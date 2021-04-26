@@ -1,0 +1,13 @@
+name: Wanted
+version: ${project.version}
+main: ir.syrent.wanted.Core.Wanted
+api-version: 1.16
+prefix: Wanted
+authors: [ Syrent ]
+description: Wanted plugin for RolePlay servers
+website: syrent.ir
+softdepend:
+  - PlaceholderAPI
+commands:
+  wanteds:
+  wanted:

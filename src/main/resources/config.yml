@@ -1,0 +1,12 @@
+Wanted:
+  #use wanted.receive.(number) to change player wanted number
+  Maximum: 5
+  #if killer don't have "wanted.receive.X" receive this wanted.
+  ReceiveOnKill: 1
+  CompassRefreshInterval: 20 #in tick
+
+#data save interval in min
+DataSave:
+  Enable: true
+  Interval: 30
+  Notification: true
