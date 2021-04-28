@@ -9,6 +9,7 @@ import ir.syrent.wanted.Dependencies.PlaceholderAPI;
 import ir.syrent.wanted.Events.DeathEvent;
 import ir.syrent.wanted.GUI.SpiGUI;
 import ir.syrent.wanted.Messages.Messages;
+import ir.syrent.wanted.Utils.SkullBuilder;
 import ir.syrent.wanted.Utils.TabCompleter;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
@@ -18,17 +19,20 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.HashMap;
 import java.util.Map;
 
-public final class Wanted extends JavaPlugin implements CommandExecutor {
+public final class Main extends JavaPlugin implements CommandExecutor {
+
+    private static Main plugin;
 
     public static WantedsYML wantedsYML;
     public static MessagesYML messagesYML;
     public static Messages messages;
     public static Log log;
     public static SpiGUI spiGUI;
-    private static Wanted instance;
+    private static Main instance;
+    public SkullBuilder skullBuilder;
     private final HashMap<String, Integer> setWanted = new HashMap<>();
 
-    public Wanted() {
+    public Main() {
         instance = this;
     }
 
@@ -42,6 +46,7 @@ public final class Wanted extends JavaPlugin implements CommandExecutor {
         if (!getSetWanted().isEmpty()) {
             for (Map.Entry<String, Integer> wantedlist : getSetWanted().entrySet()) {
                 wantedsYML.getConfig().set("wanted." + wantedlist.getKey(), wantedlist.getValue());
+                skullBuilder.cache.put(Bukkit.getPlayerExact(wantedlist.getKey()), skullBuilder.getHead(wantedlist.getKey()).serialize());
             }
             if (getConfig().getBoolean("DataSave.Notification"))
                 Bukkit.getLogger().info(messages.getRawPrefix() + "Wanted data saved!");
@@ -65,6 +70,9 @@ public final class Wanted extends JavaPlugin implements CommandExecutor {
 
     @Override
     public void onEnable() {
+
+        plugin = this;
+
         getServer().getPluginManager().registerEvents(new DeathEvent(), this);
 
         getCommand("wanted").setExecutor(new WantedCommand());
@@ -81,6 +89,7 @@ public final class Wanted extends JavaPlugin implements CommandExecutor {
 
         wantedsYML = new WantedsYML();
         messagesYML = new MessagesYML();
+        skullBuilder = new SkullBuilder();
         this.saveDefaultConfig();
         messagesYML.saveDefaultConfig();
         wantedsYML.saveDefaultConfig();
@@ -101,5 +110,9 @@ public final class Wanted extends JavaPlugin implements CommandExecutor {
     @Override
     public void onDisable() {
         if (getConfig().getBoolean("DataSave.Enable")) saveData();
+    }
+
+    public static Main getInstance() {
+        return plugin;
     }
 }

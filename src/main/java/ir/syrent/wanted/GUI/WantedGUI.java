@@ -1,9 +1,10 @@
 package ir.syrent.wanted.GUI;
 
-import ir.syrent.wanted.Core.Wanted;
+import ir.syrent.wanted.Core.Main;
 import ir.syrent.wanted.GUI.buttons.SGButton;
 import ir.syrent.wanted.GUI.item.ItemBuilder;
 import ir.syrent.wanted.Messages.Messages;
+import ir.syrent.wanted.Utils.SkullBuilder;
 import ir.syrent.wanted.Utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -21,7 +22,7 @@ import java.util.stream.Collectors;
 
 public class WantedGUI {
 
-    private static final Wanted plugin = Wanted.getPlugin(Wanted.class);
+    private static final Main plugin = Main.getPlugin(Main.class);
     Messages messages = new Messages();
 
     @SuppressWarnings("deprecation")
@@ -53,7 +54,7 @@ public class WantedGUI {
         int page = 0;
 
 
-        SGMenu wantedGU = Wanted.getSpiGUI().create("&6&lWANTED LIST &7(&9&lPAGE &9{currentPage}&7/&9{maxPage}&7)", 3);
+        SGMenu wantedGU = Main.getSpiGUI().create("&6&lWANTED LIST &7(&9&lPAGE &9{currentPage}&7/&9{maxPage}&7)", 3);
 
         boolean isNewVersion = Arrays.stream(Material.values()).map(Material::name)
                 .collect(Collectors.toList()).contains("PLAYER_HEAD");
@@ -76,11 +77,9 @@ public class WantedGUI {
             Player wanted = Bukkit.getPlayerExact(wantedPlayer.getKey());
             if (wanted == null) continue;
 
-            if (plugin.getConfig().getInt("Wanted.Maximum") <= 64)
-                item = new ItemStack(type, wantedPlayer.getValue());
-            else item = new ItemStack(type, 1);
+            item = ItemStack.deserialize(Main.getInstance().skullBuilder.cache.get(Bukkit.getPlayerExact(wantedPlayer.getKey())));
 
-            if (!isNewVersion) item.setDurability((short) 3);
+            //if (!isNewVersion) item.setDurability((short) 3);
             wantedGU.setButton(page, slot, new SGButton(
                     new ItemBuilder(item)
                             .skullOwner(wantedPlayer.getKey())

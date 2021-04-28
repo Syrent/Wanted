@@ -1,15 +1,15 @@
 package ir.syrent.wanted.Dependencies;
 
-import ir.syrent.wanted.Core.Wanted;
+import ir.syrent.wanted.Core.Main;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 public class PlaceholderAPI extends PlaceholderExpansion {
 
-    private final Wanted plugin;
+    private final Main plugin;
 
-    public PlaceholderAPI(Wanted plugin) {
+    public PlaceholderAPI(Main plugin) {
         this.plugin = plugin;
     }
 

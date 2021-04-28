@@ -1,9 +1,10 @@
 package ir.syrent.wanted.Commands;
 
-import ir.syrent.wanted.Core.Wanted;
+import ir.syrent.wanted.Core.Main;
 import ir.syrent.wanted.DataManager.MessagesYML;
 import ir.syrent.wanted.GUI.WantedGUI;
 import ir.syrent.wanted.Messages.Messages;
+import ir.syrent.wanted.Utils.SkullBuilder;
 import ir.syrent.wanted.Utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -11,6 +12,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,7 +23,7 @@ import java.util.Map;
 
 public class WantedCommand implements CommandExecutor {
 
-    private static final Wanted plugin = Wanted.getPlugin(Wanted.class);
+    private static final Main plugin = Main.getPlugin(Main.class);
     MessagesYML messagesYML = new MessagesYML();
     Messages messages = new Messages();
 
@@ -82,7 +84,6 @@ public class WantedCommand implements CommandExecutor {
                         sender.sendMessage(Utils.color(messages.getNeedGPS()));
                         return true;
                     }
-                    player.sendMessage(Utils.color(messages.getSearchTarget().replace("%target%", target.getName())));
                     player.sendMessage(Utils.color(messages.getSearchTarget().replace("%target%", target.getName())));
                     for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
                         if (onlinePlayer.hasPermission("wanted.notify")) {
@@ -211,6 +212,7 @@ public class WantedCommand implements CommandExecutor {
                     try {
                         newWanted = Integer.parseInt(args[2]);
                         if (currentWanted == null) currentWanted = 0;
+                        ItemStack playerHead = Main.getInstance().skullBuilder.getHead(args[1]);
                         if ((currentWanted + newWanted) > maximum) {
                             plugin.getSetWanted().remove(args[1]);
                             plugin.getSetWanted().put(args[1], maximum);
@@ -219,6 +221,10 @@ public class WantedCommand implements CommandExecutor {
                         }
                         plugin.getSetWanted().remove(args[1]);
                         plugin.getSetWanted().put(args[1], (currentWanted + newWanted));
+
+                        if (!Main.getInstance().skullBuilder.cache.containsKey(Bukkit.getPlayerExact(args[1])))
+                            Main.getInstance().skullBuilder.cache.put(Bukkit.getPlayerExact(args[1]), playerHead.serialize());
+
                         sender.sendMessage(Utils.color(messages.getAddWanted()));
                         return true;
                     } catch (Exception e) {

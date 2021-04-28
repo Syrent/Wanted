@@ -1,6 +1,6 @@
 package ir.syrent.wanted.DataManager;
 
-import ir.syrent.wanted.Core.Wanted;
+import ir.syrent.wanted.Core.Main;
 import org.bukkit.ChatColor;
 
 import java.io.File;
@@ -14,7 +14,7 @@ import java.util.Date;
 
 public class Log {
 
-    private final Wanted plugin = Wanted.getPlugin(Wanted.class);
+    private final Main plugin = Main.getPlugin(Main.class);
 
     public File logsfolder;
 

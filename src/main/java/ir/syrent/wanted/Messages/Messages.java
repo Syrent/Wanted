@@ -1,6 +1,6 @@
 package ir.syrent.wanted.Messages;
 
-import ir.syrent.wanted.Core.Wanted;
+import ir.syrent.wanted.Core.Main;
 import ir.syrent.wanted.DataManager.Log;
 import ir.syrent.wanted.DataManager.MessagesYML;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -14,7 +14,7 @@ import java.util.List;
 
 public class Messages {
 
-    private static final Wanted plugin = Wanted.getPlugin(Wanted.class);
+    private static final Main plugin = Main.getPlugin(Main.class);
     private final MessagesYML messagesYML = new MessagesYML();
 
     private final String prefix = getMessagesYML().getConfig().getString("prefix");
@@ -48,7 +48,7 @@ public class Messages {
 
     private final List<TextComponent> message = new ArrayList<>();
 
-    public static Wanted getPlugin() {
+    public static Main getPlugin() {
         return plugin;
     }
 
@@ -155,8 +155,7 @@ public class Messages {
         Player killer = player.getKiller();
         assert killer != null;
         int wanted = plugin.getSetWanted().get(killer.getName());
-        Log log = new Log();
-        return "[" + log.formatMessage() + "] "
+        return "[" + Main.getInstance().log.formatMessage() + "] "
                 + killer.getName() + " killed " + player.getName()
                 + " in " + player.getWorld().getName()
                 + " at X:" + (int) player.getLocation().getX()

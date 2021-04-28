@@ -1,6 +1,6 @@
 package ir.syrent.wanted.DataManager;
 
-import ir.syrent.wanted.Core.Wanted;
+import ir.syrent.wanted.Core.Main;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -10,7 +10,7 @@ import java.io.InputStreamReader;
 
 public class MessagesYML {
 
-    private final static Wanted plugin = Wanted.getPlugin(Wanted.class);
+    private final static Main plugin = Main.getPlugin(Main.class);
     private FileConfiguration dataConfig = null;
     private File configFile = null;
 

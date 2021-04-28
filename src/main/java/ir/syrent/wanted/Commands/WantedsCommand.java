@@ -1,6 +1,6 @@
 package ir.syrent.wanted.Commands;
 
-import ir.syrent.wanted.Core.Wanted;
+import ir.syrent.wanted.Core.Main;
 import ir.syrent.wanted.Messages.Messages;
 import ir.syrent.wanted.Utils.Utils;
 import org.bukkit.Bukkit;
@@ -16,7 +16,7 @@ import java.util.Map;
 
 public class WantedsCommand implements CommandExecutor {
 
-    private final static Wanted plugin = Wanted.getPlugin(Wanted.class);
+    private final static Main plugin = Main.getPlugin(Main.class);
     Messages messages = new Messages();
     List<String> message = new ArrayList<>();
     int number = 0;
