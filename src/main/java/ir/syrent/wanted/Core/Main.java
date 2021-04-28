@@ -30,7 +30,7 @@ public final class Main extends JavaPlugin implements CommandExecutor {
     public static SpiGUI spiGUI;
     private static Main instance;
     public SkullBuilder skullBuilder;
-    private final HashMap<String, Integer> setWanted = new HashMap<>();
+    public HashMap<String, Integer> wantedMap = new HashMap<>();
 
     public Main() {
         instance = this;
@@ -42,9 +42,9 @@ public final class Main extends JavaPlugin implements CommandExecutor {
 
     public void saveData() {
         wantedsYML = new WantedsYML();
-        if (getSetWanted().isEmpty() && wantedsYML.getConfig().getConfigurationSection("wanted") == null) return;
-        if (!getSetWanted().isEmpty()) {
-            for (Map.Entry<String, Integer> wantedlist : getSetWanted().entrySet()) {
+        if (wantedMap.isEmpty() && wantedsYML.getConfig().getConfigurationSection("wanted") == null) return;
+        if (!wantedMap.isEmpty()) {
+            for (Map.Entry<String, Integer> wantedlist : wantedMap.entrySet()) {
                 wantedsYML.getConfig().set("wanted." + wantedlist.getKey(), wantedlist.getValue());
                 skullBuilder.cache.put(Bukkit.getPlayerExact(wantedlist.getKey()), skullBuilder.getHead(wantedlist.getKey()).serialize());
             }
@@ -53,8 +53,8 @@ public final class Main extends JavaPlugin implements CommandExecutor {
             wantedsYML.saveConfig();
         } else {
             for (String wantedlist : wantedsYML.getConfig().getConfigurationSection("wanted").getKeys(false)) {
-                getSetWanted().remove(wantedlist);
-                getSetWanted().put(wantedlist, wantedsYML.getConfig().getInt("wanted." + wantedlist));
+                wantedMap.remove(wantedlist);
+                wantedMap.put(wantedlist, wantedsYML.getConfig().getInt("wanted." + wantedlist));
             }
         }
     }
@@ -101,10 +101,6 @@ public final class Main extends JavaPlugin implements CommandExecutor {
         spiGUI = new SpiGUI(this);
 
         if (getConfig().getBoolean("DataSave.Enable")) saveData();
-    }
-
-    public HashMap<String, Integer> getSetWanted() {
-        return setWanted;
     }
 
     @Override

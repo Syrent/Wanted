@@ -28,12 +28,12 @@ public class WantedsCommand implements CommandExecutor {
                 sender.sendMessage(Utils.color(messages.getNeedPermission().replace("%prefix%", messages.getPrefix()).replace("%player%", sender.getName())));
                 return true;
             }
-            if (plugin.getSetWanted().isEmpty()) {
+            if (plugin.wantedMap.isEmpty()) {
                 sender.sendMessage(Utils.color(messages.getNoWanteds()));
                 return true;
             }
 
-            for (Map.Entry<String, Integer> wantedPlayer : plugin.getSetWanted().entrySet()) {
+            for (Map.Entry<String, Integer> wantedPlayer : plugin.wantedMap.entrySet()) {
                 if (Bukkit.getPlayerExact(wantedPlayer.getKey()) != null) number++;
             }
             if (number == 0) {
@@ -43,17 +43,17 @@ public class WantedsCommand implements CommandExecutor {
             number = 0;
 
             sender.sendMessage(Utils.color(messages.getWantedTitle()));
-            for (Map.Entry<String, Integer> wantedlist : plugin.getSetWanted().entrySet()) {
+            for (Map.Entry<String, Integer> wantedlist : plugin.wantedMap.entrySet()) {
                 String key = wantedlist.getKey();
 
                 Player wantedPlayer = Bukkit.getPlayerExact(key);
                 if (wantedPlayer == null) continue;
 
                 int maximum = plugin.getConfig().getInt("Wanted.Maximum");
-                int currentWanted = plugin.getSetWanted().get(key);
+                int currentWanted = plugin.wantedMap.get(key);
 
                 if (currentWanted <= 0 || currentWanted > maximum) continue;
-                int count = plugin.getSetWanted().get(key);
+                int count = plugin.wantedMap.get(key);
 
                 if (maximum <= 5) {
                     message.add(Utils.color(messages.wantedSymbol(currentWanted).replace("%player%", key)));

@@ -52,7 +52,7 @@ public class WantedCommand implements CommandExecutor {
                         return true;
                     }
                     sender.sendMessage(Utils.color(messages.getGetPlayerWanted()
-                            .replace("%wanted%", String.valueOf(plugin.getSetWanted().get(args[1])))
+                            .replace("%wanted%", String.valueOf(plugin.wantedMap.get(args[1])))
                             .replace("%player%", args[1])));
                     return true;
                 }
@@ -159,7 +159,7 @@ public class WantedCommand implements CommandExecutor {
                         sender.sendMessage(Utils.color(messages.getClearOperator()));
                         return true;
                     }
-                    plugin.getSetWanted().remove(args[1]);
+                    plugin.wantedMap.remove(args[1]);
                     sender.sendMessage(Utils.color(messages.getClearWanted()));
                     return true;
                 }
@@ -173,11 +173,11 @@ public class WantedCommand implements CommandExecutor {
                         sender.sendMessage(Utils.color(messages.getOperation().replace("%action%", "Take")));
                         return true;
                     }
-                    if (plugin.getSetWanted().get(args[1]) == null) {
+                    if (plugin.wantedMap.get(args[1]) == null) {
                         sender.sendMessage(Utils.color(messages.getPlayerNotFound()));
                         return true;
                     }
-                    int currentWanted = plugin.getSetWanted().get(args[1]);
+                    int currentWanted = plugin.wantedMap.get(args[1]);
                     int newWanted;
                     try {
                         newWanted = Integer.parseInt(args[2]);
@@ -185,9 +185,9 @@ public class WantedCommand implements CommandExecutor {
                             sender.sendMessage(Utils.color(messages.getValidNumber()));
                             return true;
                         }
-                        plugin.getSetWanted().remove(args[1]);
+                        plugin.wantedMap.remove(args[1]);
                         if ((currentWanted - newWanted) >= 1) {
-                            plugin.getSetWanted().put(args[1], (currentWanted - newWanted));
+                            plugin.wantedMap.put(args[1], (currentWanted - newWanted));
                         }
                         sender.sendMessage(Utils.color(messages.getTakeWanted()));
                     } catch (Exception e) {
@@ -206,7 +206,7 @@ public class WantedCommand implements CommandExecutor {
                         sender.sendMessage(Utils.color(messages.getOperation().replace("%action%", "Add")));
                         return true;
                     }
-                    Integer currentWanted = plugin.getSetWanted().get(args[1]);
+                    Integer currentWanted = plugin.wantedMap.get(args[1]);
                     int newWanted;
                     int maximum = plugin.getConfig().getInt("Wanted.Maximum");
                     try {
@@ -214,13 +214,13 @@ public class WantedCommand implements CommandExecutor {
                         if (currentWanted == null) currentWanted = 0;
                         ItemStack playerHead = Main.getInstance().skullBuilder.getHead(args[1]);
                         if ((currentWanted + newWanted) > maximum) {
-                            plugin.getSetWanted().remove(args[1]);
-                            plugin.getSetWanted().put(args[1], maximum);
+                            plugin.wantedMap.remove(args[1]);
+                            plugin.wantedMap.put(args[1], maximum);
                             sender.sendMessage(Utils.color(messages.getAddWanted()));
                             return true;
                         }
-                        plugin.getSetWanted().remove(args[1]);
-                        plugin.getSetWanted().put(args[1], (currentWanted + newWanted));
+                        plugin.wantedMap.remove(args[1]);
+                        plugin.wantedMap.put(args[1], (currentWanted + newWanted));
 
                         if (!Main.getInstance().skullBuilder.cache.containsKey(Bukkit.getPlayerExact(args[1])))
                             Main.getInstance().skullBuilder.cache.put(Bukkit.getPlayerExact(args[1]), playerHead.serialize());
@@ -246,18 +246,18 @@ public class WantedCommand implements CommandExecutor {
                     try {
                         newWanted = Integer.parseInt(args[2]);
                         if (newWanted < 1) {
-                            plugin.getSetWanted().remove(args[1]);
+                            plugin.wantedMap.remove(args[1]);
                             return true;
                         }
                         int maximum = plugin.getConfig().getInt("Wanted.Maximum");
                         if (newWanted > maximum) {
-                            plugin.getSetWanted().remove(args[1]);
-                            plugin.getSetWanted().put(args[1], maximum);
+                            plugin.wantedMap.remove(args[1]);
+                            plugin.wantedMap.put(args[1], maximum);
                             sender.sendMessage(Utils.color(messages.getAddWanted()));
                             return true;
                         }
-                        plugin.getSetWanted().remove(args[1]);
-                        plugin.getSetWanted().put(args[1], newWanted);
+                        plugin.wantedMap.remove(args[1]);
+                        plugin.wantedMap.put(args[1], newWanted);
                         sender.sendMessage(Utils.color(messages.getSetWanted()));
                     } catch (Exception e) {
                         sender.sendMessage(Utils.color(messages.getValidNumber()));
@@ -271,14 +271,14 @@ public class WantedCommand implements CommandExecutor {
                         sender.sendMessage(Utils.color(messages.getNeedPermission()));
                         return true;
                     }
-                    if (plugin.getSetWanted().isEmpty()) {
+                    if (plugin.wantedMap.isEmpty()) {
                         sender.sendMessage(Utils.color(messages.getNoWanteds()));
                         return true;
                     }
 
                     List<String> playerList = new ArrayList<>();
                     List<Integer> numberList = new ArrayList<>();
-                    for (Map.Entry<String, Integer> getPlayer : plugin.getSetWanted().entrySet()) {
+                    for (Map.Entry<String, Integer> getPlayer : plugin.wantedMap.entrySet()) {
                         Player wantedPlayer = Bukkit.getPlayerExact(getPlayer.getKey());
                         if (wantedPlayer == null) continue;
                         playerList.add(getPlayer.getKey());
@@ -359,7 +359,7 @@ public class WantedCommand implements CommandExecutor {
             }
             int currentWanted;
             try {
-                currentWanted = plugin.getSetWanted().get(sender.getName());
+                currentWanted = plugin.wantedMap.get(sender.getName());
                 sender.sendMessage(Utils.color("§aYour wanted: §e[" + currentWanted + "§e]"));
                 return true;
             } catch (Exception e) {

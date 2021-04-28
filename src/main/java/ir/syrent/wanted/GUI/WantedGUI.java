@@ -28,14 +28,14 @@ public class WantedGUI {
     @SuppressWarnings("deprecation")
     public WantedGUI(Player player) {
 
-        if (plugin.getSetWanted().isEmpty()) {
+        if (plugin.wantedMap.isEmpty()) {
             player.sendMessage(Utils.color(messages.getNoWanteds()));
             return;
         }
 
         int number = 0;
 
-        for (Map.Entry<String, Integer> wantedPlayer : plugin.getSetWanted().entrySet()) {
+        for (Map.Entry<String, Integer> wantedPlayer : plugin.wantedMap.entrySet()) {
             if (Bukkit.getPlayerExact(wantedPlayer.getKey()) != null) number++;
         }
         if (number == 0) {
@@ -70,7 +70,7 @@ public class WantedGUI {
         ItemMeta glassMeta = glassItem.getItemMeta();
         glassMeta.setDisplayName("§r");
 
-        for (Map.Entry<String, Integer> wantedPlayer : plugin.getSetWanted().entrySet()) {
+        for (Map.Entry<String, Integer> wantedPlayer : plugin.wantedMap.entrySet()) {
 
             ItemStack item;
 
