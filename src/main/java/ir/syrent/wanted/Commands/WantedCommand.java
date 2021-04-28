@@ -30,6 +30,7 @@ public class WantedCommand implements CommandExecutor {
     HashMap<Player, Player> getTarget = new HashMap<>();
 
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, String label, String[] args) {
+        boolean isAdmin = sender.hasPermission("wanted.admin");
         if (label.equalsIgnoreCase("wanted")) {
             if (args.length > 0) {
                 //Get Wanted
@@ -38,7 +39,7 @@ public class WantedCommand implements CommandExecutor {
                         sender.sendMessage(Utils.color(messages.getConsoleSender()));
                         return true;
                     }
-                    if (!(sender.hasPermission("wanted.admin") || sender.hasPermission("wanted.admin"))) {
+                    if (!isAdmin) {
                         sender.sendMessage(Utils.color(messages.getNeedPermission()));
                         return true;
                     }
@@ -63,7 +64,7 @@ public class WantedCommand implements CommandExecutor {
                         return true;
                     }
                     Player player = (Player) sender;
-                    if (!(player.hasPermission("wanted.find") || player.hasPermission("wanted.admin"))) {
+                    if (!(player.hasPermission("wanted.find") || isAdmin)) {
                         sender.sendMessage(Utils.color(messages.getNeedPermission()));
                         return true;
                     }
@@ -113,7 +114,7 @@ public class WantedCommand implements CommandExecutor {
                 }
                 //Set maximum command
                 if (args[0].equalsIgnoreCase("set-maximum")) {
-                    if (!(sender.hasPermission("wanted.admin"))) {
+                    if (!isAdmin) {
                         sender.sendMessage(Utils.color(messages.getNeedPermission()));
                         return true;
                     }
@@ -140,7 +141,7 @@ public class WantedCommand implements CommandExecutor {
                 }
                 //Reload command
                 if (args[0].equalsIgnoreCase("reload")) {
-                    if (!(sender.hasPermission("wanted.admin"))) {
+                    if (!isAdmin) {
                         sender.sendMessage(Utils.color(messages.getNeedPermission()));
                         return true;
                     }
@@ -151,7 +152,7 @@ public class WantedCommand implements CommandExecutor {
                 }
                 //ClearWanted command
                 if (args[0].equalsIgnoreCase("clear")) {
-                    if (!(sender.hasPermission("wanted.clear") || sender.hasPermission("wanted.admin"))) {
+                    if (!(sender.hasPermission("wanted.clear") || isAdmin)) {
                         sender.sendMessage(Utils.color(messages.getNeedPermission()));
                         return true;
                     }
@@ -165,7 +166,7 @@ public class WantedCommand implements CommandExecutor {
                 }
                 //TakeWanted command
                 if (args[0].equalsIgnoreCase("take")) {
-                    if (!(sender.hasPermission("wanted.take") || sender.hasPermission("wanted.admin"))) {
+                    if (!(sender.hasPermission("wanted.take") || isAdmin)) {
                         sender.sendMessage(Utils.color(messages.getNeedPermission()));
                         return true;
                     }
@@ -198,7 +199,7 @@ public class WantedCommand implements CommandExecutor {
                 }
                 //AddWanted command
                 if (args[0].equalsIgnoreCase("add")) {
-                    if (!(sender.hasPermission("wanted.add") || sender.hasPermission("wanted.admin"))) {
+                    if (!(sender.hasPermission("wanted.add") || isAdmin)) {
                         sender.sendMessage(Utils.color(messages.getNeedPermission()));
                         return true;
                     }
@@ -234,7 +235,7 @@ public class WantedCommand implements CommandExecutor {
                 }
                 //SetWanted command
                 if (args[0].equalsIgnoreCase("set")) {
-                    if (!(sender.hasPermission("wanted.set") || sender.hasPermission("wanted.admin"))) {
+                    if (!(sender.hasPermission("wanted.set") || isAdmin)) {
                         sender.sendMessage(Utils.color(messages.getNeedPermission()));
                         return true;
                     }
@@ -267,7 +268,7 @@ public class WantedCommand implements CommandExecutor {
                 }
                 //TopWanted command
                 if (args[0].equalsIgnoreCase("top")) {
-                    if (!(sender.hasPermission("wanted.top") || sender.hasPermission("wanted.admin"))) {
+                    if (!(sender.hasPermission("wanted.top") || isAdmin)) {
                         sender.sendMessage(Utils.color(messages.getNeedPermission()));
                         return true;
                     }
