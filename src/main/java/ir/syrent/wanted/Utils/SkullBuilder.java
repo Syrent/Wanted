@@ -130,8 +130,9 @@ public class SkullBuilder {
         boolean isNewVersion = Arrays.stream(Material.values()).map(Material::name)
                 .collect(Collectors.toList()).contains("PLAYER_HEAD");
         Material type = Material.matchMaterial(isNewVersion ? "PLAYER_HEAD" : "SKULL_ITEM");
+        ItemStack item = new ItemStack(type, 1, (short) 3);
 
-        return new ItemStack(type);
+        return item;
     }
 
 }

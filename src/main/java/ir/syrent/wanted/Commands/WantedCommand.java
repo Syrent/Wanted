@@ -2,9 +2,8 @@ package ir.syrent.wanted.Commands;
 
 import ir.syrent.wanted.Core.Main;
 import ir.syrent.wanted.DataManager.MessagesYML;
-import ir.syrent.wanted.GUI.WantedGUI;
+import ir.syrent.wanted.GUI.RequestGUI;
 import ir.syrent.wanted.Messages.Messages;
-import ir.syrent.wanted.Utils.SkullBuilder;
 import ir.syrent.wanted.Utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -16,10 +15,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class WantedCommand implements CommandExecutor {
 
@@ -330,7 +326,8 @@ public class WantedCommand implements CommandExecutor {
                         sender.sendMessage(Utils.color(messages.getNeedPermission()));
                         return true;
                     }
-                    new WantedGUI(player);
+
+                    Main.getInstance().requestGUI.open(player);
                     return true;
                 }
                 //Help command
@@ -350,6 +347,20 @@ public class WantedCommand implements CommandExecutor {
                         }
                     }
                     messages.helpMessage1(sender);
+                    return true;
+                }
+                //Debug command
+                if (args[0].equalsIgnoreCase("debug")) {
+                    if (!sender.hasPermission("wanted.admin")) {
+                        sender.sendMessage(Utils.color(messages.getNeedPermission()));
+                        return true;
+                    }
+                    Bukkit.broadcastMessage(Main.getInstance().skullBuilder.cache.toString());
+                    Player player = (Player) sender;
+                    player.getInventory().addItem(Main.getInstance().skullBuilder.getHead(player));
+                    for (Player fuckingBot : Bukkit.getOnlinePlayers()) {
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "wanted add " + fuckingBot.getName() + " 3");
+                    }
                     return true;
                 }
             }
