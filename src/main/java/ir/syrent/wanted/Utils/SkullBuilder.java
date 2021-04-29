@@ -2,12 +2,11 @@ package ir.syrent.wanted.Utils;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import ir.syrent.wanted.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -20,25 +19,62 @@ import java.util.stream.Collectors;
 @SuppressWarnings("deprecation")
 public class SkullBuilder {
 
-    public Map<Player, Map<String, Object>> cache = new HashMap<>();
+    private static SkullBuilder instance;
 
-    public void reloadCache() {
-        cache.clear();
-        new BukkitRunnable() {
-            public void run() {
-                for (Player player : Bukkit.getOnlinePlayers()) {
-                    cache.put(player, getHead(player).serialize());
-                }
-                //Main.getInstance().requestGUI.refresh();
-            }
-        }.runTaskAsynchronously(Main.getInstance());
+    public static SkullBuilder getInstance() {
+        return instance;
     }
 
-    /*private final String serverVersion;
+    JavaPlugin plugin;
 
-    public SkullBuilder(String serverVersion) {
-        this.serverVersion = serverVersion;
+    public SkullBuilder(JavaPlugin plugin) {
+        instance = this;
+        this.plugin = plugin;
+    }
+
+    public Map<Player, Map<String, Object>> cache = new HashMap<>();
+
+    /* Handling in Join,Leave listeners is better.
+    public void reloadCache() {
+        new BukkitRunnable() {
+            public void run() {
+                for (String playerName : Main.getInstance().wantedMap.keySet()) {
+                    Player player = Bukkit.getPlayerExact(playerName);
+                    if (!cache.containsKey(player))
+                        cache.put(player, getHead(player).serialize());
+                }
+                Main.getInstance().requestGUI.refresh();
+            }
+        }.runTaskAsynchronously(Main.getInstance());
     }*/
+
+    /**
+     * Save the player's head to the cache async.
+     * @param player The target player to save head
+     */
+    public void saveHead(Player player) {
+        if (player == null) return;
+        if (!cache.containsKey(player))
+            Bukkit.getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+                @Override
+                public void run() {
+                    cache.put(player, getHead(player).serialize());
+                }
+            });
+    }
+
+    /**
+     * Save the player's head to the cache async.
+     * @param playerName The target player to save head
+     */
+    public void saveHead(String playerName) {
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+            @Override
+            public void run() {
+                cache.put(Bukkit.getPlayerExact(playerName), getHead(playerName).serialize());
+            }
+        });
+    }
 
     /**
      * Get a head skin of a value.
@@ -65,7 +101,6 @@ public class SkullBuilder {
         try {
             hashAsId = new UUID(value.hashCode(), value.hashCode());
         } catch (NullPointerException e) {
-            Main.getInstance().getLogger().info(player.getName() + " is not premium"); //TODO: Debug Message
             return getSkull();
         }
         return Bukkit.getUnsafe().modifyItemStack(skull,
@@ -130,9 +165,8 @@ public class SkullBuilder {
         boolean isNewVersion = Arrays.stream(Material.values()).map(Material::name)
                 .collect(Collectors.toList()).contains("PLAYER_HEAD");
         Material type = Material.matchMaterial(isNewVersion ? "PLAYER_HEAD" : "SKULL_ITEM");
-        ItemStack item = new ItemStack(type, 1, (short) 3);
 
-        return item;
+        return new ItemStack(type, 1, (short) 3);
     }
 
 }

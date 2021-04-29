@@ -7,16 +7,19 @@ import ir.syrent.wanted.DataManager.MessagesYML;
 import ir.syrent.wanted.DataManager.WantedsYML;
 import ir.syrent.wanted.Dependencies.PlaceholderAPI;
 import ir.syrent.wanted.Events.DeathEvent;
+import ir.syrent.wanted.Events.InventoryListener;
+import ir.syrent.wanted.Events.JoinListener;
+import ir.syrent.wanted.Events.QuitListener;
 import ir.syrent.wanted.GUI.RequestGUI;
 import ir.syrent.wanted.Messages.Messages;
 import ir.syrent.wanted.Utils.SkullBuilder;
 import ir.syrent.wanted.Utils.TabCompleter;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,26 +41,26 @@ public final class Main extends JavaPlugin implements CommandExecutor {
 
     public void reloadData() {
         if (!getConfig().getBoolean("DataSave.Enable", true)) return;
-        if (wantedsYML.getConfig().getConfigurationSection("wanted") == null) return;
-        if (!wantedMap.isEmpty()) {
-            //Saving data to the configuration file.
-            for (String playerName : wantedMap.keySet()) {
-                Player player = Bukkit.getPlayerExact(playerName);
-                int wanteds = wantedMap.get(playerName);
-                wantedsYML.getConfig().set("wanted." + playerName, wanteds);
-                //Putting player's head to our cache if they were online
-                if (player != null)
-                    skullBuilder.cache.put(player, skullBuilder.getHead(player).serialize());
-            }
-            if (getConfig().getBoolean("DataSave.Notification"))
-                this.getLogger().info("Wanted data has been saved.");
-            wantedsYML.saveConfig();
-        } else {
+        ConfigurationSection section = wantedsYML.getConfig().getConfigurationSection("wanted");
+        if (section == null) return;
+        if (wantedMap.isEmpty()) {
             //If the wantedMap was empty, get wanteds from the configuration file.
             for (String wantedPlayerName : wantedsYML.getConfig().getConfigurationSection("wanted").getKeys(false)) {
                 wantedMap.put(wantedPlayerName, wantedsYML.getConfig().getInt("wanted." + wantedPlayerName));
             }
         }
+        //Saving data to the configuration file.
+        for (String playerName : wantedMap.keySet()) {
+            Player player = Bukkit.getPlayerExact(playerName);
+            int wanteds = wantedMap.get(playerName);
+            section.set(playerName, wanteds);
+            //Putting player's head to our cache if they were online
+            if (player != null)
+                skullBuilder.cache.put(player, skullBuilder.getHead(player).serialize());
+        }
+        if (getConfig().getBoolean("DataSave.Notification"))
+            this.getLogger().info("Wanted data has been saved.");
+        wantedsYML.saveConfig();
     }
 
     @Override
@@ -70,21 +73,11 @@ public final class Main extends JavaPlugin implements CommandExecutor {
         initializePlaceholderAPI();
 
         reloadData();
-        autoSaveData();
     }
 
     @Override
     public void onDisable() {
         reloadData();
-    }
-
-    public void autoSaveData() {
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                reloadData();
-            }
-        }.runTaskTimer(this, 0, 20L * 60 * getConfig().getInt("DataSave.Interval"));
     }
 
     public void registerCmds() {
@@ -95,6 +88,9 @@ public final class Main extends JavaPlugin implements CommandExecutor {
 
     public void registerEvents() {
         getServer().getPluginManager().registerEvents(new DeathEvent(), this);
+        getServer().getPluginManager().registerEvents(new JoinListener(), this);
+        getServer().getPluginManager().registerEvents(new QuitListener(), this);
+        getServer().getPluginManager().registerEvents(new InventoryListener(), this);
     }
 
     public void initializeInstances() {
@@ -103,7 +99,7 @@ public final class Main extends JavaPlugin implements CommandExecutor {
         messagesYML = new MessagesYML();
         messagesYML.saveDefaultConfig();
         wantedsYML.saveDefaultConfig();
-        skullBuilder = new SkullBuilder();
+        skullBuilder = new SkullBuilder(this);
         requestGUI = new RequestGUI();
         messages = new Messages();
         log = new Log();
