@@ -1,6 +1,6 @@
 package ir.syrent.wanted.Commands;
 
-import ir.syrent.wanted.Core.Main;
+import ir.syrent.wanted.Main;
 import ir.syrent.wanted.Messages.Messages;
 import ir.syrent.wanted.Utils.Utils;
 import org.bukkit.Bukkit;

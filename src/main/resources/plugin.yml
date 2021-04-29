@@ -1,7 +1,7 @@
 name: Wanted
-version: ${project.version}
-main: ir.syrent.wanted.Core.Main
-api-version: 1.16
+version: "${project.version}"
+main: ir.syrent.wanted.Main
+api-version: 1.13
 prefix: Wanted
 authors: [ Syrent ]
 description: Wanted plugin for RolePlay servers

@@ -1,6 +1,6 @@
 package ir.syrent.wanted.DataManager;
 
-import ir.syrent.wanted.Core.Main;
+import ir.syrent.wanted.Main;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 

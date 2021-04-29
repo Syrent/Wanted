@@ -2,7 +2,7 @@ package ir.syrent.wanted.Utils;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import ir.syrent.wanted.Core.Main;
+import ir.syrent.wanted.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

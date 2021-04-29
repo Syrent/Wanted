@@ -1,7 +1,6 @@
 package ir.syrent.wanted.Messages;
 
-import ir.syrent.wanted.Core.Main;
-import ir.syrent.wanted.DataManager.Log;
+import ir.syrent.wanted.Main;
 import ir.syrent.wanted.DataManager.MessagesYML;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;

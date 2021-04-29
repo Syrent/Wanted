@@ -1,6 +1,6 @@
 package ir.syrent.wanted.GUI;
 
-import ir.syrent.wanted.Core.Main;
+import ir.syrent.wanted.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -14,6 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RequestGUI {
+
+    public RequestGUI() {
+        start();
+    }
+
     public boolean needRefresh = false;
 
     public void refresh() {

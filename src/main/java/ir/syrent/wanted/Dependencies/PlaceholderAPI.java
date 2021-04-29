@@ -1,6 +1,6 @@
 package ir.syrent.wanted.Dependencies;
 
-import ir.syrent.wanted.Core.Main;
+import ir.syrent.wanted.Main;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
