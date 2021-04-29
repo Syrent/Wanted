@@ -7,16 +7,19 @@ import ir.syrent.wanted.DataManager.MessagesYML;
 import ir.syrent.wanted.DataManager.WantedsYML;
 import ir.syrent.wanted.Dependencies.PlaceholderAPI;
 import ir.syrent.wanted.Events.DeathEvent;
-import ir.syrent.wanted.GUI.SpiGUI;
+import ir.syrent.wanted.GUI.RequestGUI;
 import ir.syrent.wanted.Messages.Messages;
 import ir.syrent.wanted.Utils.SkullBuilder;
 import ir.syrent.wanted.Utils.TabCompleter;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public final class Main extends JavaPlugin implements CommandExecutor {
@@ -27,34 +30,33 @@ public final class Main extends JavaPlugin implements CommandExecutor {
     public static MessagesYML messagesYML;
     public static Messages messages;
     public static Log log;
-    public static SpiGUI spiGUI;
     private static Main instance;
     public SkullBuilder skullBuilder;
-    private final HashMap<String, Integer> setWanted = new HashMap<>();
+    public RequestGUI requestGUI;
+    public HashMap<String, Integer> wantedMap = new HashMap<>();
+    public List<Inventory> playersGUI = new ArrayList<>();
+
 
     public Main() {
         instance = this;
     }
 
-    public static SpiGUI getSpiGUI() {
-        return spiGUI;
-    }
-
     public void saveData() {
         wantedsYML = new WantedsYML();
-        if (getSetWanted().isEmpty() && wantedsYML.getConfig().getConfigurationSection("wanted") == null) return;
-        if (!getSetWanted().isEmpty()) {
-            for (Map.Entry<String, Integer> wantedlist : getSetWanted().entrySet()) {
+        if (wantedMap.isEmpty() && wantedsYML.getConfig().getConfigurationSection("wanted") == null) return;
+        if (!wantedMap.isEmpty()) {
+            for (Map.Entry<String, Integer> wantedlist : wantedMap.entrySet()) {
                 wantedsYML.getConfig().set("wanted." + wantedlist.getKey(), wantedlist.getValue());
-                skullBuilder.cache.put(Bukkit.getPlayerExact(wantedlist.getKey()), skullBuilder.getHead(wantedlist.getKey()).serialize());
+                if (Bukkit.getPlayerExact(wantedlist.getKey()) != null)
+                    skullBuilder.cache.put(Bukkit.getPlayerExact(wantedlist.getKey()), skullBuilder.getHead(Bukkit.getPlayerExact(wantedlist.getKey())).serialize());
             }
             if (getConfig().getBoolean("DataSave.Notification"))
                 Bukkit.getLogger().info(messages.getRawPrefix() + "Wanted data saved!");
             wantedsYML.saveConfig();
         } else {
             for (String wantedlist : wantedsYML.getConfig().getConfigurationSection("wanted").getKeys(false)) {
-                getSetWanted().remove(wantedlist);
-                getSetWanted().put(wantedlist, wantedsYML.getConfig().getInt("wanted." + wantedlist));
+                wantedMap.remove(wantedlist);
+                wantedMap.put(wantedlist, wantedsYML.getConfig().getInt("wanted." + wantedlist));
             }
         }
     }
@@ -72,6 +74,7 @@ public final class Main extends JavaPlugin implements CommandExecutor {
     public void onEnable() {
 
         plugin = this;
+        if (getConfig().getBoolean("DataSave.Enable")) saveData();
 
         getServer().getPluginManager().registerEvents(new DeathEvent(), this);
 
@@ -90,6 +93,8 @@ public final class Main extends JavaPlugin implements CommandExecutor {
         wantedsYML = new WantedsYML();
         messagesYML = new MessagesYML();
         skullBuilder = new SkullBuilder();
+        requestGUI = new RequestGUI();
+        requestGUI.start();
         this.saveDefaultConfig();
         messagesYML.saveDefaultConfig();
         wantedsYML.saveDefaultConfig();
@@ -98,13 +103,6 @@ public final class Main extends JavaPlugin implements CommandExecutor {
             new PlaceholderAPI(this).register();
         }
 
-        spiGUI = new SpiGUI(this);
-
-        if (getConfig().getBoolean("DataSave.Enable")) saveData();
-    }
-
-    public HashMap<String, Integer> getSetWanted() {
-        return setWanted;
     }
 
     @Override

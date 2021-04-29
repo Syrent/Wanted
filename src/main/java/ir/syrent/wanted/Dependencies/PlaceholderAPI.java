@@ -47,8 +47,8 @@ public class PlaceholderAPI extends PlaceholderExpansion {
 
         //Wanted placeholder
         if (identifier.equals("wanted")) {
-            if (plugin.getSetWanted().get(player.getName()) == null) return "0";
-            return String.valueOf(plugin.getSetWanted().get(player.getName()));
+            if (plugin.wantedMap.get(player.getName()) == null) return "0";
+            return String.valueOf(plugin.wantedMap.get(player.getName()));
         }
 
         return null;

@@ -2,9 +2,8 @@ package ir.syrent.wanted.Commands;
 
 import ir.syrent.wanted.Core.Main;
 import ir.syrent.wanted.DataManager.MessagesYML;
-import ir.syrent.wanted.GUI.WantedGUI;
+import ir.syrent.wanted.GUI.RequestGUI;
 import ir.syrent.wanted.Messages.Messages;
-import ir.syrent.wanted.Utils.SkullBuilder;
 import ir.syrent.wanted.Utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -16,10 +15,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class WantedCommand implements CommandExecutor {
 
@@ -30,6 +26,7 @@ public class WantedCommand implements CommandExecutor {
     HashMap<Player, Player> getTarget = new HashMap<>();
 
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, String label, String[] args) {
+        boolean isAdmin = sender.hasPermission("wanted.admin");
         if (label.equalsIgnoreCase("wanted")) {
             if (args.length > 0) {
                 //Get Wanted
@@ -38,7 +35,7 @@ public class WantedCommand implements CommandExecutor {
                         sender.sendMessage(Utils.color(messages.getConsoleSender()));
                         return true;
                     }
-                    if (!(sender.hasPermission("wanted.admin") || sender.hasPermission("wanted.admin"))) {
+                    if (!isAdmin) {
                         sender.sendMessage(Utils.color(messages.getNeedPermission()));
                         return true;
                     }
@@ -52,7 +49,7 @@ public class WantedCommand implements CommandExecutor {
                         return true;
                     }
                     sender.sendMessage(Utils.color(messages.getGetPlayerWanted()
-                            .replace("%wanted%", String.valueOf(plugin.getSetWanted().get(args[1])))
+                            .replace("%wanted%", String.valueOf(plugin.wantedMap.get(args[1])))
                             .replace("%player%", args[1])));
                     return true;
                 }
@@ -63,7 +60,7 @@ public class WantedCommand implements CommandExecutor {
                         return true;
                     }
                     Player player = (Player) sender;
-                    if (!(player.hasPermission("wanted.find") || player.hasPermission("wanted.admin"))) {
+                    if (!(player.hasPermission("wanted.find") || isAdmin)) {
                         sender.sendMessage(Utils.color(messages.getNeedPermission()));
                         return true;
                     }
@@ -113,7 +110,7 @@ public class WantedCommand implements CommandExecutor {
                 }
                 //Set maximum command
                 if (args[0].equalsIgnoreCase("set-maximum")) {
-                    if (!(sender.hasPermission("wanted.admin"))) {
+                    if (!isAdmin) {
                         sender.sendMessage(Utils.color(messages.getNeedPermission()));
                         return true;
                     }
@@ -140,7 +137,7 @@ public class WantedCommand implements CommandExecutor {
                 }
                 //Reload command
                 if (args[0].equalsIgnoreCase("reload")) {
-                    if (!(sender.hasPermission("wanted.admin"))) {
+                    if (!isAdmin) {
                         sender.sendMessage(Utils.color(messages.getNeedPermission()));
                         return true;
                     }
@@ -151,7 +148,7 @@ public class WantedCommand implements CommandExecutor {
                 }
                 //ClearWanted command
                 if (args[0].equalsIgnoreCase("clear")) {
-                    if (!(sender.hasPermission("wanted.clear") || sender.hasPermission("wanted.admin"))) {
+                    if (!(sender.hasPermission("wanted.clear") || isAdmin)) {
                         sender.sendMessage(Utils.color(messages.getNeedPermission()));
                         return true;
                     }
@@ -159,13 +156,13 @@ public class WantedCommand implements CommandExecutor {
                         sender.sendMessage(Utils.color(messages.getClearOperator()));
                         return true;
                     }
-                    plugin.getSetWanted().remove(args[1]);
+                    plugin.wantedMap.remove(args[1]);
                     sender.sendMessage(Utils.color(messages.getClearWanted()));
                     return true;
                 }
                 //TakeWanted command
                 if (args[0].equalsIgnoreCase("take")) {
-                    if (!(sender.hasPermission("wanted.take") || sender.hasPermission("wanted.admin"))) {
+                    if (!(sender.hasPermission("wanted.take") || isAdmin)) {
                         sender.sendMessage(Utils.color(messages.getNeedPermission()));
                         return true;
                     }
@@ -173,11 +170,11 @@ public class WantedCommand implements CommandExecutor {
                         sender.sendMessage(Utils.color(messages.getOperation().replace("%action%", "Take")));
                         return true;
                     }
-                    if (plugin.getSetWanted().get(args[1]) == null) {
+                    if (plugin.wantedMap.get(args[1]) == null) {
                         sender.sendMessage(Utils.color(messages.getPlayerNotFound()));
                         return true;
                     }
-                    int currentWanted = plugin.getSetWanted().get(args[1]);
+                    int currentWanted = plugin.wantedMap.get(args[1]);
                     int newWanted;
                     try {
                         newWanted = Integer.parseInt(args[2]);
@@ -185,9 +182,9 @@ public class WantedCommand implements CommandExecutor {
                             sender.sendMessage(Utils.color(messages.getValidNumber()));
                             return true;
                         }
-                        plugin.getSetWanted().remove(args[1]);
+                        plugin.wantedMap.remove(args[1]);
                         if ((currentWanted - newWanted) >= 1) {
-                            plugin.getSetWanted().put(args[1], (currentWanted - newWanted));
+                            plugin.wantedMap.put(args[1], (currentWanted - newWanted));
                         }
                         sender.sendMessage(Utils.color(messages.getTakeWanted()));
                     } catch (Exception e) {
@@ -198,7 +195,7 @@ public class WantedCommand implements CommandExecutor {
                 }
                 //AddWanted command
                 if (args[0].equalsIgnoreCase("add")) {
-                    if (!(sender.hasPermission("wanted.add") || sender.hasPermission("wanted.admin"))) {
+                    if (!(sender.hasPermission("wanted.add") || isAdmin)) {
                         sender.sendMessage(Utils.color(messages.getNeedPermission()));
                         return true;
                     }
@@ -206,7 +203,7 @@ public class WantedCommand implements CommandExecutor {
                         sender.sendMessage(Utils.color(messages.getOperation().replace("%action%", "Add")));
                         return true;
                     }
-                    Integer currentWanted = plugin.getSetWanted().get(args[1]);
+                    Integer currentWanted = plugin.wantedMap.get(args[1]);
                     int newWanted;
                     int maximum = plugin.getConfig().getInt("Wanted.Maximum");
                     try {
@@ -214,13 +211,13 @@ public class WantedCommand implements CommandExecutor {
                         if (currentWanted == null) currentWanted = 0;
                         ItemStack playerHead = Main.getInstance().skullBuilder.getHead(args[1]);
                         if ((currentWanted + newWanted) > maximum) {
-                            plugin.getSetWanted().remove(args[1]);
-                            plugin.getSetWanted().put(args[1], maximum);
+                            plugin.wantedMap.remove(args[1]);
+                            plugin.wantedMap.put(args[1], maximum);
                             sender.sendMessage(Utils.color(messages.getAddWanted()));
                             return true;
                         }
-                        plugin.getSetWanted().remove(args[1]);
-                        plugin.getSetWanted().put(args[1], (currentWanted + newWanted));
+                        plugin.wantedMap.remove(args[1]);
+                        plugin.wantedMap.put(args[1], (currentWanted + newWanted));
 
                         if (!Main.getInstance().skullBuilder.cache.containsKey(Bukkit.getPlayerExact(args[1])))
                             Main.getInstance().skullBuilder.cache.put(Bukkit.getPlayerExact(args[1]), playerHead.serialize());
@@ -234,7 +231,7 @@ public class WantedCommand implements CommandExecutor {
                 }
                 //SetWanted command
                 if (args[0].equalsIgnoreCase("set")) {
-                    if (!(sender.hasPermission("wanted.set") || sender.hasPermission("wanted.admin"))) {
+                    if (!(sender.hasPermission("wanted.set") || isAdmin)) {
                         sender.sendMessage(Utils.color(messages.getNeedPermission()));
                         return true;
                     }
@@ -246,18 +243,18 @@ public class WantedCommand implements CommandExecutor {
                     try {
                         newWanted = Integer.parseInt(args[2]);
                         if (newWanted < 1) {
-                            plugin.getSetWanted().remove(args[1]);
+                            plugin.wantedMap.remove(args[1]);
                             return true;
                         }
                         int maximum = plugin.getConfig().getInt("Wanted.Maximum");
                         if (newWanted > maximum) {
-                            plugin.getSetWanted().remove(args[1]);
-                            plugin.getSetWanted().put(args[1], maximum);
+                            plugin.wantedMap.remove(args[1]);
+                            plugin.wantedMap.put(args[1], maximum);
                             sender.sendMessage(Utils.color(messages.getAddWanted()));
                             return true;
                         }
-                        plugin.getSetWanted().remove(args[1]);
-                        plugin.getSetWanted().put(args[1], newWanted);
+                        plugin.wantedMap.remove(args[1]);
+                        plugin.wantedMap.put(args[1], newWanted);
                         sender.sendMessage(Utils.color(messages.getSetWanted()));
                     } catch (Exception e) {
                         sender.sendMessage(Utils.color(messages.getValidNumber()));
@@ -267,18 +264,18 @@ public class WantedCommand implements CommandExecutor {
                 }
                 //TopWanted command
                 if (args[0].equalsIgnoreCase("top")) {
-                    if (!(sender.hasPermission("wanted.top") || sender.hasPermission("wanted.admin"))) {
+                    if (!(sender.hasPermission("wanted.top") || isAdmin)) {
                         sender.sendMessage(Utils.color(messages.getNeedPermission()));
                         return true;
                     }
-                    if (plugin.getSetWanted().isEmpty()) {
+                    if (plugin.wantedMap.isEmpty()) {
                         sender.sendMessage(Utils.color(messages.getNoWanteds()));
                         return true;
                     }
 
                     List<String> playerList = new ArrayList<>();
                     List<Integer> numberList = new ArrayList<>();
-                    for (Map.Entry<String, Integer> getPlayer : plugin.getSetWanted().entrySet()) {
+                    for (Map.Entry<String, Integer> getPlayer : plugin.wantedMap.entrySet()) {
                         Player wantedPlayer = Bukkit.getPlayerExact(getPlayer.getKey());
                         if (wantedPlayer == null) continue;
                         playerList.add(getPlayer.getKey());
@@ -329,7 +326,8 @@ public class WantedCommand implements CommandExecutor {
                         sender.sendMessage(Utils.color(messages.getNeedPermission()));
                         return true;
                     }
-                    new WantedGUI(player);
+
+                    Main.getInstance().requestGUI.open(player);
                     return true;
                 }
                 //Help command
@@ -351,6 +349,20 @@ public class WantedCommand implements CommandExecutor {
                     messages.helpMessage1(sender);
                     return true;
                 }
+                //Debug command
+                if (args[0].equalsIgnoreCase("debug")) {
+                    if (!sender.hasPermission("wanted.admin")) {
+                        sender.sendMessage(Utils.color(messages.getNeedPermission()));
+                        return true;
+                    }
+                    Bukkit.broadcastMessage(Main.getInstance().skullBuilder.cache.toString());
+                    Player player = (Player) sender;
+                    player.getInventory().addItem(Main.getInstance().skullBuilder.getHead(player));
+                    for (Player fuckingBot : Bukkit.getOnlinePlayers()) {
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "wanted add " + fuckingBot.getName() + " 3");
+                    }
+                    return true;
+                }
             }
             //Wanted (default)
             if (!(sender instanceof Player)) {
@@ -359,7 +371,7 @@ public class WantedCommand implements CommandExecutor {
             }
             int currentWanted;
             try {
-                currentWanted = plugin.getSetWanted().get(sender.getName());
+                currentWanted = plugin.wantedMap.get(sender.getName());
                 sender.sendMessage(Utils.color("§aYour wanted: §e[" + currentWanted + "§e]"));
                 return true;
             } catch (Exception e) {

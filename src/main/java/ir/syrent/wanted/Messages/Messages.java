@@ -154,7 +154,7 @@ public class Messages {
         Player player = event.getEntity();
         Player killer = player.getKiller();
         assert killer != null;
-        int wanted = plugin.getSetWanted().get(killer.getName());
+        int wanted = plugin.wantedMap.get(killer.getName());
         return "[" + Main.getInstance().log.formatMessage() + "] "
                 + killer.getName() + " killed " + player.getName()
                 + " in " + player.getWorld().getName()
