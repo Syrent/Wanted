@@ -1,4 +1,4 @@
-prefix: "&8[&6Wanted&8]"
+prefix: "&8[&6Wanted&8] "
 
 need-permission: "%prefix% &cyou don't have enough permission to perform this command!"
 target-warn: "%prefix% &b%player% &7Used their GPS to find you!"
