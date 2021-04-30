@@ -1,8 +1,8 @@
 package ir.syrent.wanted.Messages;
 
-import ir.syrent.wanted.Core.Main;
-import ir.syrent.wanted.DataManager.Log;
+import ir.syrent.wanted.Main;
 import ir.syrent.wanted.DataManager.MessagesYML;
+import ir.syrent.wanted.Utils.Utils;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.command.CommandSender;
@@ -34,17 +34,17 @@ public class Messages {
     private final String pluginReloaded = getMessagesYML().getConfig().getString("plugin-reloaded").replace("%prefix%", getPrefix());
     private final String getPlayerWanted = getMessagesYML().getConfig().getString("get-player-wanted").replace("%prefix%", getPrefix());
 
-    private final String findUsage = "%prefix% §cUsage: /wanted find <player>".replace("%prefix%", getPrefix());
-    private final String operation = "%prefix% §cUsage: /wanted %action% <player> <wanted>".replace("%prefix%", getPrefix());
-    private final String clearOperator = "%prefix% §cUsage: /wanted Clear <player>".replace("%prefix%", getPrefix());
-    private final String setMaximumUsage = "%prefix% §cUsage: /wanted set-maximum <number>".replace("%prefix%", getPrefix());
-    private final String getWantedUsage = "%prefix% §cUsage: /wanted get <player>".replace("%prefix%", getPrefix());
-    private final String clearWanted = "%prefix% §7Wanted successfully cleared.".replace("%prefix%", getPrefix());
-    private final String takeWanted = "%prefix% §7Wanted successfully taked.".replace("%prefix%", getPrefix());
-    private final String addWanted = "%prefix% §7Wanted successfully added.".replace("%prefix%", getPrefix());
-    private final String setWanted = "%prefix% §7Wanted was set.".replace("%prefix%", getPrefix());
-    private final String validNumber = "%prefix% §cPlease enter an valid number.".replace("%prefix%", getPrefix());
-    private final String consoleSender = "%prefix% §cOnly player can run this command.".replace("%prefix%", getPrefix());
+    private final String findUsage = Utils.color(String.format("%s%s", getPrefix(), "§cUsage: /wanted find <player>"));
+    private final String operation = Utils.color(String.format("%s%s", getPrefix(), "§cUsage: /wanted %action% <player> <wanted>"));
+    private final String clearOperator = Utils.color(String.format("%s%s", getPrefix(), "§cUsage: /wanted Clear <player>"));
+    private final String setMaximumUsage = Utils.color(String.format("%s%s", getPrefix(), "§cUsage: /wanted set-maximum <number>"));
+    private final String getWantedUsage = Utils.color(String.format("%s%s", getPrefix(), "§cUsage: /wanted get <player>"));
+    private final String clearWanted = Utils.color(String.format("%s%s", getPrefix(), "§7Wanted successfully cleared."));
+    private final String takeWanted = Utils.color(String.format("%s%s", getPrefix(), "§7Wanted successfully taked."));
+    private final String addWanted = Utils.color(String.format("%s%s", getPrefix(), "§7Wanted successfully added."));
+    private final String setWanted = Utils.color(String.format("%s%s", getPrefix(), "§7Wanted was set."));
+    private final String validNumber = Utils.color(String.format("%s%s", getPrefix(), "§cPlease enter an valid number."));
+    private final String consoleSender = Utils.color(String.format("%s%s", getPrefix(), "§cOnly player can run this command."));
 
     private final List<TextComponent> message = new ArrayList<>();
 

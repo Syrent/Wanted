@@ -1,7 +1,6 @@
 package ir.syrent.wanted.Events;
 
-import ir.syrent.wanted.Core.Main;
-import ir.syrent.wanted.DataManager.Log;
+import ir.syrent.wanted.Main;
 import ir.syrent.wanted.Messages.Messages;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

@@ -1,9 +1,9 @@
 package ir.syrent.wanted.Commands;
 
-import ir.syrent.wanted.Core.Main;
 import ir.syrent.wanted.DataManager.MessagesYML;
-import ir.syrent.wanted.GUI.RequestGUI;
+import ir.syrent.wanted.Main;
 import ir.syrent.wanted.Messages.Messages;
+import ir.syrent.wanted.Utils.SkullBuilder;
 import ir.syrent.wanted.Utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -11,11 +11,13 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class WantedCommand implements CommandExecutor {
 
@@ -157,6 +159,8 @@ public class WantedCommand implements CommandExecutor {
                         return true;
                     }
                     plugin.wantedMap.remove(args[1]);
+                    SkullBuilder.getInstance().cache.remove(Bukkit.getPlayerExact(args[1]));
+                    Main.getInstance().reloadData();
                     sender.sendMessage(Utils.color(messages.getClearWanted()));
                     return true;
                 }
@@ -185,7 +189,11 @@ public class WantedCommand implements CommandExecutor {
                         plugin.wantedMap.remove(args[1]);
                         if ((currentWanted - newWanted) >= 1) {
                             plugin.wantedMap.put(args[1], (currentWanted - newWanted));
+                            Main.getInstance().reloadData();
                         }
+                        if (currentWanted - newWanted <= 0)
+                            SkullBuilder.getInstance().cache.remove(Bukkit.getPlayerExact(args[1]));
+
                         sender.sendMessage(Utils.color(messages.getTakeWanted()));
                     } catch (Exception e) {
                         sender.sendMessage(Utils.color(messages.getValidNumber()));
@@ -209,7 +217,7 @@ public class WantedCommand implements CommandExecutor {
                     try {
                         newWanted = Integer.parseInt(args[2]);
                         if (currentWanted == null) currentWanted = 0;
-                        ItemStack playerHead = Main.getInstance().skullBuilder.getHead(args[1]);
+                        Player target = Bukkit.getPlayerExact(args[1]);
                         if ((currentWanted + newWanted) > maximum) {
                             plugin.wantedMap.remove(args[1]);
                             plugin.wantedMap.put(args[1], maximum);
@@ -218,9 +226,8 @@ public class WantedCommand implements CommandExecutor {
                         }
                         plugin.wantedMap.remove(args[1]);
                         plugin.wantedMap.put(args[1], (currentWanted + newWanted));
-
-                        if (!Main.getInstance().skullBuilder.cache.containsKey(Bukkit.getPlayerExact(args[1])))
-                            Main.getInstance().skullBuilder.cache.put(Bukkit.getPlayerExact(args[1]), playerHead.serialize());
+                        Main.getInstance().reloadData();
+                        SkullBuilder.getInstance().saveHead(target);
 
                         sender.sendMessage(Utils.color(messages.getAddWanted()));
                         return true;
@@ -255,6 +262,8 @@ public class WantedCommand implements CommandExecutor {
                         }
                         plugin.wantedMap.remove(args[1]);
                         plugin.wantedMap.put(args[1], newWanted);
+                        SkullBuilder.getInstance().saveHead(Bukkit.getPlayerExact(args[1]));
+                        Main.getInstance().reloadData();
                         sender.sendMessage(Utils.color(messages.getSetWanted()));
                     } catch (Exception e) {
                         sender.sendMessage(Utils.color(messages.getValidNumber()));

@@ -1,6 +1,6 @@
 package ir.syrent.wanted.DataManager;
 
-import ir.syrent.wanted.Core.Main;
+import ir.syrent.wanted.Main;
 import org.bukkit.ChatColor;
 
 import java.io.File;
@@ -13,6 +13,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 public class Log {
+
+    public Log() {
+        setupLogFolder();
+    }
 
     private final Main plugin = Main.getPlugin(Main.class);
 
