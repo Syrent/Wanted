@@ -211,15 +211,19 @@ public class WantedCommand implements CommandExecutor {
                     try {
                         newWanted = Integer.parseInt(args[2]);
                         if (currentWanted == null) currentWanted = 0;
+
                         Player target = Bukkit.getPlayerExact(args[1]);
+
                         if ((currentWanted + newWanted) > maximum) {
                             Main.getInstance().wantedMap.remove(args[1]);
                             Main.getInstance().wantedMap.put(args[1], maximum);
+                            Main.getInstance().reloadData();
                             sender.sendMessage(Utils.color(Main.getInstance().messages.getAddWanted()));
                             return true;
                         }
                         Main.getInstance().wantedMap.remove(args[1]);
                         Main.getInstance().wantedMap.put(args[1], (currentWanted + newWanted));
+                        Main.getInstance().reloadData();
                         Main.getInstance().reloadData();
                         SkullBuilder.getInstance().saveHead(target);
 
@@ -251,6 +255,7 @@ public class WantedCommand implements CommandExecutor {
                         if (newWanted > maximum) {
                             Main.getInstance().wantedMap.remove(args[1]);
                             Main.getInstance().wantedMap.put(args[1], maximum);
+                            Main.getInstance().reloadData();
                             sender.sendMessage(Utils.color(Main.getInstance().messages.getAddWanted()));
                             return true;
                         }
