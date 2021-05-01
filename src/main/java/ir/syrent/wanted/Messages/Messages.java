@@ -1,7 +1,6 @@
 package ir.syrent.wanted.Messages;
 
 import ir.syrent.wanted.Main;
-import ir.syrent.wanted.DataManager.MessagesYML;
 import ir.syrent.wanted.Utils.Utils;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -9,31 +8,28 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Messages {
 
-    private static final Main plugin = Main.getPlugin(Main.class);
-    private final MessagesYML messagesYML = new MessagesYML();
+    public static Main getPlugin() {
+        return Main.getInstance();
+    }
 
-    private final String prefix = getMessagesYML().getConfig().getString("prefix");
+    private final String prefix = Main.getInstance().messagesYML.getConfig().getString("prefix");
+    private final String needPermission = Utils.color(String.format("%s%s", getPrefix(), Main.getInstance().messagesYML.getConfig().getString("need-permission")));
+    private final String needGPS = Utils.color(String.format("%s%s", getPrefix(), Main.getInstance().messagesYML.getConfig().getString("needGPS")));
+    private final String playerNotFound = Utils.color(String.format("%s%s", getPrefix(), Main.getInstance().messagesYML.getConfig().getString("player-not-found")));
+    private final String selfTarget = Utils.color(String.format("%s%s", getPrefix(), Main.getInstance().messagesYML.getConfig().getString("self-target")));
+    private final String searchTarget = Utils.color(String.format("%s%s", getPrefix(), Main.getInstance().messagesYML.getConfig().getString("search-target")));
+    private final String targetWarn = Utils.color(String.format("%s%s", getPrefix(), Main.getInstance().messagesYML.getConfig().getString("search-notification")));
+    private final String wantedTitle = Utils.color(String.format("%s%s", getPrefix(), Main.getInstance().messagesYML.getConfig().getString("wanted-title")));
+    private final String wantedList = Utils.color(String.format("%s%s", getPrefix(), Main.getInstance().messagesYML.getConfig().getString("wanted-title")));
+    private final String wantedTop = Utils.color(String.format("%s%s", getPrefix(), Main.getInstance().messagesYML.getConfig().getString("wanted-top")));
+    private final String playerLeaveOnFinding = Utils.color(String.format("%s%s", getPrefix(), Main.getInstance().messagesYML.getConfig().getString("player-leave-on-finding")));
+    private final String noWanteds = Utils.color(String.format("%s%s", getPrefix(), Main.getInstance().messagesYML.getConfig().getString("no-wanteds")));
+    private final String maximumWantedChanged = Utils.color(String.format("%s%s", getPrefix(), Main.getInstance().messagesYML.getConfig().getString("maximum-wanted-changed")));
+    private final String pluginReloaded = Utils.color(String.format("%s%s", getPrefix(), Main.getInstance().messagesYML.getConfig().getString("plugin-reloaded")));
 
-    private final String needPermission = getMessagesYML().getConfig().getString("need-permission").replace("%prefix%", getPrefix());
-    private final String needGPS = getMessagesYML().getConfig().getString("needGPS").replace("%prefix%", getPrefix());
-    private final String playerNotFound = getMessagesYML().getConfig().getString("player-not-found").replace("%prefix%", getPrefix());
-    private final String selfTarget = getMessagesYML().getConfig().getString("self-target").replace("%prefix%", getPrefix());
-    private final String searchTarget = getMessagesYML().getConfig().getString("search-target").replace("%prefix%", getPrefix());
-    private final String targetWarn = getMessagesYML().getConfig().getString("search-notification").replace("%prefix%", getPrefix());
-    private final String wantedTitle = getMessagesYML().getConfig().getString("wanted-title").replace("%prefix%", getPrefix());
-    private final String wantedList = getMessagesYML().getConfig().getString("wanted-list").replace("%prefix%", getPrefix());
-    private final String wantedTop = getMessagesYML().getConfig().getString("wanted-top").replace("%prefix%", getPrefix());
-    private final String playerLeaveOnFinding = getMessagesYML().getConfig().getString("player-leave-on-finding").replace("%prefix%", getPrefix());
-    private final String noWanteds = getMessagesYML().getConfig().getString("no-wanteds").replace("%prefix%", getPrefix());
-    private final String maximumWantedChanged = getMessagesYML().getConfig().getString("maximum-wanted-changed").replace("%prefix%", getPrefix());
-    private final String pluginReloaded = getMessagesYML().getConfig().getString("plugin-reloaded").replace("%prefix%", getPrefix());
-    private final String getPlayerWanted = getMessagesYML().getConfig().getString("get-player-wanted").replace("%prefix%", getPrefix());
-
+    private final String getPlayerWanted = Utils.color(String.format("%s%s", getPrefix(), Main.getInstance().messagesYML.getConfig().getString("get-player-wanted")));
     private final String findUsage = Utils.color(String.format("%s%s", getPrefix(), "§cUsage: /wanted find <player>"));
     private final String operation = Utils.color(String.format("%s%s", getPrefix(), "§cUsage: /wanted %action% <player> <wanted>"));
     private final String clearOperator = Utils.color(String.format("%s%s", getPrefix(), "§cUsage: /wanted Clear <player>"));
@@ -44,13 +40,8 @@ public class Messages {
     private final String addWanted = Utils.color(String.format("%s%s", getPrefix(), "§7Wanted successfully added."));
     private final String setWanted = Utils.color(String.format("%s%s", getPrefix(), "§7Wanted was set."));
     private final String validNumber = Utils.color(String.format("%s%s", getPrefix(), "§cPlease enter an valid number."));
+
     private final String consoleSender = Utils.color(String.format("%s%s", getPrefix(), "§cOnly player can run this command."));
-
-    private final List<TextComponent> message = new ArrayList<>();
-
-    public static Main getPlugin() {
-        return plugin;
-    }
 
     public void helpMessage1(CommandSender sender) {
         sender.sendMessage("§7§l§m---------------§f[§r §bWanted v%version% §f]§7§l§m---------------§r".replace("%version%", getPlugin().getDescription().getVersion()));
@@ -154,7 +145,7 @@ public class Messages {
         Player player = event.getEntity();
         Player killer = player.getKiller();
         assert killer != null;
-        int wanted = plugin.wantedMap.get(killer.getName());
+        int wanted = Main.getInstance().wantedMap.get(killer.getName());
         return "[" + Main.getInstance().log.formatMessage() + "] "
                 + killer.getName() + " killed " + player.getName()
                 + " in " + player.getWorld().getName()
@@ -162,10 +153,6 @@ public class Messages {
                 + " Y:" + (int) player.getLocation().getY()
                 + " Z:" + (int) player.getLocation().getZ()
                 + " | New Wanted: " + wanted;
-    }
-
-    public MessagesYML getMessagesYML() {
-        return messagesYML;
     }
 
     public String getPrefix() {
@@ -210,10 +197,6 @@ public class Messages {
 
     public String getNoWanteds() {
         return noWanteds;
-    }
-
-    public List<TextComponent> getMessage() {
-        return message;
     }
 
     public String getFindUsage() {
