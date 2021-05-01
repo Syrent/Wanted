@@ -39,30 +39,6 @@ public final class Main extends JavaPlugin implements CommandExecutor {
     public SkullBuilder skullBuilder;
     public RequestGUI requestGUI;
 
-    public void reloadData() {
-        if (!getConfig().getBoolean("DataSave.Enable", true)) return;
-        ConfigurationSection section = wantedsYML.getConfig().getConfigurationSection("wanted");
-        if (section == null) return;
-        if (wantedMap.isEmpty()) {
-            //If the wantedMap was empty, get wanteds from the configuration file.
-            for (String wantedPlayerName : wantedsYML.getConfig().getConfigurationSection("wanted").getKeys(false)) {
-                wantedMap.put(wantedPlayerName, wantedsYML.getConfig().getInt("wanted." + wantedPlayerName));
-            }
-        }
-        //Saving data to the configuration file.
-        for (String playerName : wantedMap.keySet()) {
-            Player player = Bukkit.getPlayerExact(playerName);
-            int wanteds = wantedMap.get(playerName);
-            section.set(playerName, wanteds);
-            //Putting player's head to our cache if they were online
-            if (player != null)
-                skullBuilder.cache.put(player, skullBuilder.getHead(player).serialize());
-        }
-        if (getConfig().getBoolean("DataSave.Notification"))
-            this.getLogger().info("Wanted data has been saved.");
-        wantedsYML.saveConfig();
-    }
-
     @Override
     public void onEnable() {
         plugin = this;
@@ -78,6 +54,34 @@ public final class Main extends JavaPlugin implements CommandExecutor {
     @Override
     public void onDisable() {
         reloadData();
+    }
+
+    public void reloadData() {
+        if (!getConfig().getBoolean("DataSave.Enable", true)) return;
+        ConfigurationSection section = wantedsYML.getConfig().getConfigurationSection("wanted");
+        if (section == null) return;
+        if (wantedMap.isEmpty()) {
+            //If the wantedMap was empty, get wanteds from the configuration file.
+            ConfigurationSection wantedSection = wantedsYML.getConfig().getConfigurationSection("wanted");
+            if (wantedSection != null) {
+                this.getLogger().info("Getting player's data...");
+                for (String wantedPlayerName : wantedSection.getKeys(false)) {
+                    wantedMap.put(wantedPlayerName, wantedsYML.getConfig().getInt("wanted." + wantedPlayerName));
+                }
+            }
+        }
+        //Saving data to the configuration file.
+        for (String playerName : wantedMap.keySet()) {
+            Player player = Bukkit.getPlayerExact(playerName);
+            int wanteds = wantedMap.get(playerName);
+            section.set(playerName, wanteds);
+            //Putting player's head to our cache if they were online
+            if (player != null)
+                skullBuilder.cache.put(player, skullBuilder.getHead(player).serialize());
+        }
+        if (getConfig().getBoolean("DataSave.Notification"))
+            this.getLogger().info("Wanted data has been saved.");
+        wantedsYML.saveConfig();
     }
 
     public void registerCmds() {
