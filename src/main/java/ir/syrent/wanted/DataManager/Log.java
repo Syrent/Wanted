@@ -18,30 +18,28 @@ public class Log {
         setupLogFolder();
     }
 
-    private final Main plugin = Main.getPlugin(Main.class);
-
     public File logsfolder;
 
     public void setupLogFolder() {
-        if (!plugin.getDataFolder().exists()) { // Check if plugin folder exists
-            plugin.getDataFolder().mkdir(); // if not then create it
+        if (!Main.getInstance().getDataFolder().exists()) { // Check if plugin folder exists
+            Main.getInstance().getDataFolder().mkdir(); // if not then create it
         }
 
-        logsfolder = new File(plugin.getDataFolder(), "logs"); // Set the path of the new logs folder
+        logsfolder = new File(Main.getInstance().getDataFolder(), "logs"); // Set the path of the new logs folder
 
         if (!logsfolder.exists()) { // Check if logs folder exists
             logsfolder.mkdirs(); // if not then create it
-            plugin.getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "Created the logs folder"); // Send a message to console that the folder has been created
+            Main.getInstance().getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "Created the logs folder"); // Send a message to console that the folder has been created
         }
     }
 
     public void logToFile(String file, String message) {
         try {
-            File dataFolder = plugin.getDataFolder(); // Sets file to the plugins/<pluginname> folder
+            File dataFolder = Main.getInstance().getDataFolder(); // Sets file to the plugins/<pluginname> folder
             if (!dataFolder.exists()) { // Check if logs folder exists
                 dataFolder.mkdir(); // if not then create it
             }
-            File saveTo = new File(plugin.getDataFolder() + "/logs/", file + ".log"); // Sets the path of the new log file
+            File saveTo = new File(Main.getInstance().getDataFolder() + "/logs/", file + ".log"); // Sets the path of the new log file
             if (!saveTo.exists()) { // Check if logs folder exists
                 saveTo.createNewFile(); // if not then create it
             }

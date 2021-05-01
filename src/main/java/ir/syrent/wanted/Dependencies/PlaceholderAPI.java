@@ -7,12 +7,6 @@ import org.jetbrains.annotations.NotNull;
 
 public class PlaceholderAPI extends PlaceholderExpansion {
 
-    private final Main plugin;
-
-    public PlaceholderAPI(Main plugin) {
-        this.plugin = plugin;
-    }
-
     @Override
     public boolean persist() {
         return true;
@@ -25,7 +19,7 @@ public class PlaceholderAPI extends PlaceholderExpansion {
 
     @Override
     public @NotNull String getAuthor() {
-        return plugin.getDescription().getAuthors().toString();
+        return Main.getInstance().getDescription().getAuthors().toString();
     }
 
     @Override
@@ -35,7 +29,7 @@ public class PlaceholderAPI extends PlaceholderExpansion {
 
     @Override
     public @NotNull String getVersion() {
-        return plugin.getDescription().getVersion();
+        return Main.getInstance().getDescription().getVersion();
     }
 
     @Override
@@ -47,8 +41,8 @@ public class PlaceholderAPI extends PlaceholderExpansion {
 
         //Wanted placeholder
         if (identifier.equals("wanted")) {
-            if (plugin.wantedMap.get(player.getName()) == null) return "0";
-            return String.valueOf(plugin.wantedMap.get(player.getName()));
+            if (Main.getInstance().wantedMap.get(player.getName()) == null) return "0";
+            return String.valueOf(Main.getInstance().wantedMap.get(player.getName()));
         }
 
         return null;

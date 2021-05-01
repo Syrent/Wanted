@@ -10,22 +10,14 @@ import org.bukkit.permissions.PermissionAttachmentInfo;
 
 public class DeathEvent implements Listener {
 
-    Messages messages = new Messages();
-
     @EventHandler
     public void getWanted(PlayerDeathEvent event) {
         Player killer = event.getEntity().getKiller();
         Player victim = event.getEntity();
 
         if (killer != null) {
-            /*if (killer.hasPermission("wanted.reset")) {
-                if (!(Main.getInstance().getSetWanted().get(victim.getName()) == null)) {
-                    Main.getInstance().getSetWanted().remove(victim.getName());
-                    return;
-                }
-            }*/
 
-            Main.getInstance().log.logToFile(Main.getInstance().log.logTime(), messages.logger(event));
+            Main.getInstance().log.logToFile(Main.getInstance().log.logTime(), Main.getInstance().messages.logger(event));
 
             int wanted = Main.getInstance().wantedMap.getOrDefault(killer.getName(), 0);
             int maximum = Main.getInstance().getConfig().getInt("Wanted.Maximum");
@@ -47,7 +39,6 @@ public class DeathEvent implements Listener {
                         break;
                     }
                     Main.getInstance().wantedMap.replace(killer.getName(), (wanted + number));
-                    break;
                 } else {
                     if (!Main.getInstance().skullBuilder.cache.containsKey(killer)) {
                         Main.getInstance().skullBuilder.cache.put(killer, killer.serialize());
@@ -60,8 +51,8 @@ public class DeathEvent implements Listener {
                         Main.getInstance().wantedMap.put(killer.getName(), (wanted + Main.getInstance().getConfig().getInt("Wanted.ReceiveOnKill")));
                     }
                     Main.getInstance().wantedMap.replace(killer.getName(), (wanted + Main.getInstance().getConfig().getInt("Wanted.ReceiveOnKill")));
-                    break;
                 }
+                break;
             }
         }
     }

@@ -10,16 +10,15 @@ import java.io.InputStreamReader;
 
 public class MessagesYML {
 
-    private final static Main plugin = Main.getPlugin(Main.class);
     private FileConfiguration dataConfig = null;
     private File configFile = null;
 
     public void reloadConfig() {
-        if (this.configFile == null) this.configFile = new File(plugin.getDataFolder(), "messages.yml");
+        if (this.configFile == null) this.configFile = new File(Main.getInstance().getDataFolder(), "messages.yml");
 
         this.dataConfig = YamlConfiguration.loadConfiguration(this.configFile);
 
-        InputStream defaultStream = plugin.getResource("messages.yml");
+        InputStream defaultStream = Main.getInstance().getResource("messages.yml");
         if (defaultStream != null) {
             YamlConfiguration defaultConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(defaultStream));
             this.dataConfig.setDefaults(defaultConfig);
@@ -32,10 +31,10 @@ public class MessagesYML {
     }
 
     public void saveDefaultConfig() {
-        if (this.configFile == null) this.configFile = new File(plugin.getDataFolder(), "messages.yml");
+        if (this.configFile == null) this.configFile = new File(Main.getInstance().getDataFolder(), "messages.yml");
 
         if (!this.configFile.exists()) {
-            plugin.saveResource("messages.yml", false);
+            Main.getInstance().saveResource("messages.yml", false);
         }
     }
 

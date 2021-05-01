@@ -111,7 +111,7 @@ public final class Main extends JavaPlugin implements CommandExecutor {
 
     public void initializePlaceholderAPI() {
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
-            new PlaceholderAPI(this).register();
+            new PlaceholderAPI().register();
         }
     }
 
