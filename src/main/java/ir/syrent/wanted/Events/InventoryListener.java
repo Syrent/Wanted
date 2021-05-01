@@ -24,6 +24,7 @@ public class InventoryListener implements Listener {
                     .substring(ChatColor.stripColor(event.getView().getTitle()).length() - 1));
             int maximumPage = Main.getInstance().playersGUI.size();
 
+            if (event.getClickedInventory() == null) return;
             if (event.getSlot() == 46 && event.getClickedInventory().getItem(46) != null) {
                 //Previous Page
                 if (currentPage != 1) {
