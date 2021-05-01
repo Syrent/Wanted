@@ -17,18 +17,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class RequestGUI {
-
-    private static RequestGUI instance;
-
-    public static RequestGUI getInstance() {
-        return instance;
-    }
-
-    public RequestGUI() {
-        instance = this;
-        refresh();
-    }
-
     public void refresh() {
         List<Inventory> playersGUI = new ArrayList<>();
         List<Player> playerList = new ArrayList<>(SkullBuilder.getInstance().cache.keySet());
@@ -48,6 +36,7 @@ public class RequestGUI {
             Player player = playerList.get(i - 1);
             ItemStack playerItem = SkullBuilder.getInstance().getHeadFromCache(player);
             ItemMeta meta = playerItem.getItemMeta();
+            assert meta != null;
             meta.setDisplayName(ChatColor.AQUA + player.getName());
 
             List<String> lore = new ArrayList<>();
@@ -69,11 +58,13 @@ public class RequestGUI {
             ItemStack nextPage = SkullBuilder.getInstance().getHead("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5" +
                     "lY3JhZnQubmV0L3RleHR1cmUvYWFiOTVhODc1MWFlYWEzYzY3MWE4ZTkwYjgzZGU3NmEwMjA0ZjFiZTY1NzUyYWMzMWJlMmY5OGZlYjY0YmY3ZiJ9fX0=");
             ItemMeta nextPageMeta = nextPage.getItemMeta();
+            assert nextPageMeta != null;
             nextPageMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&e» &aNext Page &e»"));
             nextPage.setItemMeta(nextPageMeta);
             ItemStack prevPage = SkullBuilder.getInstance().getHead("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5" +
                     "lY3JhZnQubmV0L3RleHR1cmUvMzJmZjhhYWE0YjJlYzMwYmM1NTQxZDQxYzg3ODIxOTliYWEyNWFlNmQ4NTRjZGE2NTFmMTU5OWU2NTRjZmM3OSJ9fX0=");
             ItemMeta prevPageMeta = prevPage.getItemMeta();
+            assert prevPageMeta != null;
             prevPageMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&e« &aPrevious Page &e«"));
             prevPage.setItemMeta(prevPageMeta);
 
@@ -90,6 +81,7 @@ public class RequestGUI {
         //Adding Refresh button
         ItemStack refresh = getRefreshButtonItem();
         ItemMeta refreshMeta = refresh.getItemMeta();
+        assert refreshMeta != null;
         refreshMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&5• &6Refresh &5•"));
         refresh.setItemMeta(refreshMeta);
         for (Inventory inv : playersGUI) {
@@ -115,6 +107,7 @@ public class RequestGUI {
                 .collect(Collectors.toList()).contains("SUNFLOWER");
         Material type = Material.matchMaterial(isNewVersion ? "SUNFLOWER" : "DOUBLE_PLANT");
 
+        assert type != null;
         return new ItemStack(type);
     }
 
