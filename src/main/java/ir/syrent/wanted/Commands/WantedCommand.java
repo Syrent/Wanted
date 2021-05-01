@@ -28,63 +28,63 @@ public class WantedCommand implements CommandExecutor {
                 //Get Wanted
                 if (args[0].equalsIgnoreCase("get")) {
                     if (!(sender instanceof Player)) {
-                        sender.sendMessage(Utils.color(Main.getInstance().messages.getConsoleSender()));
+                        sender.sendMessage(Main.getInstance().messages.getConsoleSender());
                         return true;
                     }
                     if (!isAdmin) {
-                        sender.sendMessage(Utils.color(Main.getInstance().messages.getNeedPermission()));
+                        sender.sendMessage(Main.getInstance().messages.getNeedPermission());
                         return true;
                     }
                     if (args.length == 1) {
-                        sender.sendMessage(Utils.color(Main.getInstance().messages.getGetWantedUsage()));
+                        sender.sendMessage(Main.getInstance().messages.getGetWantedUsage());
                         return true;
                     }
                     Player target = Bukkit.getPlayerExact(args[1]);
                     if (target == null) {
-                        sender.sendMessage(Utils.color(Main.getInstance().messages.getPlayerNotFound()));
+                        sender.sendMessage(Main.getInstance().messages.getPlayerNotFound());
                         return true;
                     }
-                    sender.sendMessage(Utils.color(Main.getInstance().messages.getGetPlayerWanted()
+                    sender.sendMessage(Main.getInstance().messages.getGetPlayerWanted()
                             .replace("%wanted%", String.valueOf(Main.getInstance().wantedMap.get(args[1])))
-                            .replace("%player%", args[1])));
+                            .replace("%player%", args[1]));
                     return true;
                 }
                 //WantedFinder
                 if (args[0].equalsIgnoreCase("find")) {
                     if (!(sender instanceof Player)) {
-                        sender.sendMessage(Utils.color(Main.getInstance().messages.getConsoleSender()));
+                        sender.sendMessage(Main.getInstance().messages.getConsoleSender());
                         return true;
                     }
                     Player player = (Player) sender;
                     if (!(player.hasPermission("wanted.find") || isAdmin)) {
-                        sender.sendMessage(Utils.color(Main.getInstance().messages.getNeedPermission()));
+                        sender.sendMessage(Main.getInstance().messages.getNeedPermission());
                         return true;
                     }
                     if (args.length == 1) {
-                        sender.sendMessage(Utils.color(Main.getInstance().messages.getFindUsage()));
+                        sender.sendMessage(Main.getInstance().messages.getFindUsage());
                         return true;
                     }
                     Player target = Bukkit.getPlayerExact(args[1]);
                     if (target == sender) {
-                        sender.sendMessage(Utils.color(Main.getInstance().messages.getSelfTarget()));
+                        sender.sendMessage(Main.getInstance().messages.getSelfTarget());
                         return true;
                     }
                     if (target == null) {
-                        sender.sendMessage(Utils.color(Main.getInstance().messages.getPlayerNotFound()));
+                        sender.sendMessage(Main.getInstance().messages.getPlayerNotFound());
                         return true;
                     }
                     if (!player.getInventory().contains(Material.COMPASS)) {
-                        sender.sendMessage(Utils.color(Main.getInstance().messages.getNeedGPS()));
+                        sender.sendMessage(Main.getInstance().messages.getNeedGPS());
                         return true;
                     }
-                    player.sendMessage(Utils.color(Main.getInstance().messages.getSearchTarget().replace("%target%", target.getName())));
+                    player.sendMessage(Main.getInstance().messages.getSearchTarget().replace("%target%", target.getName()));
                     for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
                         if (onlinePlayer.hasPermission("wanted.notify")) {
                             if (sender == onlinePlayer) continue;
-                            onlinePlayer.sendMessage(Utils.color(Main.getInstance().messages.getTargetWarn()
+                            onlinePlayer.sendMessage(Main.getInstance().messages.getTargetWarn()
                                     .replace("%player%", player.getName())
                                     .replace("%target%", target.getName())
-                            ));
+                            );
                         }
                     }
                     getTarget.remove(player);
@@ -94,8 +94,8 @@ public class WantedCommand implements CommandExecutor {
                         public void run() {
                             Bukkit.getScheduler().runTaskAsynchronously(Main.getInstance(), () -> {
                                 if (!target.isOnline()) {
-                                    player.sendMessage(Utils.color(Main.getInstance().messages.getPlayerLeaveOnFinding()
-                                            .replace("%player%", target.getName())));
+                                    player.sendMessage(Main.getInstance().messages.getPlayerLeaveOnFinding()
+                                            .replace("%player%", target.getName()));
                                     cancel();
                                 }
                                 player.setCompassTarget(getTarget.get(player).getLocation());
@@ -107,37 +107,37 @@ public class WantedCommand implements CommandExecutor {
                 //Set maximum command
                 if (args[0].equalsIgnoreCase("set-maximum")) {
                     if (!isAdmin) {
-                        sender.sendMessage(Utils.color(Main.getInstance().messages.getNeedPermission()));
+                        sender.sendMessage(Main.getInstance().messages.getNeedPermission());
                         return true;
                     }
                     if (args.length == 1) {
-                        sender.sendMessage(Utils.color(Main.getInstance().messages.getSetMaximumUsage()));
+                        sender.sendMessage(Main.getInstance().messages.getSetMaximumUsage());
                         return true;
                     }
                     int number;
                     try {
                         if (Integer.parseInt(args[1]) < 1) {
-                            sender.sendMessage(Utils.color(Main.getInstance().messages.getValidNumber()));
+                            sender.sendMessage(Main.getInstance().messages.getValidNumber());
                             return true;
                         }
                         number = Integer.parseInt(args[1]);
                         Main.getInstance().getConfig().set("Wanted.Maximum", number);
                         Main.getInstance().saveConfig();
                         Main.getInstance().reloadConfig();
-                        sender.sendMessage(Utils.color(Main.getInstance().messages.getMaximumWantedChanged()));
+                        sender.sendMessage(Main.getInstance().messages.getMaximumWantedChanged());
                         return true;
                     } catch (Exception e) {
-                        sender.sendMessage(Utils.color(Main.getInstance().messages.getValidNumber()));
+                        sender.sendMessage(Main.getInstance().messages.getValidNumber());
                         return true;
                     }
                 }
                 //Reload command
                 if (args[0].equalsIgnoreCase("reload")) {
                     if (!isAdmin) {
-                        sender.sendMessage(Utils.color(Main.getInstance().messages.getNeedPermission()));
+                        sender.sendMessage(Main.getInstance().messages.getNeedPermission());
                         return true;
                     }
-                    sender.sendMessage(Utils.color(Main.getInstance().messages.getPluginReloaded()));
+                    sender.sendMessage(Main.getInstance().messages.getPluginReloaded());
                     Main.getInstance().reloadConfig();
                     Main.getInstance().messagesYML.reloadConfig();
                     return true;
@@ -145,31 +145,31 @@ public class WantedCommand implements CommandExecutor {
                 //ClearWanted command
                 if (args[0].equalsIgnoreCase("clear")) {
                     if (!(sender.hasPermission("wanted.clear") || isAdmin)) {
-                        sender.sendMessage(Utils.color(Main.getInstance().messages.getNeedPermission()));
+                        sender.sendMessage(Main.getInstance().messages.getNeedPermission());
                         return true;
                     }
                     if (args.length == 1) {
-                        sender.sendMessage(Utils.color(Main.getInstance().messages.getClearOperator()));
+                        sender.sendMessage(Main.getInstance().messages.getClearOperator());
                         return true;
                     }
                     Main.getInstance().wantedMap.remove(args[1]);
                     SkullBuilder.getInstance().cache.remove(Bukkit.getPlayerExact(args[1]));
                     Main.getInstance().reloadData();
-                    sender.sendMessage(Utils.color(Main.getInstance().messages.getClearWanted()));
+                    sender.sendMessage(Main.getInstance().messages.getClearWanted());
                     return true;
                 }
                 //TakeWanted command
                 if (args[0].equalsIgnoreCase("take")) {
                     if (!(sender.hasPermission("wanted.take") || isAdmin)) {
-                        sender.sendMessage(Utils.color(Main.getInstance().messages.getNeedPermission()));
+                        sender.sendMessage(Main.getInstance().messages.getNeedPermission());
                         return true;
                     }
                     if (args.length < 3) {
-                        sender.sendMessage(Utils.color(Main.getInstance().messages.getOperation().replace("%action%", "Take")));
+                        sender.sendMessage(Main.getInstance().messages.getOperation().replace("%action%", "Take"));
                         return true;
                     }
                     if (Main.getInstance().wantedMap.get(args[1]) == null) {
-                        sender.sendMessage(Utils.color(Main.getInstance().messages.getPlayerNotFound()));
+                        sender.sendMessage(Main.getInstance().messages.getPlayerNotFound());
                         return true;
                     }
                     int currentWanted = Main.getInstance().wantedMap.get(args[1]);
@@ -177,7 +177,7 @@ public class WantedCommand implements CommandExecutor {
                     try {
                         newWanted = Integer.parseInt(args[2]);
                         if (newWanted < 1) {
-                            sender.sendMessage(Utils.color(Main.getInstance().messages.getValidNumber()));
+                            sender.sendMessage(Main.getInstance().messages.getValidNumber());
                             return true;
                         }
                         Main.getInstance().wantedMap.remove(args[1]);
@@ -188,9 +188,9 @@ public class WantedCommand implements CommandExecutor {
                         if (currentWanted - newWanted <= 0)
                             SkullBuilder.getInstance().cache.remove(Bukkit.getPlayerExact(args[1]));
 
-                        sender.sendMessage(Utils.color(Main.getInstance().messages.getTakeWanted()));
+                        sender.sendMessage(Main.getInstance().messages.getTakeWanted());
                     } catch (Exception e) {
-                        sender.sendMessage(Utils.color(Main.getInstance().messages.getValidNumber()));
+                        sender.sendMessage(Main.getInstance().messages.getValidNumber());
                         return true;
                     }
                     return true;
@@ -198,11 +198,11 @@ public class WantedCommand implements CommandExecutor {
                 //AddWanted command
                 if (args[0].equalsIgnoreCase("add")) {
                     if (!(sender.hasPermission("wanted.add") || isAdmin)) {
-                        sender.sendMessage(Utils.color(Main.getInstance().messages.getNeedPermission()));
+                        sender.sendMessage(Main.getInstance().messages.getNeedPermission());
                         return true;
                     }
                     if (args.length < 3) {
-                        sender.sendMessage(Utils.color(Main.getInstance().messages.getOperation().replace("%action%", "Add")));
+                        sender.sendMessage(Main.getInstance().messages.getOperation().replace("%action%", "Add"));
                         return true;
                     }
                     Integer currentWanted = Main.getInstance().wantedMap.get(args[1]);
@@ -218,7 +218,7 @@ public class WantedCommand implements CommandExecutor {
                             Main.getInstance().wantedMap.remove(args[1]);
                             Main.getInstance().wantedMap.put(args[1], maximum);
                             Main.getInstance().reloadData();
-                            sender.sendMessage(Utils.color(Main.getInstance().messages.getAddWanted()));
+                            sender.sendMessage(Main.getInstance().messages.getAddWanted());
                             return true;
                         }
                         Main.getInstance().wantedMap.remove(args[1]);
@@ -227,21 +227,21 @@ public class WantedCommand implements CommandExecutor {
                         Main.getInstance().reloadData();
                         SkullBuilder.getInstance().saveHead(target);
 
-                        sender.sendMessage(Utils.color(Main.getInstance().messages.getAddWanted()));
+                        sender.sendMessage(Main.getInstance().messages.getAddWanted());
                         return true;
                     } catch (Exception e) {
-                        sender.sendMessage(Utils.color(Main.getInstance().messages.getValidNumber()));
+                        sender.sendMessage(Main.getInstance().messages.getValidNumber());
                         return true;
                     }
                 }
                 //SetWanted command
                 if (args[0].equalsIgnoreCase("set")) {
                     if (!(sender.hasPermission("wanted.set") || isAdmin)) {
-                        sender.sendMessage(Utils.color(Main.getInstance().messages.getNeedPermission()));
+                        sender.sendMessage(Main.getInstance().messages.getNeedPermission());
                         return true;
                     }
                     if (args.length < 3) {
-                        sender.sendMessage(Utils.color(Main.getInstance().messages.getOperation().replace("%action%", "Set")));
+                        sender.sendMessage(Main.getInstance().messages.getOperation().replace("%action%", "Set"));
                         return true;
                     }
                     int newWanted;
@@ -256,16 +256,16 @@ public class WantedCommand implements CommandExecutor {
                             Main.getInstance().wantedMap.remove(args[1]);
                             Main.getInstance().wantedMap.put(args[1], maximum);
                             Main.getInstance().reloadData();
-                            sender.sendMessage(Utils.color(Main.getInstance().messages.getAddWanted()));
+                            sender.sendMessage(Main.getInstance().messages.getAddWanted());
                             return true;
                         }
                         Main.getInstance().wantedMap.remove(args[1]);
                         Main.getInstance().wantedMap.put(args[1], newWanted);
                         SkullBuilder.getInstance().saveHead(Bukkit.getPlayerExact(args[1]));
                         Main.getInstance().reloadData();
-                        sender.sendMessage(Utils.color(Main.getInstance().messages.getSetWanted()));
+                        sender.sendMessage(Main.getInstance().messages.getSetWanted());
                     } catch (Exception e) {
-                        sender.sendMessage(Utils.color(Main.getInstance().messages.getValidNumber()));
+                        sender.sendMessage(Main.getInstance().messages.getValidNumber());
                         return true;
                     }
                     return true;
@@ -273,11 +273,11 @@ public class WantedCommand implements CommandExecutor {
                 //TopWanted command
                 if (args[0].equalsIgnoreCase("top")) {
                     if (!(sender.hasPermission("wanted.top") || isAdmin)) {
-                        sender.sendMessage(Utils.color(Main.getInstance().messages.getNeedPermission()));
+                        sender.sendMessage(Main.getInstance().messages.getNeedPermission());
                         return true;
                     }
                     if (Main.getInstance().wantedMap.isEmpty()) {
-                        sender.sendMessage(Utils.color(Main.getInstance().messages.getNoWanteds()));
+                        sender.sendMessage(Main.getInstance().messages.getNoWanteds());
                         return true;
                     }
 
@@ -311,7 +311,7 @@ public class WantedCommand implements CommandExecutor {
                     sender.sendMessage("§aTOP Wanted(s):");
 
                     for (int i = 0; i < numberList.size(); i++) {
-                        sender.sendMessage(Utils.color(Main.getInstance().messages.getWantedTop()).replace("%wanted%", String.valueOf(numberList.get(i)))
+                        sender.sendMessage(Main.getInstance().messages.getWantedTop().replace("%wanted%", String.valueOf(numberList.get(i)))
                                 .replace("%player%", playerList.get(i)).replace("%number%", String.valueOf(counter)));
                         if (counter == 10) {
                             break;
@@ -326,12 +326,12 @@ public class WantedCommand implements CommandExecutor {
                 //GUI command
                 if (args[0].equalsIgnoreCase("gui")) {
                     if (!(sender instanceof Player)) {
-                        sender.sendMessage(Utils.color(Main.getInstance().messages.getConsoleSender()));
+                        sender.sendMessage(Main.getInstance().messages.getConsoleSender());
                         return true;
                     }
                     Player player = (Player) sender;
                     if (!(sender.hasPermission("wanted.gui") || sender.hasPermission("wanted.admin"))) {
-                        sender.sendMessage(Utils.color(Main.getInstance().messages.getNeedPermission()));
+                        sender.sendMessage(Main.getInstance().messages.getNeedPermission());
                         return true;
                     }
 
@@ -341,7 +341,7 @@ public class WantedCommand implements CommandExecutor {
                 //Help command
                 if (args[0].equalsIgnoreCase("help")) {
                     if (!(sender.hasPermission("wanted.help") || sender.hasPermission("wanted.admin"))) {
-                        sender.sendMessage(Utils.color(Main.getInstance().messages.getNeedPermission()));
+                        sender.sendMessage(Main.getInstance().messages.getNeedPermission());
                         return true;
                     }
                     if (args.length == 2) {
@@ -360,7 +360,7 @@ public class WantedCommand implements CommandExecutor {
                 //Debug command
                 if (args[0].equalsIgnoreCase("debug")) {
                     if (!sender.hasPermission("wanted.admin")) {
-                        sender.sendMessage(Utils.color(Main.getInstance().messages.getNeedPermission()));
+                        sender.sendMessage(Main.getInstance().messages.getNeedPermission());
                         return true;
                     }
                     Bukkit.broadcastMessage(Main.getInstance().skullBuilder.cache.toString());
@@ -374,16 +374,16 @@ public class WantedCommand implements CommandExecutor {
             }
             //Wanted (default)
             if (!(sender instanceof Player)) {
-                sender.sendMessage(Utils.color(Main.getInstance().messages.getConsoleSender()));
+                sender.sendMessage(Main.getInstance().messages.getConsoleSender());
                 return true;
             }
             int currentWanted;
             try {
                 currentWanted = Main.getInstance().wantedMap.get(sender.getName());
-                sender.sendMessage(Utils.color("§aYour wanted: §e[" + currentWanted + "§e]"));
+                sender.sendMessage("§aYour wanted: §e[" + currentWanted + "§e]");
                 return true;
             } catch (Exception e) {
-                sender.sendMessage(Utils.color("§aYour wanted: §e[0]"));
+                sender.sendMessage("§aYour wanted: §e[0]");
                 return true;
             }
         }

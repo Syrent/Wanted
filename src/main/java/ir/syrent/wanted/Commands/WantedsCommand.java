@@ -22,11 +22,11 @@ public class WantedsCommand implements CommandExecutor {
         boolean isAdmin = sender.hasPermission("wanted.admin");
         if (label.equalsIgnoreCase("wanteds")) {
             if (!(sender.hasPermission("wanted.list") || isAdmin)) {
-                sender.sendMessage(Utils.color(Main.getInstance().messages.getNeedPermission().replace("%prefix%", Main.getInstance().messages.getPrefix()).replace("%player%", sender.getName())));
+                sender.sendMessage(Main.getInstance().messages.getNeedPermission().replace("%prefix%", Main.getInstance().messages.getPrefix()).replace("%player%", sender.getName()));
                 return true;
             }
             if (Main.getInstance().wantedMap.isEmpty()) {
-                sender.sendMessage(Utils.color(Main.getInstance().messages.getNoWanteds()));
+                sender.sendMessage(Main.getInstance().messages.getNoWanteds());
                 return true;
             }
 
@@ -34,12 +34,12 @@ public class WantedsCommand implements CommandExecutor {
                 if (Bukkit.getPlayerExact(wantedPlayer.getKey()) != null) number++;
             }
             if (number == 0) {
-                sender.sendMessage(Utils.color(Main.getInstance().messages.getNoWanteds()));
+                sender.sendMessage(Main.getInstance().messages.getNoWanteds());
                 return true;
             }
             number = 0;
 
-            sender.sendMessage(Utils.color(Main.getInstance().messages.getWantedTitle()));
+            sender.sendMessage(Main.getInstance().messages.getWantedTitle());
             for (Map.Entry<String, Integer> wantedlist : Main.getInstance().wantedMap.entrySet()) {
                 String key = wantedlist.getKey();
 
@@ -53,9 +53,9 @@ public class WantedsCommand implements CommandExecutor {
                 int count = Main.getInstance().wantedMap.get(key);
 
                 if (maximum <= 5) {
-                    message.add(Utils.color(Main.getInstance().messages.wantedSymbol(currentWanted).replace("%player%", key)));
+                    message.add(Main.getInstance().messages.wantedSymbol(currentWanted).replace("%player%", key));
                 } else {
-                    message.add(Utils.color(Main.getInstance().messages.getWantedList()).replace("%player%", key).replace("%wanted%", String.valueOf(count)));
+                    message.add(Main.getInstance().messages.getWantedList().replace("%player%", key).replace("%wanted%", String.valueOf(count)));
                 }
             }
 
