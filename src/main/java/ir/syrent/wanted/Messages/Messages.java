@@ -28,6 +28,7 @@ public class Messages {
     private final String noWanteds = Utils.color(String.format("%s%s", getPrefix(), Main.getInstance().messagesYML.getConfig().getString("no-wanteds")));
     private final String maximumWantedChanged = Utils.color(String.format("%s%s", getPrefix(), Main.getInstance().messagesYML.getConfig().getString("maximum-wanted-changed")));
     private final String pluginReloaded = Utils.color(String.format("%s%s", getPrefix(), Main.getInstance().messagesYML.getConfig().getString("plugin-reloaded")));
+    private final String itemCooldown = Utils.color(String.format("%s%s", getPrefix(), Main.getInstance().messagesYML.getConfig().getString("item-cooldown")));
 
     private final String getPlayerWanted = Utils.color(String.format("%s%s", getPrefix(), Main.getInstance().messagesYML.getConfig().getString("get-player-wanted")));
     private final String findUsage = Utils.color(String.format("%s%s", getPrefix(), "§cUsage: /wanted find <player>"));
@@ -261,5 +262,9 @@ public class Messages {
 
     public String getWantedTop() {
         return wantedTop;
+    }
+
+    public String getItemCooldown() {
+        return itemCooldown;
     }
 }

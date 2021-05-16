@@ -26,7 +26,7 @@ public class RequestGUI {
         for (int i=1 ; i <= Math.ceil((float) playerList.size() / 45) ; i++) {
             playersGUI.add(Bukkit.createInventory(null, 54,
                     ChatColor.translateAlternateColorCodes('&',
-                            "&4Wanteds List &8- &5Page &n" + i)));
+                            "&4&lWANTED GUI &8- &5Page &n" + i)));
         }
         //Looping and placing heads for each player
         for (int i=1,slot ; i <= playerList.size() ; i++) {
@@ -82,7 +82,7 @@ public class RequestGUI {
         ItemStack refresh = getRefreshButtonItem();
         ItemMeta refreshMeta = refresh.getItemMeta();
         assert refreshMeta != null;
-        refreshMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&5• &6Refresh &5•"));
+        refreshMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&6&l• &eRefresh &6&l•"));
         refresh.setItemMeta(refreshMeta);
         for (Inventory inv : playersGUI) {
             inv.setItem(49, refresh);
