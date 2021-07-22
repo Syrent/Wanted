@@ -14,35 +14,71 @@ public class Messages {
         return Main.getInstance();
     }
 
-    private final String prefix = Main.getInstance().messagesYML.getConfig().getString("prefix");
-    private final String needPermission = Utils.color(String.format("%s%s", getPrefix(), Main.getInstance().messagesYML.getConfig().getString("need-permission")));
-    private final String needGPS = Utils.color(String.format("%s%s", getPrefix(), Main.getInstance().messagesYML.getConfig().getString("needGPS")));
-    private final String playerNotFound = Utils.color(String.format("%s%s", getPrefix(), Main.getInstance().messagesYML.getConfig().getString("player-not-found")));
-    private final String selfTarget = Utils.color(String.format("%s%s", getPrefix(), Main.getInstance().messagesYML.getConfig().getString("self-target")));
-    private final String searchTarget = Utils.color(String.format("%s%s", getPrefix(), Main.getInstance().messagesYML.getConfig().getString("search-target")));
-    private final String targetWarn = Utils.color(String.format("%s%s", getPrefix(), Main.getInstance().messagesYML.getConfig().getString("search-notification")));
-    private final String wantedTitle = Utils.color(String.format("%s%s", getPrefix(), Main.getInstance().messagesYML.getConfig().getString("wanted-title")));
-    private final String wantedList = Utils.color(String.format("%s%s", getPrefix(), Main.getInstance().messagesYML.getConfig().getString("wanted-title")));
-    private final String wantedTop = Utils.color(String.format("%s%s", getPrefix(), Main.getInstance().messagesYML.getConfig().getString("wanted-top")));
-    private final String playerLeaveOnFinding = Utils.color(String.format("%s%s", getPrefix(), Main.getInstance().messagesYML.getConfig().getString("player-leave-on-finding")));
-    private final String noWanteds = Utils.color(String.format("%s%s", getPrefix(), Main.getInstance().messagesYML.getConfig().getString("no-wanteds")));
-    private final String maximumWantedChanged = Utils.color(String.format("%s%s", getPrefix(), Main.getInstance().messagesYML.getConfig().getString("maximum-wanted-changed")));
-    private final String pluginReloaded = Utils.color(String.format("%s%s", getPrefix(), Main.getInstance().messagesYML.getConfig().getString("plugin-reloaded")));
-    private final String itemCooldown = Utils.color(String.format("%s%s", getPrefix(), Main.getInstance().messagesYML.getConfig().getString("item-cooldown")));
+    private final String prefix;
+    private final String needPermission;
+    private final String needGPS;
+    private final String playerNotFound;
+    private final String selfTarget;
+    private final String searchTarget;
+    private final String targetWarn;
+    private final String wantedTitle;
+    private final String wantedList;
+    private final String wantedTop;
+    private final String playerLeaveOnFinding;
+    private final String noWanteds;
+    private final String maximumWantedChanged;
+    private final String pluginReloaded;
+    private final String itemCooldown;
 
-    private final String getPlayerWanted = Utils.color(String.format("%s%s", getPrefix(), Main.getInstance().messagesYML.getConfig().getString("get-player-wanted")));
-    private final String findUsage = Utils.color(String.format("%s%s", getPrefix(), "§cUsage: /wanted find <player>"));
-    private final String operation = Utils.color(String.format("%s%s", getPrefix(), "§cUsage: /wanted %action% <player> <wanted>"));
-    private final String clearOperator = Utils.color(String.format("%s%s", getPrefix(), "§cUsage: /wanted Clear <player>"));
-    private final String setMaximumUsage = Utils.color(String.format("%s%s", getPrefix(), "§cUsage: /wanted set-maximum <number>"));
-    private final String getWantedUsage = Utils.color(String.format("%s%s", getPrefix(), "§cUsage: /wanted get <player>"));
-    private final String clearWanted = Utils.color(String.format("%s%s", getPrefix(), "§7Wanted successfully cleared."));
-    private final String takeWanted = Utils.color(String.format("%s%s", getPrefix(), "§7Wanted successfully taked."));
-    private final String addWanted = Utils.color(String.format("%s%s", getPrefix(), "§7Wanted successfully added."));
-    private final String setWanted = Utils.color(String.format("%s%s", getPrefix(), "§7Wanted was set."));
-    private final String validNumber = Utils.color(String.format("%s%s", getPrefix(), "§cPlease enter an valid number."));
+    private final String getPlayerWanted;
+    private final String findUsage;
+    private final String operation;
+    private final String clearOperator;
+    private final String setMaximumUsage;
+    private final String getWantedUsage;
+    private final String clearWanted;
+    private final String takeWanted;
+    private final String addWanted;
+    private final String setWanted;
+    private final String validNumber;
 
-    private final String consoleSender = Utils.color(String.format("%s%s", getPrefix(), "§cOnly player can run this command."));
+    private final String playerWanted;
+
+    private final String consoleSender;
+
+    public Messages() {
+        prefix = Main.getInstance().messagesYML.getConfig().getString("prefix");
+        needPermission = Utils.color(String.format("%s%s", getPrefix(), Main.getInstance().messagesYML.getConfig().getString("need-permission")));
+        needGPS = Utils.color(String.format("%s%s", getPrefix(), Main.getInstance().messagesYML.getConfig().getString("needGPS")));
+        playerNotFound = Utils.color(String.format("%s%s", getPrefix(), Main.getInstance().messagesYML.getConfig().getString("player-not-found")));
+        selfTarget = Utils.color(String.format("%s%s", getPrefix(), Main.getInstance().messagesYML.getConfig().getString("self-target")));
+        searchTarget = Utils.color(String.format("%s%s", getPrefix(), Main.getInstance().messagesYML.getConfig().getString("search-target")));
+        targetWarn = Utils.color(String.format("%s%s", getPrefix(), Main.getInstance().messagesYML.getConfig().getString("search-notification")));
+        wantedTitle = Utils.color(String.format("%s", Main.getInstance().messagesYML.getConfig().getString("wanted-title")));
+        wantedList = Utils.color(String.format("%s", Main.getInstance().messagesYML.getConfig().getString("wanted-list")));
+        wantedTop = Utils.color(String.format("%s", Main.getInstance().messagesYML.getConfig().getString("wanted-top")));
+        playerLeaveOnFinding = Utils.color(String.format("%s%s", getPrefix(), Main.getInstance().messagesYML.getConfig().getString("player-leave-on-finding")));
+        noWanteds = Utils.color(String.format("%s%s", getPrefix(), Main.getInstance().messagesYML.getConfig().getString("no-wanteds")));
+        maximumWantedChanged = Utils.color(String.format("%s%s", getPrefix(), Main.getInstance().messagesYML.getConfig().getString("maximum-wanted-changed")));
+        pluginReloaded = Utils.color(String.format("%s%s", getPrefix(), Main.getInstance().messagesYML.getConfig().getString("plugin-reloaded")));
+        itemCooldown = Utils.color(String.format("%s%s", getPrefix(), Main.getInstance().messagesYML.getConfig().getString("item-cooldown")));
+
+        getPlayerWanted = Utils.color(String.format("%s%s", getPrefix(), Main.getInstance().messagesYML.getConfig().getString("get-player-wanted")));
+        findUsage = Utils.color(String.format("%s%s", getPrefix(), "§cUsage: /wanted find <player>"));
+        operation = Utils.color(String.format("%s%s", getPrefix(), "§cUsage: /wanted %action% <player> <wanted>"));
+        clearOperator = Utils.color(String.format("%s%s", getPrefix(), "§cUsage: /wanted Clear <player>"));
+        setMaximumUsage = Utils.color(String.format("%s%s", getPrefix(), "§cUsage: /wanted set-maximum <number>"));
+        getWantedUsage = Utils.color(String.format("%s%s", getPrefix(), "§cUsage: /wanted get <player>"));
+        clearWanted = Utils.color(String.format("%s%s", getPrefix(), "§aWanted successfully cleared."));
+        takeWanted = Utils.color(String.format("%s%s", getPrefix(), "§aWanted successfully taked."));
+        addWanted = Utils.color(String.format("%s%s", getPrefix(), "§aWanted successfully added."));
+        setWanted = Utils.color(String.format("%s%s", getPrefix(), "§aWanted was set."));
+        validNumber = Utils.color(String.format("%s%s", getPrefix(), "§cPlease enter an valid number."));
+
+        playerWanted = Utils.color(String.format("%s%s", getPrefix(), "&7Your Wanted is &b%wanted%."));
+
+        consoleSender = Utils.color(String.format("%s%s", getPrefix(), "§cOnly player can run this command."));
+    }
 
     public void helpMessage1(CommandSender sender) {
         sender.sendMessage("§7§l§m---------------§f[§r §bWanted v%version% §f]§7§l§m---------------§r".replace("%version%", getPlugin().getDescription().getVersion()));
@@ -139,7 +175,7 @@ public class Messages {
             default:
                 throw new IllegalStateException("Unexpected value: " + count);
         }
-        return format;
+        return Utils.color(format);
     }
 
     public String logger(PlayerDeathEvent event) {
@@ -266,5 +302,9 @@ public class Messages {
 
     public String getItemCooldown() {
         return itemCooldown;
+    }
+
+    public String getPlayerWanted() {
+        return playerWanted;
     }
 }

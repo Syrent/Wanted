@@ -6,14 +6,15 @@ import ir.syrent.wanted.DataManager.Log;
 import ir.syrent.wanted.DataManager.MessagesYML;
 import ir.syrent.wanted.DataManager.WantedsYML;
 import ir.syrent.wanted.Dependencies.PlaceholderAPI;
-import ir.syrent.wanted.Events.DeathEvent;
-import ir.syrent.wanted.Events.InventoryListener;
-import ir.syrent.wanted.Events.JoinListener;
-import ir.syrent.wanted.Events.QuitListener;
+import ir.syrent.wanted.Events.PlayerDeathListener;
+import ir.syrent.wanted.Events.InventoryClickListener;
+import ir.syrent.wanted.Events.PlayerJoinListener;
+import ir.syrent.wanted.Events.PlayerQuitListener;
 import ir.syrent.wanted.GUI.RequestGUI;
 import ir.syrent.wanted.Messages.Messages;
 import ir.syrent.wanted.Utils.SkullBuilder;
 import ir.syrent.wanted.Utils.TabCompleter;
+import ir.syrent.wanted.Utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.configuration.ConfigurationSection;
@@ -39,14 +40,16 @@ public final class Main extends JavaPlugin implements CommandExecutor {
     public SkullBuilder skullBuilder;
     public RequestGUI requestGUI;
 
+    public boolean placeholderAPIFound;
+
     @Override
     public void onEnable() {
         plugin = this;
 
-        registerCmds();
+        initializePlaceholderAPI();
+        registerCommands();
         registerEvents();
         initializeInstances();
-        initializePlaceholderAPI();
 
         reloadData();
     }
@@ -59,7 +62,10 @@ public final class Main extends JavaPlugin implements CommandExecutor {
     public void reloadData() {
         if (!getConfig().getBoolean("DataSave.Enable", true)) return;
         ConfigurationSection section = wantedsYML.getConfig().getConfigurationSection("wanted");
-        if (section == null) return;
+        if (section == null) {
+            this.getLogger().warning("wanted section is empty. Cancel player data loader...");
+            return;
+        }
         if (wantedMap.isEmpty()) {
             //If the wantedMap was empty, get wanteds from the configuration file.
             ConfigurationSection wantedSection = wantedsYML.getConfig().getConfigurationSection("wanted");
@@ -84,25 +90,25 @@ public final class Main extends JavaPlugin implements CommandExecutor {
         wantedsYML.saveConfig();
     }
 
-    public void registerCmds() {
+    public void registerCommands() {
         getCommand("wanted").setExecutor(new WantedCommand());
         getCommand("wanteds").setExecutor(new WantedsCommand());
         getCommand("wanted").setTabCompleter(new TabCompleter());
     }
 
     public void registerEvents() {
-        getServer().getPluginManager().registerEvents(new DeathEvent(), this);
-        getServer().getPluginManager().registerEvents(new JoinListener(), this);
-        getServer().getPluginManager().registerEvents(new QuitListener(), this);
-        getServer().getPluginManager().registerEvents(new InventoryListener(), this);
+        getServer().getPluginManager().registerEvents(new PlayerDeathListener(), this);
+        getServer().getPluginManager().registerEvents(new PlayerJoinListener(), this);
+        getServer().getPluginManager().registerEvents(new PlayerQuitListener(), this);
+        getServer().getPluginManager().registerEvents(new InventoryClickListener(), this);
     }
 
     public void initializeInstances() {
         this.saveDefaultConfig();
         wantedsYML = new WantedsYML();
         messagesYML = new MessagesYML();
-        messagesYML.saveDefaultConfig();
         wantedsYML.saveDefaultConfig();
+        messagesYML.saveDefaultConfig();
         skullBuilder = new SkullBuilder(this);
         requestGUI = new RequestGUI();
         messages = new Messages();
@@ -111,7 +117,13 @@ public final class Main extends JavaPlugin implements CommandExecutor {
 
     public void initializePlaceholderAPI() {
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            this.getLogger().info(Utils.color("PlaceholderAPI found! enabling hook..."));
             new PlaceholderAPI().register();
+            this.getLogger().info(Utils.color("PlaceholderAPI hook enabled!"));
+            placeholderAPIFound = true;
+        } else {
+            this.getLogger().warning(Utils.color("PlaceholderAPI not found! disabling hook..."));
+            placeholderAPIFound = false;
         }
     }
 

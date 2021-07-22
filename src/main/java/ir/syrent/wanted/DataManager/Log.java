@@ -18,17 +18,17 @@ public class Log {
         setupLogFolder();
     }
 
-    public File logsfolder;
+    public File logsFolder;
 
     public void setupLogFolder() {
         if (!Main.getInstance().getDataFolder().exists()) { // Check if plugin folder exists
             Main.getInstance().getDataFolder().mkdir(); // if not then create it
         }
 
-        logsfolder = new File(Main.getInstance().getDataFolder(), "logs"); // Set the path of the new logs folder
+        logsFolder = new File(Main.getInstance().getDataFolder(), "logs"); // Set the path of the new logs folder
 
-        if (!logsfolder.exists()) { // Check if logs folder exists
-            logsfolder.mkdirs(); // if not then create it
+        if (!logsFolder.exists()) { // Check if logs folder exists
+            logsFolder.mkdirs(); // if not then create it
             Main.getInstance().getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "Created the logs folder"); // Send a message to console that the folder has been created
         }
     }

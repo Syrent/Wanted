@@ -21,6 +21,7 @@ public class TabCompleter implements org.bukkit.command.TabCompleter {
             arguments.add("clear");
             arguments.add("set-maximum");
             arguments.add("reload");
+            arguments.add("help");
         }
 
         List<String> result = new ArrayList<>();

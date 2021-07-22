@@ -14,12 +14,14 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.stream.Collectors;
 
-public class InventoryListener implements Listener {
+public class InventoryClickListener implements Listener {
 
     HashSet<Player> playerCooldown = new HashSet<>();
 
     @EventHandler
     public void onClick(InventoryClickEvent event) {
+        if (event.getCurrentItem() == null) return;
+
         Player player = (Player) event.getWhoClicked();
         if (event.getView().getTitle().contains("WANTED GUI")) {
             event.setCancelled(true);
@@ -35,6 +37,7 @@ public class InventoryListener implements Listener {
                 player.sendMessage(Main.getInstance().messages.getItemCooldown());
                 return;
             }
+
             playerCooldown.add(player);
             new BukkitRunnable() {
                 @Override
@@ -42,6 +45,7 @@ public class InventoryListener implements Listener {
                     playerCooldown.remove(player);
                 }
             }.runTaskLaterAsynchronously(Main.getInstance(), 60L);
+
             if (event.getSlot() == 46 && event.getClickedInventory().getItem(46) != null) {
                 //Previous Page
                 if (currentPage != 1) {
@@ -61,6 +65,7 @@ public class InventoryListener implements Listener {
                 Material type = Material.matchMaterial(isNewVersion ? "PLAYER_HEAD" : "SKULL_ITEM");
 
                 if (event.getCurrentItem().getType().equals(type)) {
+                    player.closeInventory();
                     Bukkit.dispatchCommand(player, "wanted find " + ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName()));
                 }
             }
