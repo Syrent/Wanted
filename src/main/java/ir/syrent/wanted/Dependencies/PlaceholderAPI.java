@@ -41,8 +41,10 @@ public class PlaceholderAPI extends PlaceholderExpansion {
 
         //Wanted placeholder
         if (identifier.equals("wanted")) {
-            if (Main.getInstance().wantedMap.get(player.getName()) == null) return "0";
-            return String.valueOf(Main.getInstance().wantedMap.get(player.getName()));
+            if (Main.getInstance().wantedMap.get(player.getName()) == null || Main.getInstance().wantedMap.get(player.getName()) == 0) return "0";
+            else if (Main.getInstance().wantedMap.get(player.getName()) <= 5)
+                return Main.getInstance().messages.rawWantedSymbol(Main.getInstance().wantedMap.get(player.getName()));
+            else return String.valueOf(Main.getInstance().wantedMap.get(player.getName()));
         }
 
         return null;

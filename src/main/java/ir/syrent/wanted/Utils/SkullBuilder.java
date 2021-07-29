@@ -55,12 +55,7 @@ public class SkullBuilder {
     public void saveHead(Player player) {
         if (player == null) return;
         if (!cache.containsKey(player))
-            Bukkit.getScheduler().runTaskAsynchronously(plugin, new Runnable() {
-                @Override
-                public void run() {
-                    cache.put(player, getHead(player).serialize());
-                }
-            });
+            Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> cache.put(player, getHead(player).serialize()));
     }
 
     /**

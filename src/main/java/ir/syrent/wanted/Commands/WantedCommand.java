@@ -1,9 +1,7 @@
 package ir.syrent.wanted.Commands;
 
 import ir.syrent.wanted.Main;
-import ir.syrent.wanted.Messages.Messages;
 import ir.syrent.wanted.Utils.SkullBuilder;
-import ir.syrent.wanted.Utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -106,14 +104,12 @@ public class WantedCommand implements CommandExecutor {
                 new BukkitRunnable() {
                     @Override
                     public void run() {
-                        Bukkit.getScheduler().runTaskAsynchronously(Main.getInstance(), () -> {
-                            if (!target.isOnline()) {
-                                player.sendMessage(Main.getInstance().messages.getPlayerLeaveOnFinding()
-                                        .replace("%player%", target.getName()));
-                                cancel();
-                            }
-                            player.setCompassTarget(getTarget.get(player).getLocation());
-                        });
+                        if (!target.isOnline()) {
+                            player.sendMessage(Main.getInstance().messages.getPlayerLeaveOnFinding()
+                                    .replace("%player%", target.getName()));
+                            cancel();
+                        }
+                        player.setCompassTarget(getTarget.get(player).getLocation());
                     }
                 }.runTaskTimerAsynchronously(Main.getInstance(), 0, Main.getInstance().getConfig().getInt("Wanted.CompassRefreshInterval"));
                 return true;
@@ -159,7 +155,7 @@ public class WantedCommand implements CommandExecutor {
                 sender.sendMessage(Main.getInstance().messages.getPluginReloaded());
                 Main.getInstance().reloadConfig();
                 Main.getInstance().messagesYML.reloadConfig();
-                new Messages();
+                Main.getInstance().messages.reload();
                 return true;
             }
 
@@ -176,6 +172,7 @@ public class WantedCommand implements CommandExecutor {
                 }
 
                 Main.getInstance().wantedMap.remove(args[1]);
+                Bukkit.broadcastMessage("Cleared: " + Main.getInstance().wantedMap.get(args[1]));
                 SkullBuilder.getInstance().cache.remove(Bukkit.getPlayerExact(args[1]));
                 Main.getInstance().reloadData();
                 sender.sendMessage(Main.getInstance().messages.getClearWanted());
@@ -255,13 +252,13 @@ public class WantedCommand implements CommandExecutor {
                     Main.getInstance().wantedMap.remove(args[1]);
                     Main.getInstance().wantedMap.put(args[1], (currentWanted + newWanted));
                     Main.getInstance().reloadData();
-                    Main.getInstance().reloadData();
                     SkullBuilder.getInstance().saveHead(target);
 
                     sender.sendMessage(Main.getInstance().messages.getAddWanted());
                     return true;
                 } catch (Exception e) {
                     sender.sendMessage(Main.getInstance().messages.getValidNumber());
+                    e.printStackTrace();
                     return true;
                 }
             }

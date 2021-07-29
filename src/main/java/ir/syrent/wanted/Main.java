@@ -6,8 +6,8 @@ import ir.syrent.wanted.DataManager.Log;
 import ir.syrent.wanted.DataManager.MessagesYML;
 import ir.syrent.wanted.DataManager.WantedsYML;
 import ir.syrent.wanted.Dependencies.PlaceholderAPI;
-import ir.syrent.wanted.Events.PlayerDeathListener;
 import ir.syrent.wanted.Events.InventoryClickListener;
+import ir.syrent.wanted.Events.PlayerDeathListener;
 import ir.syrent.wanted.Events.PlayerJoinListener;
 import ir.syrent.wanted.Events.PlayerQuitListener;
 import ir.syrent.wanted.GUI.RequestGUI;
@@ -30,15 +30,16 @@ public final class Main extends JavaPlugin implements CommandExecutor {
 
     private static Main plugin;
 
-    public HashMap<String, Integer> wantedMap = new HashMap<>();
-    public List<Inventory> playersGUI = new ArrayList<>();
-
     public WantedsYML wantedsYML;
     public MessagesYML messagesYML;
     public Messages messages;
     public Log log;
     public SkullBuilder skullBuilder;
     public RequestGUI requestGUI;
+
+    public HashMap<String, Integer> wantedMap = new HashMap<>();
+    public List<Inventory> playersGUI = new ArrayList<>();
+    public ConfigurationSection section;
 
     public boolean placeholderAPIFound;
 
@@ -61,11 +62,7 @@ public final class Main extends JavaPlugin implements CommandExecutor {
 
     public void reloadData() {
         if (!getConfig().getBoolean("DataSave.Enable", true)) return;
-        ConfigurationSection section = wantedsYML.getConfig().getConfigurationSection("wanted");
-        if (section == null) {
-            this.getLogger().warning("wanted section is empty. Cancel player data loader...");
-            return;
-        }
+        if (section == null) wantedsYML.getConfig().createSection("wanted");
         if (wantedMap.isEmpty()) {
             //If the wantedMap was empty, get wanteds from the configuration file.
             ConfigurationSection wantedSection = wantedsYML.getConfig().getConfigurationSection("wanted");
@@ -79,14 +76,21 @@ public final class Main extends JavaPlugin implements CommandExecutor {
         //Saving data to the configuration file.
         for (String playerName : wantedMap.keySet()) {
             Player player = Bukkit.getPlayerExact(playerName);
-            int wanteds = wantedMap.get(playerName);
-            section.set(playerName, wanteds);
+
+            if (wantedMap.get(playerName) == null) {
+                Bukkit.broadcastMessage("§aSet to null!");
+                section.set(playerName, null);
+            }
+            else {
+                section.set(playerName, wantedMap.get(playerName));
+                Bukkit.broadcastMessage(String.valueOf(wantedMap.get(playerName)));
+                Bukkit.broadcastMessage("§aNot null!");
+            }
             //Putting player's head to our cache if they were online
             if (player != null)
-                skullBuilder.cache.put(player, skullBuilder.getHead(player).serialize());
+                if (!skullBuilder.cache.containsKey(player))
+                    Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> skullBuilder.cache.put(player, skullBuilder.getHead(player).serialize()));
         }
-        if (getConfig().getBoolean("DataSave.Notification"))
-            this.getLogger().info("Wanted data has been saved.");
         wantedsYML.saveConfig();
     }
 
@@ -113,6 +117,8 @@ public final class Main extends JavaPlugin implements CommandExecutor {
         requestGUI = new RequestGUI();
         messages = new Messages();
         log = new Log();
+
+        section = wantedsYML.getConfig().getConfigurationSection("wanted");
     }
 
     public void initializePlaceholderAPI() {

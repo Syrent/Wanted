@@ -1,7 +1,6 @@
 package ir.syrent.wanted.Events;
 
 import ir.syrent.wanted.Main;
-import ir.syrent.wanted.Messages.Messages;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -17,7 +16,6 @@ public class PlayerDeathListener implements Listener {
 
         if (killer != null) {
 
-            Main.getInstance().log.logToFile(Main.getInstance().log.logTime(), Main.getInstance().messages.logger(event));
 
             int wanted = Main.getInstance().wantedMap.getOrDefault(killer.getName(), 0);
             int maximum = Main.getInstance().getConfig().getInt("Wanted.Maximum");
@@ -59,6 +57,7 @@ public class PlayerDeathListener implements Listener {
 
                     Main.getInstance().wantedMap.replace(killer.getName(), (wanted + Main.getInstance().getConfig().getInt("Wanted.ReceiveOnKill")));
                 }
+                Main.getInstance().log.logToFile(Main.getInstance().log.logTime(), Main.getInstance().messages.logger(event));
                 break;
             }
         }
