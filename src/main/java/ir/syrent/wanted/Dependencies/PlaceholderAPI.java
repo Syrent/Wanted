@@ -1,6 +1,7 @@
 package ir.syrent.wanted.Dependencies;
 
 import ir.syrent.wanted.Main;
+import ir.syrent.wanted.WantedManager;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -41,10 +42,11 @@ public class PlaceholderAPI extends PlaceholderExpansion {
 
         //Wanted placeholder
         if (identifier.equals("wanted")) {
-            if (Main.getInstance().wantedMap.get(player.getName()) == null || Main.getInstance().wantedMap.get(player.getName()) == 0) return "0";
-            else if (Main.getInstance().wantedMap.get(player.getName()) <= 5)
-                return Main.getInstance().messages.rawWantedSymbol(Main.getInstance().wantedMap.get(player.getName()));
-            else return String.valueOf(Main.getInstance().wantedMap.get(player.getName()));
+            if (WantedManager.getInstance().getWanteds().get(player.getName()) == null) return "0";
+            else if (WantedManager.getInstance().getWanted(player) == 0) return "";
+            else if (WantedManager.getInstance().getWanted(player) <= 5)
+                return Main.getInstance().messages.rawWantedSymbol(WantedManager.getInstance().getWanted(player));
+            else return String.valueOf(WantedManager.getInstance().getWanted(player));
         }
 
         return null;

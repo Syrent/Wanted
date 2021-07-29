@@ -3,6 +3,7 @@ package ir.syrent.wanted.GUI;
 import ir.syrent.wanted.Main;
 import ir.syrent.wanted.Utils.SkullBuilder;
 import ir.syrent.wanted.Utils.Utils;
+import ir.syrent.wanted.WantedManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -40,7 +41,7 @@ public class RequestGUI {
             meta.setDisplayName(ChatColor.AQUA + player.getName());
 
             List<String> lore = new ArrayList<>();
-            lore.add(Utils.color("&7Wanteds: &b" + Main.getInstance().wantedMap.get(player.getName())));
+            lore.add(Utils.color("&7Wanteds: &b" + WantedManager.getInstance().getWanted(player)));
             lore.add(Utils.color("&7World: &b" + player.getWorld().getName()));
             lore.add(Utils.color("&7Location: " + String.format(
                     "&eX: &b%.0f&7, &eY: &b%.0f&7, &eZ: &b%.0f",

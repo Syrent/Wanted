@@ -1,7 +1,7 @@
 package ir.syrent.wanted.Events;
 
-import ir.syrent.wanted.Main;
 import ir.syrent.wanted.Utils.SkullBuilder;
+import ir.syrent.wanted.WantedManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -13,7 +13,7 @@ public class PlayerQuitListener implements Listener {
     public void onQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
         //Removing player from cache to avoid memory leaks
-        if (Main.getInstance().wantedMap.containsKey(player.getName())) {
+        if (WantedManager.getInstance().getWanted(player) != 0) {
             SkullBuilder.getInstance().cache.remove(player);
         }
     }

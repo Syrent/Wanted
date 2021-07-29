@@ -2,6 +2,7 @@ package ir.syrent.wanted.Commands;
 
 import ir.syrent.wanted.Main;
 import ir.syrent.wanted.Utils.SkullBuilder;
+import ir.syrent.wanted.WantedManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -31,26 +32,28 @@ public class WantedCommand implements CommandExecutor {
                     return true;
                 }
 
+                Player player = (Player) sender;
+
                 if (!isAdmin) {
-                    sender.sendMessage(Main.getInstance().messages.getNeedPermission());
+                    player.sendMessage(Main.getInstance().messages.getNeedPermission());
                     return true;
                 }
 
                 if (args.length == 1) {
-                    sender.sendMessage(Main.getInstance().messages.getGetWantedUsage());
+                    player.sendMessage(Main.getInstance().messages.getGetWantedUsage());
                     return true;
                 }
 
                 Player target = Bukkit.getPlayerExact(args[1]);
                 if (target == null) {
-                    sender.sendMessage(Main.getInstance().messages.getPlayerNotFound());
+                    player.sendMessage(Main.getInstance().messages.getPlayerNotFound());
                     return true;
                 }
 
-                String wanted = String.valueOf(Main.getInstance().wantedMap.get(args[1]));
-                if (wanted.equals("null")) wanted = "0";
-                sender.sendMessage(Main.getInstance().messages.getGetPlayerWanted()
-                        .replace("%wanted%", wanted)
+                int wanted = WantedManager.getInstance().getWanted(player);
+
+                player.sendMessage(Main.getInstance().messages.getGetPlayerWanted()
+                        .replace("%wanted%", String.valueOf(wanted))
                         .replace("%player%", args[1]));
                 return true;
             }
@@ -171,10 +174,16 @@ public class WantedCommand implements CommandExecutor {
                     return true;
                 }
 
-                Main.getInstance().wantedMap.remove(args[1]);
-                Bukkit.broadcastMessage("Cleared: " + Main.getInstance().wantedMap.get(args[1]));
-                SkullBuilder.getInstance().cache.remove(Bukkit.getPlayerExact(args[1]));
-                Main.getInstance().reloadData();
+                Player target = Bukkit.getPlayerExact(args[1]);
+
+                if (target == null) {
+                    sender.sendMessage(Main.getInstance().messages.getPlayerNotFound());
+                    return true;
+                }
+
+                WantedManager.getInstance().setWanted(target, 0);
+                SkullBuilder.getInstance().cache.remove(target);
+
                 sender.sendMessage(Main.getInstance().messages.getClearWanted());
                 return true;
             }
@@ -191,34 +200,25 @@ public class WantedCommand implements CommandExecutor {
                     return true;
                 }
 
-                if (Main.getInstance().wantedMap.get(args[1]) == null) {
+                Player target = Bukkit.getPlayerExact(args[1]);
+
+                if (target == null) {
                     sender.sendMessage(Main.getInstance().messages.getPlayerNotFound());
                     return true;
                 }
 
-                int currentWanted = Main.getInstance().wantedMap.get(args[1]);
-                int newWanted;
+                int wanted;
                 try {
-                    newWanted = Integer.parseInt(args[2]);
-                    if (newWanted < 1) {
-                        sender.sendMessage(Main.getInstance().messages.getValidNumber());
-                        return true;
-                    }
-
-                    Main.getInstance().wantedMap.remove(args[1]);
-                    if ((currentWanted - newWanted) >= 1) {
-                        Main.getInstance().wantedMap.put(args[1], (currentWanted - newWanted));
-                        Main.getInstance().reloadData();
-                    }
-
-                    if (currentWanted - newWanted <= 0)
-                        SkullBuilder.getInstance().cache.remove(Bukkit.getPlayerExact(args[1]));
-
-                    sender.sendMessage(Main.getInstance().messages.getTakeWanted());
-                } catch (Exception e) {
+                    wanted = Integer.parseInt(args[2]);
+                } catch (NumberFormatException e) {
                     sender.sendMessage(Main.getInstance().messages.getValidNumber());
                     return true;
                 }
+
+                if (WantedManager.getInstance().takeWanted(target, wanted) == 0)
+                    SkullBuilder.getInstance().cache.remove(Bukkit.getPlayerExact(args[1]));
+
+                sender.sendMessage(Main.getInstance().messages.getTakeWanted());
                 return true;
             }
             //AddWanted command
@@ -233,34 +233,26 @@ public class WantedCommand implements CommandExecutor {
                     return true;
                 }
 
-                Integer currentWanted = Main.getInstance().wantedMap.get(args[1]);
-                int newWanted;
-                int maximum = Main.getInstance().getConfig().getInt("Wanted.Maximum");
-                try {
-                    newWanted = Integer.parseInt(args[2]);
-                    if (currentWanted == null) currentWanted = 0;
+                Player target = Bukkit.getPlayerExact(args[1]);
 
-                    Player target = Bukkit.getPlayerExact(args[1]);
-
-                    if ((currentWanted + newWanted) > maximum) {
-                        Main.getInstance().wantedMap.remove(args[1]);
-                        Main.getInstance().wantedMap.put(args[1], maximum);
-                        Main.getInstance().reloadData();
-                        sender.sendMessage(Main.getInstance().messages.getAddWanted());
-                        return true;
-                    }
-                    Main.getInstance().wantedMap.remove(args[1]);
-                    Main.getInstance().wantedMap.put(args[1], (currentWanted + newWanted));
-                    Main.getInstance().reloadData();
-                    SkullBuilder.getInstance().saveHead(target);
-
-                    sender.sendMessage(Main.getInstance().messages.getAddWanted());
-                    return true;
-                } catch (Exception e) {
-                    sender.sendMessage(Main.getInstance().messages.getValidNumber());
-                    e.printStackTrace();
+                if (target == null) {
+                    sender.sendMessage(Main.getInstance().messages.getPlayerNotFound());
                     return true;
                 }
+
+                int wanted;
+                try {
+                    wanted = Integer.parseInt(args[2]);
+                } catch (NumberFormatException e) {
+                    sender.sendMessage(Main.getInstance().messages.getValidNumber());
+                    return true;
+                }
+
+                if (WantedManager.getInstance().addWanted(target, wanted) != 0)
+                    SkullBuilder.getInstance().saveHead(target);
+
+                sender.sendMessage(Main.getInstance().messages.getTakeWanted());
+                return true;
             }
 
             //SetWanted command
@@ -275,32 +267,25 @@ public class WantedCommand implements CommandExecutor {
                     return true;
                 }
 
-                int newWanted;
+                Player target = Bukkit.getPlayerExact(args[1]);
+
+                if (target == null) {
+                    sender.sendMessage(Main.getInstance().messages.getPlayerNotFound());
+                    return true;
+                }
+
+                int wanted;
                 try {
-                    newWanted = Integer.parseInt(args[2]);
-                    if (newWanted < 1) {
-                        Main.getInstance().wantedMap.remove(args[1]);
-                        return true;
-                    }
-
-                    int maximum = Main.getInstance().getConfig().getInt("Wanted.Maximum");
-                    if (newWanted > maximum) {
-                        Main.getInstance().wantedMap.remove(args[1]);
-                        Main.getInstance().wantedMap.put(args[1], maximum);
-                        Main.getInstance().reloadData();
-                        sender.sendMessage(Main.getInstance().messages.getAddWanted());
-                        return true;
-                    }
-
-                    Main.getInstance().wantedMap.remove(args[1]);
-                    Main.getInstance().wantedMap.put(args[1], newWanted);
-                    SkullBuilder.getInstance().saveHead(Bukkit.getPlayerExact(args[1]));
-                    Main.getInstance().reloadData();
-                    sender.sendMessage(Main.getInstance().messages.getSetWanted());
-                } catch (Exception e) {
+                    wanted = Integer.parseInt(args[2]);
+                } catch (NumberFormatException e) {
                     sender.sendMessage(Main.getInstance().messages.getValidNumber());
                     return true;
                 }
+
+                if (WantedManager.getInstance().setWanted(target, wanted) != 0)
+                    SkullBuilder.getInstance().saveHead(target);
+
+                sender.sendMessage(Main.getInstance().messages.getSetWanted());
                 return true;
             }
 
@@ -311,14 +296,14 @@ public class WantedCommand implements CommandExecutor {
                     return true;
                 }
 
-                if (Main.getInstance().wantedMap.isEmpty()) {
+                if (WantedManager.getInstance().getWanteds().isEmpty()) {
                     sender.sendMessage(Main.getInstance().messages.getNoWanteds());
                     return true;
                 }
 
                 List<String> playerList = new ArrayList<>();
                 List<Integer> numberList = new ArrayList<>();
-                for (Map.Entry<String, Integer> getPlayer : Main.getInstance().wantedMap.entrySet()) {
+                for (Map.Entry<String, Integer> getPlayer : WantedManager.getInstance().getWanteds().entrySet()) {
                     Player wantedPlayer = Bukkit.getPlayerExact(getPlayer.getKey());
                     if (wantedPlayer == null) continue;
                     playerList.add(getPlayer.getKey());
@@ -401,10 +386,11 @@ public class WantedCommand implements CommandExecutor {
             return true;
         }
 
-        int currentWanted;
+        Player player = (Player) sender;
+
         try {
-            currentWanted = Main.getInstance().wantedMap.get(sender.getName());
-            sender.sendMessage(Main.getInstance().messages.getPlayerWanted().replace("%wanted%", String.valueOf(currentWanted)));
+            sender.sendMessage(Main.getInstance().messages.getPlayerWanted().replace("%wanted%",
+                    String.valueOf(WantedManager.getInstance().getWanted(player))));
             return true;
         } catch (Exception e) {
             sender.sendMessage(Main.getInstance().messages.getPlayerWanted().replace("%wanted%", "0"));

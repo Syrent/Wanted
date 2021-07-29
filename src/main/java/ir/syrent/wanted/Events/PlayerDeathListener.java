@@ -1,6 +1,7 @@
 package ir.syrent.wanted.Events;
 
 import ir.syrent.wanted.Main;
+import ir.syrent.wanted.WantedManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -17,7 +18,7 @@ public class PlayerDeathListener implements Listener {
         if (killer != null) {
 
 
-            int wanted = Main.getInstance().wantedMap.getOrDefault(killer.getName(), 0);
+            int wanted = WantedManager.getInstance().getWanted(killer);
             int maximum = Main.getInstance().getConfig().getInt("Wanted.Maximum");
 
             for (PermissionAttachmentInfo permissionList : victim.getEffectivePermissions()) {
@@ -27,35 +28,20 @@ public class PlayerDeathListener implements Listener {
                 if (wantedPermission.contains("wanted") && wantedPermission.contains("receive")) {
                     String[] permissionSplit = wantedPermission.split("\\.");
                     int number = Integer.parseInt(permissionSplit[2]);
-                    if (Main.getInstance().wantedMap.get(victim.getName()) != null) {
-                        Main.getInstance().wantedMap.remove(victim.getName());
-                    }
+                    if (WantedManager.getInstance().getWanted(victim) == 0)
+                        WantedManager.getInstance().setWanted(victim, 0);
 
                     if (!Main.getInstance().skullBuilder.cache.containsKey(killer)) {
                         Main.getInstance().skullBuilder.cache.put(killer, killer.serialize());
                     }
 
-                    if ((wanted + number) > maximum) {
-                        Main.getInstance().wantedMap.put(killer.getName(), maximum);
-                        break;
-                    }
-
-                    Main.getInstance().wantedMap.replace(killer.getName(), (wanted + number));
+                    WantedManager.getInstance().setWanted(killer, (wanted + number));
                 } else {
                     if (!Main.getInstance().skullBuilder.cache.containsKey(killer)) {
                         Main.getInstance().skullBuilder.cache.put(killer, killer.serialize());
                     }
 
-                    if ((wanted + 1) > maximum) {
-                        Main.getInstance().wantedMap.put(killer.getName(), maximum);
-                        break;
-                    }
-
-                    if (wanted == 0) {
-                        Main.getInstance().wantedMap.put(killer.getName(), (wanted + Main.getInstance().getConfig().getInt("Wanted.ReceiveOnKill")));
-                    }
-
-                    Main.getInstance().wantedMap.replace(killer.getName(), (wanted + Main.getInstance().getConfig().getInt("Wanted.ReceiveOnKill")));
+                    WantedManager.getInstance().addWanted(killer, Main.getInstance().getConfig().getInt("Wanted.ReceiveOnKill"));
                 }
                 Main.getInstance().log.logToFile(Main.getInstance().log.logTime(), Main.getInstance().messages.logger(event));
                 break;

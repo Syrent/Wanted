@@ -1,6 +1,7 @@
 package ir.syrent.wanted.Commands;
 
 import ir.syrent.wanted.Main;
+import ir.syrent.wanted.WantedManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -24,12 +25,12 @@ public class WantedsCommand implements CommandExecutor {
             sender.sendMessage(Main.getInstance().messages.getNeedPermission().replace("%prefix%", Main.getInstance().messages.getPrefix()).replace("%player%", sender.getName()));
             return true;
         }
-        if (Main.getInstance().wantedMap.isEmpty()) {
+        if (WantedManager.getInstance().getWanteds().isEmpty()) {
             sender.sendMessage(Main.getInstance().messages.getNoWanteds());
             return true;
         }
 
-        for (Map.Entry<String, Integer> wantedPlayer : Main.getInstance().wantedMap.entrySet()) {
+        for (Map.Entry<String, Integer> wantedPlayer : WantedManager.getInstance().getWanteds().entrySet()) {
             if (Bukkit.getPlayerExact(wantedPlayer.getKey()) != null) number++;
         }
         if (number == 0) {
@@ -39,17 +40,17 @@ public class WantedsCommand implements CommandExecutor {
         number = 0;
 
         sender.sendMessage(Main.getInstance().messages.getWantedTitle());
-        for (Map.Entry<String, Integer> wantedlist : Main.getInstance().wantedMap.entrySet()) {
+        for (Map.Entry<String, Integer> wantedlist : WantedManager.getInstance().getWanteds().entrySet()) {
             String key = wantedlist.getKey();
 
             Player wantedPlayer = Bukkit.getPlayerExact(key);
             if (wantedPlayer == null) continue;
 
             int maximum = Main.getInstance().getConfig().getInt("Wanted.Maximum");
-            int currentWanted = Main.getInstance().wantedMap.get(key);
+            int currentWanted = WantedManager.getInstance().getWanteds().get(key);
 
             if (currentWanted <= 0 || currentWanted > maximum) continue;
-            int count = Main.getInstance().wantedMap.get(key);
+            int count = WantedManager.getInstance().getWanteds().get(key);
 
             if (maximum <= 5) message.add(Main.getInstance().messages.wantedSymbol(currentWanted).replace("%player%", key));
             else message.add(Main.getInstance().messages.getWantedList().replace("%player%", key).replace("%wanted%", String.valueOf(count)));

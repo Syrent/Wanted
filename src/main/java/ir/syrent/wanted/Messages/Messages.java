@@ -2,6 +2,7 @@ package ir.syrent.wanted.Messages;
 
 import ir.syrent.wanted.Main;
 import ir.syrent.wanted.Utils.Utils;
+import ir.syrent.wanted.WantedManager;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.command.CommandSender;
@@ -214,7 +215,7 @@ public class Messages {
         Player player = event.getEntity();
         Player killer = player.getKiller();
         assert killer != null;
-        int wanted = Main.getInstance().wantedMap.get(killer.getName());
+        int wanted = WantedManager.getInstance().getWanteds().get(killer.getName());
         return "[" + Main.getInstance().log.formatMessage() + "] "
                 + killer.getName() + " killed " + player.getName()
                 + " in " + player.getWorld().getName()
