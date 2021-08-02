@@ -7,6 +7,7 @@ import ir.syrent.wanted.WantedManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.block.Skull;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -18,8 +19,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class RequestGUI {
+
+    public List<Inventory> playersGUI;
+
     public void refresh() {
-        List<Inventory> playersGUI = new ArrayList<>();
+        playersGUI = new ArrayList<>();
         List<Player> playerList = new ArrayList<>(SkullBuilder.getInstance().cache.keySet());
 
         if (playerList.size() == 0) return; //No wanteds found
@@ -88,15 +92,12 @@ public class RequestGUI {
         for (Inventory inv : playersGUI) {
             inv.setItem(49, refresh);
         }
-
-        Main.getInstance().playersGUI.clear();
-        Main.getInstance().playersGUI = playersGUI;
     }
 
     public void open(Player player) {
         refresh();
         try {
-            player.openInventory(Main.getInstance().playersGUI.get(0));
+            player.openInventory(playersGUI.get(0));
         } catch (IndexOutOfBoundsException e) {
             player.sendMessage(Utils.color(Main.getInstance().messages.getPrefix() + "&cThe data is still loading or empty." +
                     " Please try again later."));

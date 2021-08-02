@@ -6,17 +6,22 @@ import ir.syrent.wanted.DataManager.Log;
 import ir.syrent.wanted.DataManager.MessagesYML;
 import ir.syrent.wanted.DataManager.WantedsYML;
 import ir.syrent.wanted.Dependencies.PlaceholderAPI;
-import ir.syrent.wanted.Events.InventoryClickListener;
-import ir.syrent.wanted.Events.PlayerDeathListener;
-import ir.syrent.wanted.Events.PlayerJoinListener;
-import ir.syrent.wanted.Events.PlayerQuitListener;
+import ir.syrent.wanted.Events.*;
 import ir.syrent.wanted.GUI.RequestGUI;
 import ir.syrent.wanted.Messages.Messages;
 import ir.syrent.wanted.Utils.SkullBuilder;
 import ir.syrent.wanted.Utils.TabCompleter;
 import ir.syrent.wanted.Utils.Utils;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.command.CommandExecutor;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.inventory.InventoryAction;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryMoveItemEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -34,18 +39,21 @@ public final class Main extends JavaPlugin implements CommandExecutor {
     public SkullBuilder skullBuilder;
     public RequestGUI requestGUI;
 
-    public List<Inventory> playersGUI = new ArrayList<>();
-
     public boolean placeholderAPIFound;
 
     @Override
     public void onEnable() {
         plugin = this;
 
+        initializeBstats();
         initializePlaceholderAPI();
         registerCommands();
         registerEvents();
         initializeInstances();
+    }
+
+    public void initializeBstats() {
+        new Metrics(this, 12311);
     }
 
     public void registerCommands() {
@@ -59,6 +67,7 @@ public final class Main extends JavaPlugin implements CommandExecutor {
         getServer().getPluginManager().registerEvents(new PlayerJoinListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerQuitListener(), this);
         getServer().getPluginManager().registerEvents(new InventoryClickListener(), this);
+        getServer().getPluginManager().registerEvents(new EntityDamageByEntityListener(), this);
     }
 
     public void initializeInstances() {
@@ -78,8 +87,8 @@ public final class Main extends JavaPlugin implements CommandExecutor {
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             this.getLogger().info(Utils.color("PlaceholderAPI found! enabling hook..."));
             new PlaceholderAPI().register();
-            this.getLogger().info(Utils.color("PlaceholderAPI hook enabled!"));
             placeholderAPIFound = true;
+            this.getLogger().info(Utils.color("PlaceholderAPI hook enabled!"));
         } else {
             this.getLogger().warning(Utils.color("PlaceholderAPI not found! disabling hook..."));
             placeholderAPIFound = false;

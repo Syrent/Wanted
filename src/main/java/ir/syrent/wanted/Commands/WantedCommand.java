@@ -34,7 +34,7 @@ public class WantedCommand implements CommandExecutor {
 
                 Player player = (Player) sender;
 
-                if (!isAdmin) {
+                if (!isAdmin || !player.hasPermission("wanted.get")) {
                     player.sendMessage(Main.getInstance().messages.getNeedPermission());
                     return true;
                 }
@@ -387,6 +387,11 @@ public class WantedCommand implements CommandExecutor {
         }
 
         Player player = (Player) sender;
+
+        if (!isAdmin || !player.hasPermission("wanted.use")) {
+            player.sendMessage(Main.getInstance().messages.getNeedPermission());
+            return true;
+        }
 
         try {
             sender.sendMessage(Main.getInstance().messages.getPlayerWanted().replace("%wanted%",

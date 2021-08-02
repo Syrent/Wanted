@@ -30,7 +30,7 @@ public class InventoryClickListener implements Listener {
 
             int currentPage = Integer.parseInt(ChatColor.stripColor(event.getView().getTitle())
                     .substring(ChatColor.stripColor(event.getView().getTitle()).length() - 1));
-            int maximumPage = Main.getInstance().playersGUI.size();
+            int maximumPage = Main.getInstance().requestGUI.playersGUI.size();
 
             if (event.getClickedInventory() == null) return;
             if (playerCooldown.contains(player)) {
@@ -49,16 +49,16 @@ public class InventoryClickListener implements Listener {
             if (event.getSlot() == 46 && event.getClickedInventory().getItem(46) != null) {
                 //Previous Page
                 if (currentPage != 1) {
-                    event.getWhoClicked().openInventory(Main.getInstance().playersGUI.get(currentPage - 2));
+                    event.getWhoClicked().openInventory(Main.getInstance().requestGUI.playersGUI.get(currentPage - 2));
                 }
             } else if (event.getSlot() == 52 && event.getClickedInventory().getItem(52) != null) {
                 //Next Page
                 if (currentPage != maximumPage) {
-                    event.getWhoClicked().openInventory(Main.getInstance().playersGUI.get(currentPage));
+                    event.getWhoClicked().openInventory(Main.getInstance().requestGUI.playersGUI.get(currentPage));
                 }
             } else if (event.getSlot() == 49) {
                 //Refresh
-                event.getWhoClicked().openInventory(Main.getInstance().playersGUI.get(0));
+                event.getWhoClicked().openInventory(Main.getInstance().requestGUI.playersGUI.get(0));
             } else {
                 boolean isNewVersion = Arrays.stream(Material.values()).map(Material::name)
                         .collect(Collectors.toList()).contains("PLAYER_HEAD");

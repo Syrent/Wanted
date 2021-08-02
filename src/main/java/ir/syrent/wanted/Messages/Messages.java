@@ -72,21 +72,18 @@ public class Messages {
         pluginReloaded = messageFormatter(Main.getInstance().messagesYML.getConfig().getString("plugin-reloaded"));
         itemCooldown = messageFormatter(Main.getInstance().messagesYML.getConfig().getString("item-cooldown"));
         getPlayerWanted = messageFormatter(Main.getInstance().messagesYML.getConfig().getString("get-player-wanted"));
-
-        findUsage = messageFormatter("&cUsage: /wanted find <player>");
-        operation = messageFormatter("&cUsage: /wanted %action% <player> <wanted>");
-        clearOperator = messageFormatter("&cUsage: /wanted Clear <player>");
-        setMaximumUsage = messageFormatter("&cUsage: /wanted set-maximum <number>");
-        getWantedUsage = messageFormatter("&cUsage: /wanted get <player>");
-        clearWanted = messageFormatter("&aWanted(s) has been successfully cleared.");
-        takeWanted = messageFormatter("&aWanted(s) has been successfully taken.");
-        addWanted = messageFormatter("&aWanted(s) has been successfully added.");
-        setWanted = messageFormatter("&aWanted was set.");
-        validNumber = messageFormatter("&cPlease enter a valid number.");
-
-        playerWanted = messageFormatter("&7Your Wanted is &b%wanted%.");
-
-        consoleSender = messageFormatter("§cOnly player can run this command.");
+        findUsage = messageFormatter(Main.getInstance().messagesYML.getConfig().getString("find-usage"));
+        operation = messageFormatter(Main.getInstance().messagesYML.getConfig().getString("operation"));
+        clearOperator = messageFormatter(Main.getInstance().messagesYML.getConfig().getString("clear-operator"));
+        setMaximumUsage = messageFormatter(Main.getInstance().messagesYML.getConfig().getString("set-maximum-usage"));
+        getWantedUsage = messageFormatter(Main.getInstance().messagesYML.getConfig().getString("get-wanted-usage"));
+        clearWanted = messageFormatter(Main.getInstance().messagesYML.getConfig().getString("clear-wanted"));
+        takeWanted = messageFormatter(Main.getInstance().messagesYML.getConfig().getString("take-wanted"));
+        addWanted = messageFormatter(Main.getInstance().messagesYML.getConfig().getString("add-wanted"));
+        setWanted = messageFormatter(Main.getInstance().messagesYML.getConfig().getString("set-wanted"));
+        validNumber = messageFormatter(Main.getInstance().messagesYML.getConfig().getString("valid-number"));
+        playerWanted = messageFormatter(Main.getInstance().messagesYML.getConfig().getString("player-wanted"));
+        consoleSender = messageFormatter(Main.getInstance().messagesYML.getConfig().getString("console-sender"));
     }
 
     public void helpMessage1(CommandSender sender) {
