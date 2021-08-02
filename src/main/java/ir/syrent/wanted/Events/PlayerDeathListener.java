@@ -12,12 +12,12 @@ public class PlayerDeathListener implements Listener {
 
     @EventHandler
     public void getWanted(PlayerDeathEvent event) {
+        if (!Main.getInstance().getConfig().getBoolean("Wanted.ReceiveOnKill.Player.Enable")) return;
+
         Player killer = event.getEntity().getKiller();
         Player victim = event.getEntity();
 
         if (killer != null) {
-
-
             int wanted = WantedManager.getInstance().getWanted(killer);
             int maximum = Main.getInstance().getConfig().getInt("Wanted.Maximum");
 
@@ -41,8 +41,9 @@ public class PlayerDeathListener implements Listener {
                         Main.getInstance().skullBuilder.cache.put(killer, killer.serialize());
                     }
 
-                    WantedManager.getInstance().addWanted(killer, Main.getInstance().getConfig().getInt("Wanted.ReceiveOnKill"));
+                    WantedManager.getInstance().addWanted(killer, Main.getInstance().getConfig().getInt("Wanted.ReceiveOnKill.Player.Receive"));
                 }
+
                 Main.getInstance().log.logToFile(Main.getInstance().log.logTime(), Main.getInstance().messages.logger(event));
                 break;
             }

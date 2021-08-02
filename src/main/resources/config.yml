@@ -1,16 +1,19 @@
 Wanted:
   # use wanted.receive.(number) to change player wanted number
   Maximum: 5
-  # You can use "wanted.receive.X" permission node to decide how many wanteds should a player get when they kill someone,
-  #  This is the default value, If someone didn't have that permission, this value will be used.
-  ReceiveOnKill: 1
+  ReceiveOnKill:
+    # You can use "wanted.receive.X" permission node to decide how many wanteds should a player get when they kill someone,
+    #  This is the default value, If someone didn't have that permission, this value will be used.
+    Player:
+      Enable: true
+      Receive: 0
+    Mob:
+      Enable: false
+      Mobs:
+        - COW;1
+        - CHICKEN;1
+        - PIG;2
+        - ZOMBIE;-1
+        - CREEPER;-2
   # Refresh interval of the compass, Recommended to keep this 10-20. In ticks (20 Ticks = 1 second)
   CompassRefreshInterval: 20
-MobWanted:
-  enable: false
-  mobs:
-    - COW;1
-    - CHICKEN;1
-    - PIG;2
-    - ZOMBIE;-1
-    - CREEPER;-2
