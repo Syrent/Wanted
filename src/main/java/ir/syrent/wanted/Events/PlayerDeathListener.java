@@ -17,9 +17,9 @@ public class PlayerDeathListener implements Listener {
         Player killer = event.getEntity().getKiller();
         Player victim = event.getEntity();
 
+        int finalWanted;
         if (killer != null) {
             int wanted = WantedManager.getInstance().getWanted(killer);
-            int maximum = Main.getInstance().getConfig().getInt("Wanted.Maximum");
 
             for (PermissionAttachmentInfo permissionList : victim.getEffectivePermissions()) {
                 if (killer.hasPermission("wanted.bypass")) break;
@@ -36,12 +36,20 @@ public class PlayerDeathListener implements Listener {
                     }
 
                     WantedManager.getInstance().setWanted(killer, (wanted + number));
+                    finalWanted = wanted + number;
                 } else {
                     if (!Main.getInstance().skullBuilder.cache.containsKey(killer)) {
                         Main.getInstance().skullBuilder.cache.put(killer, killer.serialize());
                     }
 
-                    WantedManager.getInstance().addWanted(killer, Main.getInstance().getConfig().getInt("Wanted.ReceiveOnKill.Player.Receive"));
+                    int defaultReceive = Main.getInstance().getConfig().getInt("Wanted.ReceiveOnKill.Player.Receive");
+                    WantedManager.getInstance().addWanted(killer, defaultReceive);
+                    finalWanted = defaultReceive;
+                }
+
+                if (Main.getInstance().getConfig().getBoolean("Wanted.ReceiveOnKill.Player.KillMessage")) {
+                    killer.sendMessage(Main.getInstance().messages.getMessageOnKillMob()
+                            .replace("%mob%", event.getEntityType().name()).replace("%wanted%", String.valueOf(finalWanted)));
                 }
 
                 Main.getInstance().log.logToFile(Main.getInstance().log.logTime(), Main.getInstance().messages.logger(event));

@@ -30,7 +30,6 @@ public class Messages {
     private String maximumWantedChanged;
     private String pluginReloaded;
     private String itemCooldown;
-
     private String getPlayerWanted;
     private String findUsage;
     private String operation;
@@ -42,10 +41,11 @@ public class Messages {
     private String addWanted;
     private String setWanted;
     private String validNumber;
-
     private String playerWanted;
-
     private String consoleSender;
+    private String messageOnKillPlayer;
+    private String messageOnKillMob;
+    private String loadingData;
 
     private String messageFormatter(String message) {
         return Utils.color(String.format("%s%s", getPrefix(), message));
@@ -84,6 +84,9 @@ public class Messages {
         validNumber = messageFormatter(Main.getInstance().messagesYML.getConfig().getString("valid-number"));
         playerWanted = messageFormatter(Main.getInstance().messagesYML.getConfig().getString("player-wanted"));
         consoleSender = messageFormatter(Main.getInstance().messagesYML.getConfig().getString("console-sender"));
+        messageOnKillPlayer = messageFormatter(Main.getInstance().messagesYML.getConfig().getString("message-on-kill-player"));
+        messageOnKillMob = messageFormatter(Main.getInstance().messagesYML.getConfig().getString("message-on-kill-mob"));
+        loadingData = messageFormatter(Main.getInstance().messagesYML.getConfig().getString("loading-data"));
     }
 
     public void helpMessage1(CommandSender sender) {
@@ -332,5 +335,17 @@ public class Messages {
 
     public String getPlayerWanted() {
         return playerWanted;
+    }
+
+    public String getMessageOnKillPlayer() {
+        return messageOnKillPlayer;
+    }
+
+    public String getMessageOnKillMob() {
+        return messageOnKillMob;
+    }
+
+    public String getLoadingData() {
+        return loadingData;
     }
 }

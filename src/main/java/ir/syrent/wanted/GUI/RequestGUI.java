@@ -99,8 +99,7 @@ public class RequestGUI {
         try {
             player.openInventory(playersGUI.get(0));
         } catch (IndexOutOfBoundsException e) {
-            player.sendMessage(Utils.color(Main.getInstance().messages.getPrefix() + "&cThe data is still loading or empty." +
-                    " Please try again later."));
+            player.sendMessage(Main.getInstance().messages.getLoadingData());
         }
     }
 
