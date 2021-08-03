@@ -3,9 +3,11 @@ package ir.syrent.wanted.Messages;
 import ir.syrent.wanted.Main;
 import ir.syrent.wanted.Utils.Utils;
 import ir.syrent.wanted.WantedManager;
+import net.citizensnpcs.api.event.NPCDeathEvent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
@@ -45,6 +47,7 @@ public class Messages {
     private String consoleSender;
     private String messageOnKillPlayer;
     private String messageOnKillMob;
+    private String messageOnKillNPC;
     private String loadingData;
 
     private String messageFormatter(String message) {
@@ -86,6 +89,7 @@ public class Messages {
         consoleSender = messageFormatter(Main.getInstance().messagesYML.getConfig().getString("console-sender"));
         messageOnKillPlayer = messageFormatter(Main.getInstance().messagesYML.getConfig().getString("message-on-kill-player"));
         messageOnKillMob = messageFormatter(Main.getInstance().messagesYML.getConfig().getString("message-on-kill-mob"));
+        messageOnKillNPC = messageFormatter(Main.getInstance().messagesYML.getConfig().getString("message-on-kill-npc"));
         loadingData = messageFormatter(Main.getInstance().messagesYML.getConfig().getString("loading-data"));
     }
 
@@ -211,17 +215,31 @@ public class Messages {
         return Utils.color(format);
     }
 
-    public String logger(PlayerDeathEvent event) {
+    public String playerDeathLogger(PlayerDeathEvent event) {
         Player player = event.getEntity();
         Player killer = player.getKiller();
         assert killer != null;
         int wanted = WantedManager.getInstance().getWanteds().get(killer.getName());
-        return "[" + Main.getInstance().log.formatMessage() + "] "
+        return "[Player] [" + Main.getInstance().log.formatMessage() + "] "
                 + killer.getName() + " killed " + player.getName()
                 + " in " + player.getWorld().getName()
                 + " at X:" + (int) player.getLocation().getX()
                 + " Y:" + (int) player.getLocation().getY()
                 + " Z:" + (int) player.getLocation().getZ()
+                + " | New Wanted: " + wanted;
+    }
+
+    public String npcDeathLogger(NPCDeathEvent event) {
+        Entity npc = event.getEvent().getEntity();
+        Player killer = event.getEvent().getEntity().getKiller();
+        assert killer != null;
+        int wanted = WantedManager.getInstance().getWanteds().get(killer.getName());
+        return "[NPC] [" + Main.getInstance().log.formatMessage() + "] "
+                + killer.getName() + " killed " + npc.getName()
+                + " in " + npc.getWorld().getName()
+                + " at X:" + (int) npc.getLocation().getX()
+                + " Y:" + (int) npc.getLocation().getY()
+                + " Z:" + (int) npc.getLocation().getZ()
                 + " | New Wanted: " + wanted;
     }
 

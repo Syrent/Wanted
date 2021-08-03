@@ -10,6 +10,10 @@ Wanted:
       Enable: true
       KillMessage: true
       Receive: 1
+    NPC:
+      Enable: true
+      KillMessage: true
+      Receive: 2
     Mob:
       Enable: false
       KillMessage: true

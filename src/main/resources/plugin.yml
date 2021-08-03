@@ -8,6 +8,7 @@ description: Wanted plugin for RolePlay servers
 website: syrent.ir
 softdepend:
   - PlaceholderAPI
+  - Citizens
 commands:
   wanteds:
   wanted:

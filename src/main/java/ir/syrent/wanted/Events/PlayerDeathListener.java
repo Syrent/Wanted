@@ -14,10 +14,10 @@ public class PlayerDeathListener implements Listener {
     public void getWanted(PlayerDeathEvent event) {
         if (!Main.getInstance().getConfig().getBoolean("Wanted.ReceiveOnKill.Player.Enable")) return;
 
-        Player killer = event.getEntity().getKiller();
         Player victim = event.getEntity();
+        Player killer = event.getEntity().getKiller();
 
-        int finalWanted;
+        int finalWanted = 0;
         if (killer != null) {
             int wanted = WantedManager.getInstance().getWanted(killer);
 
@@ -48,13 +48,13 @@ public class PlayerDeathListener implements Listener {
                 }
 
                 if (Main.getInstance().getConfig().getBoolean("Wanted.ReceiveOnKill.Player.KillMessage")) {
-                    killer.sendMessage(Main.getInstance().messages.getMessageOnKillMob()
-                            .replace("%mob%", event.getEntityType().name()).replace("%wanted%", String.valueOf(finalWanted)));
+                    killer.sendMessage(Main.getInstance().messages.getMessageOnKillPlayer()
+                            .replace("%player_name%", victim.getName()).replace("%wanted%", String.valueOf(finalWanted)));
                 }
-
-                Main.getInstance().log.logToFile(Main.getInstance().log.logTime(), Main.getInstance().messages.logger(event));
                 break;
             }
         }
+
+        Main.getInstance().log.logToFile(Main.getInstance().log.logTime(), Main.getInstance().messages.playerDeathLogger(event));
     }
 }

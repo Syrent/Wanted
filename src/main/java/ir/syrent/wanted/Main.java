@@ -46,7 +46,7 @@ public final class Main extends JavaPlugin implements CommandExecutor {
         plugin = this;
 
         initializeBstats();
-        initializePlaceholderAPI();
+        dependencyChecker();
         registerCommands();
         registerEvents();
         initializeInstances();
@@ -83,14 +83,23 @@ public final class Main extends JavaPlugin implements CommandExecutor {
         new WantedManager();
     }
 
-    public void initializePlaceholderAPI() {
+    public void dependencyChecker() {
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             this.getLogger().info(Utils.color("PlaceholderAPI found! enabling hook..."));
             new PlaceholderAPI().register();
             placeholderAPIFound = true;
             this.getLogger().info(Utils.color("PlaceholderAPI hook enabled!"));
         } else {
-            this.getLogger().warning(Utils.color("PlaceholderAPI not found! disabling hook..."));
+            this.getLogger().info(Utils.color("PlaceholderAPI not found! disabling hook..."));
+            placeholderAPIFound = false;
+        }
+
+        if (Bukkit.getPluginManager().getPlugin("Citizens") != null) {
+            this.getLogger().info(Utils.color("Citizens found! enabling hook..."));
+            this.getServer().getPluginManager().registerEvents(new NPCDeathListener(), this);
+            this.getLogger().info(Utils.color("Citizens hook enabled!"));
+        } else {
+            this.getLogger().info(Utils.color("Citizens not found! disabling hook..."));
             placeholderAPIFound = false;
         }
     }

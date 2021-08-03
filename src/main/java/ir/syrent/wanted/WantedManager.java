@@ -2,6 +2,7 @@ package ir.syrent.wanted;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.PermissionAttachmentInfo;
 
 import java.util.HashMap;
 import java.util.Map;
