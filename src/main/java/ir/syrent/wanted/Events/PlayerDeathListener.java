@@ -21,6 +21,7 @@ public class PlayerDeathListener implements Listener {
         if (killer == null) {
             if (WantedManager.getInstance().getWanted(victim) != 0)
                 WantedManager.getInstance().setWanted(victim, 0);
+            Main.getInstance().skullBuilder.cache.remove(victim);
             return;
         }
 
@@ -36,6 +37,8 @@ public class PlayerDeathListener implements Listener {
                 int number = Integer.parseInt(permissionSplit[2]);
                 if (WantedManager.getInstance().getWanted(victim) != 0)
                     WantedManager.getInstance().setWanted(victim, 0);
+
+                Main.getInstance().skullBuilder.cache.remove(victim);
 
                 if (!Main.getInstance().skullBuilder.cache.containsKey(killer)) {
                     Main.getInstance().skullBuilder.cache.put(killer, killer.serialize());

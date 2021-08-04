@@ -22,6 +22,7 @@ public class RequestGUI {
 
     public List<Inventory> playersGUI;
 
+    @Deprecated
     public void refresh() {
         playersGUI = new ArrayList<>();
         List<Player> playerList = new ArrayList<>(SkullBuilder.getInstance().cache.keySet());
@@ -48,7 +49,7 @@ public class RequestGUI {
             try {
                 playerItem = SkullBuilder.getInstance().getHeadFromCache(player);
             } catch (NullPointerException | IllegalArgumentException e) {
-                playerItem = new ItemStack(type);
+                playerItem = new ItemStack(type, 1, (short) 3);
             }
             ItemMeta meta = playerItem.getItemMeta();
             assert meta != null;
