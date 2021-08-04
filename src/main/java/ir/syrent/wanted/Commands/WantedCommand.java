@@ -26,7 +26,7 @@ public class WantedCommand implements CommandExecutor {
         boolean isAdmin = sender.hasPermission("wanted.admin");
         if (args.length > 0) {
             //Get Wanted
-            if (args[0].equalsIgnoreCase("get")) {
+            if (args[0].equalsIgnoreCase("get") || args[0].equalsIgnoreCase("look")) {
                 if (!(sender instanceof Player)) {
                     sender.sendMessage(Main.getInstance().messages.getConsoleSender());
                     return true;
