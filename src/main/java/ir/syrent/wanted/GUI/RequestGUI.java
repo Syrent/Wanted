@@ -48,7 +48,7 @@ public class RequestGUI {
             try {
                 playerItem = SkullBuilder.getInstance().getHeadFromCache(player);
             } catch (NullPointerException e) {
-                playerItem = new ItemStack(type, 1, (short) 3);
+                playerItem = new ItemStack(type);
             }
             ItemMeta meta = playerItem.getItemMeta();
             assert meta != null;

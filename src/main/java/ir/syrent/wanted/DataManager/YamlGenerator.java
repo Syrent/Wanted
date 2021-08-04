@@ -8,17 +8,25 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-public class MessagesYML {
+public class YamlGenerator {
 
     private FileConfiguration dataConfig = null;
-    private File configFile = null;
+    private File configFile;
+    private String path;
+    private String name;
+
+    public YamlGenerator(String path, String name) {
+        this.path = path;
+        this.name = name;
+        this.configFile = new File(path, name + ".yml");
+    }
 
     public void reloadConfig() {
-        if (this.configFile == null) this.configFile = new File(Main.getInstance().getDataFolder(), "messages.yml");
+        if (this.configFile == null) this.configFile = new File(path, name + ".yml");
 
         this.dataConfig = YamlConfiguration.loadConfiguration(this.configFile);
 
-        InputStream defaultStream = Main.getInstance().getResource("messages.yml");
+        InputStream defaultStream = Main.getInstance().getResource("language/" + name  + ".yml");
         if (defaultStream != null) {
             YamlConfiguration defaultConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(defaultStream));
             this.dataConfig.setDefaults(defaultConfig);
@@ -31,10 +39,10 @@ public class MessagesYML {
     }
 
     public void saveDefaultConfig() {
-        if (this.configFile == null) this.configFile = new File(Main.getInstance().getDataFolder(), "messages.yml");
+        if (this.configFile == null) this.configFile = new File(path, name + ".yml");
 
         if (!this.configFile.exists()) {
-            Main.getInstance().saveResource("messages.yml", false);
+            Main.getInstance().saveResource("language/" + name + ".yml", false);
         }
     }
 

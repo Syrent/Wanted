@@ -8,11 +8,17 @@ import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -157,8 +163,20 @@ public class WantedCommand implements CommandExecutor {
 
                 sender.sendMessage(Main.getInstance().messages.getPluginReloaded());
                 Main.getInstance().reloadConfig();
-                Main.getInstance().messagesYML.reloadConfig();
+
                 Main.getInstance().messages.reload();
+                File languageDirectory = new File(Main.getInstance().getDataFolder() + "/language");
+                for (File configFile : languageDirectory.listFiles()) {
+
+                    FileConfiguration dataConfig;
+                    dataConfig = YamlConfiguration.loadConfiguration(configFile);
+
+                    InputStream defaultStream = Main.getInstance().getResource("language/" + configFile.getName()  + ".yml");
+                    if (defaultStream != null) {
+                        YamlConfiguration defaultConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(defaultStream));
+                        dataConfig.setDefaults(defaultConfig);
+                    }
+                }
                 return true;
             }
 

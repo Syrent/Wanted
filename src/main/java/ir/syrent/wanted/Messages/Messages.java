@@ -1,5 +1,6 @@
 package ir.syrent.wanted.Messages;
 
+import ir.syrent.wanted.DataManager.YamlGenerator;
 import ir.syrent.wanted.Main;
 import ir.syrent.wanted.Utils.Utils;
 import ir.syrent.wanted.WantedManager;
@@ -78,56 +79,58 @@ public class Messages {
     }
 
     public void reload() {
-        prefix = Main.getInstance().messagesYML.getConfig().getString("prefix");
-        needPermission = messageFormatter(Main.getInstance().messagesYML.getConfig().getString("need-permission"));
-        needGPS = messageFormatter(Main.getInstance().messagesYML.getConfig().getString("needGPS"));
-        playerNotFound = messageFormatter(Main.getInstance().messagesYML.getConfig().getString("player-not-found"));
-        selfTarget = messageFormatter(Main.getInstance().messagesYML.getConfig().getString("self-target"));
-        searchTarget = messageFormatter(Main.getInstance().messagesYML.getConfig().getString("search-target"));
-        targetWarn = messageFormatter(Main.getInstance().messagesYML.getConfig().getString("search-notification"));
-        wantedTitle = Utils.color(Main.getInstance().messagesYML.getConfig().getString("wanted-title"));
-        wantedList = Utils.color(Main.getInstance().messagesYML.getConfig().getString("wanted-list"));
-        wantedTop = Utils.color(Main.getInstance().messagesYML.getConfig().getString("wanted-top"));
-        playerLeaveOnFinding = messageFormatter(Main.getInstance().messagesYML.getConfig().getString("player-leave-on-finding"));
-        noWanteds = messageFormatter(Main.getInstance().messagesYML.getConfig().getString("no-wanteds"));
-        maximumWantedChanged = messageFormatter(Main.getInstance().messagesYML.getConfig().getString("maximum-wanted-changed"));
-        pluginReloaded = messageFormatter(Main.getInstance().messagesYML.getConfig().getString("plugin-reloaded"));
-        itemCooldown = messageFormatter(Main.getInstance().messagesYML.getConfig().getString("item-cooldown"));
-        getPlayerWanted = messageFormatter(Main.getInstance().messagesYML.getConfig().getString("get-player-wanted"));
-        findUsage = messageFormatter(Main.getInstance().messagesYML.getConfig().getString("find-usage"));
-        operation = messageFormatter(Main.getInstance().messagesYML.getConfig().getString("operation"));
-        clearOperator = messageFormatter(Main.getInstance().messagesYML.getConfig().getString("clear-operator"));
-        setMaximumUsage = messageFormatter(Main.getInstance().messagesYML.getConfig().getString("maximum-usage"));
-        getWantedUsage = messageFormatter(Main.getInstance().messagesYML.getConfig().getString("get-wanted-usage"));
-        clearWanted = messageFormatter(Main.getInstance().messagesYML.getConfig().getString("clear-wanted"));
-        takeWanted = messageFormatter(Main.getInstance().messagesYML.getConfig().getString("take-wanted"));
-        addWanted = messageFormatter(Main.getInstance().messagesYML.getConfig().getString("add-wanted"));
-        setWanted = messageFormatter(Main.getInstance().messagesYML.getConfig().getString("set-wanted"));
-        validNumber = messageFormatter(Main.getInstance().messagesYML.getConfig().getString("valid-number"));
-        playerWanted = messageFormatter(Main.getInstance().messagesYML.getConfig().getString("player-wanted"));
-        consoleSender = messageFormatter(Main.getInstance().messagesYML.getConfig().getString("console-sender"));
-        messageOnKillPlayer = messageFormatter(Main.getInstance().messagesYML.getConfig().getString("message-on-kill-player"));
-        messageOnKillMob = messageFormatter(Main.getInstance().messagesYML.getConfig().getString("message-on-kill-mob"));
-        messageOnKillNPC = messageFormatter(Main.getInstance().messagesYML.getConfig().getString("message-on-kill-npc"));
-        loadingData = messageFormatter(Main.getInstance().messagesYML.getConfig().getString("loading-data"));
+        YamlGenerator languageYML = new YamlGenerator(Main.getInstance().getDataFolder() + "/language", Main.languageName);
+        
+        prefix = languageYML.getConfig().getString("prefix");
+        needPermission = messageFormatter(languageYML.getConfig().getString("need-permission"));
+        needGPS = messageFormatter(languageYML.getConfig().getString("needGPS"));
+        playerNotFound = messageFormatter(languageYML.getConfig().getString("player-not-found"));
+        selfTarget = messageFormatter(languageYML.getConfig().getString("self-target"));
+        searchTarget = messageFormatter(languageYML.getConfig().getString("search-target"));
+        targetWarn = messageFormatter(languageYML.getConfig().getString("search-notification"));
+        wantedTitle = Utils.color(languageYML.getConfig().getString("wanted-title"));
+        wantedList = Utils.color(languageYML.getConfig().getString("wanted-list"));
+        wantedTop = Utils.color(languageYML.getConfig().getString("wanted-top"));
+        playerLeaveOnFinding = messageFormatter(languageYML.getConfig().getString("player-leave-on-finding"));
+        noWanteds = messageFormatter(languageYML.getConfig().getString("no-wanteds"));
+        maximumWantedChanged = messageFormatter(languageYML.getConfig().getString("maximum-wanted-changed"));
+        pluginReloaded = messageFormatter(languageYML.getConfig().getString("plugin-reloaded"));
+        itemCooldown = messageFormatter(languageYML.getConfig().getString("item-cooldown"));
+        getPlayerWanted = messageFormatter(languageYML.getConfig().getString("get-player-wanted"));
+        findUsage = messageFormatter(languageYML.getConfig().getString("find-usage"));
+        operation = messageFormatter(languageYML.getConfig().getString("operation"));
+        clearOperator = messageFormatter(languageYML.getConfig().getString("clear-operator"));
+        setMaximumUsage = messageFormatter(languageYML.getConfig().getString("maximum-usage"));
+        getWantedUsage = messageFormatter(languageYML.getConfig().getString("get-wanted-usage"));
+        clearWanted = messageFormatter(languageYML.getConfig().getString("clear-wanted"));
+        takeWanted = messageFormatter(languageYML.getConfig().getString("take-wanted"));
+        addWanted = messageFormatter(languageYML.getConfig().getString("add-wanted"));
+        setWanted = messageFormatter(languageYML.getConfig().getString("set-wanted"));
+        validNumber = messageFormatter(languageYML.getConfig().getString("valid-number"));
+        playerWanted = messageFormatter(languageYML.getConfig().getString("player-wanted"));
+        consoleSender = messageFormatter(languageYML.getConfig().getString("console-sender"));
+        messageOnKillPlayer = messageFormatter(languageYML.getConfig().getString("message-on-kill-player"));
+        messageOnKillMob = messageFormatter(languageYML.getConfig().getString("message-on-kill-mob"));
+        messageOnKillNPC = messageFormatter(languageYML.getConfig().getString("message-on-kill-npc"));
+        loadingData = messageFormatter(languageYML.getConfig().getString("loading-data"));
 
         //Help messages
-        helpHeader = Utils.color(Main.getInstance().messagesYML.getConfig().getString("help-header"));
-        wantedReloadHelp = Utils.color(Main.getInstance().messagesYML.getConfig().getString("wanted-reload-help"));
-        wantedFindHelp = Utils.color(Main.getInstance().messagesYML.getConfig().getString("wanted-find-help"));
-        wantedMaximumHelp = Utils.color(Main.getInstance().messagesYML.getConfig().getString("wanted-maximum-help"));
-        wantedClearHelp = Utils.color(Main.getInstance().messagesYML.getConfig().getString("wanted-clear-help"));
-        wantedSetHelp = Utils.color(Main.getInstance().messagesYML.getConfig().getString("wanted-set-help"));
-        wantedTakeHelp = Utils.color(Main.getInstance().messagesYML.getConfig().getString("wanted-take-help"));
-        wantedAddHelp = Utils.color(Main.getInstance().messagesYML.getConfig().getString("wanted-add-help"));
-        wantedsHelp = Utils.color(Main.getInstance().messagesYML.getConfig().getString("wanteds-help"));
-        nextPageHelp = Utils.color(Main.getInstance().messagesYML.getConfig().getString("next-page-help"));
-        wantedGUIHelp = Utils.color(Main.getInstance().messagesYML.getConfig().getString("wanted-gui-help"));
-        wantedGetHelp = Utils.color(Main.getInstance().messagesYML.getConfig().getString("wanted-get-help"));
-        wantedTopHelp = Utils.color(Main.getInstance().messagesYML.getConfig().getString("wanted-top-help"));
-        wantedHelpHelp = Utils.color(Main.getInstance().messagesYML.getConfig().getString("wanted-help-help"));
-        prevPageHelp = Utils.color(Main.getInstance().messagesYML.getConfig().getString("prev-page-help"));
-        helpFooter = Utils.color(Main.getInstance().messagesYML.getConfig().getString("help-footer"));
+        helpHeader = Utils.color(languageYML.getConfig().getString("help-header"));
+        wantedReloadHelp = Utils.color(languageYML.getConfig().getString("wanted-reload-help"));
+        wantedFindHelp = Utils.color(languageYML.getConfig().getString("wanted-find-help"));
+        wantedMaximumHelp = Utils.color(languageYML.getConfig().getString("wanted-maximum-help"));
+        wantedClearHelp = Utils.color(languageYML.getConfig().getString("wanted-clear-help"));
+        wantedSetHelp = Utils.color(languageYML.getConfig().getString("wanted-set-help"));
+        wantedTakeHelp = Utils.color(languageYML.getConfig().getString("wanted-take-help"));
+        wantedAddHelp = Utils.color(languageYML.getConfig().getString("wanted-add-help"));
+        wantedsHelp = Utils.color(languageYML.getConfig().getString("wanteds-help"));
+        nextPageHelp = Utils.color(languageYML.getConfig().getString("next-page-help"));
+        wantedGUIHelp = Utils.color(languageYML.getConfig().getString("wanted-gui-help"));
+        wantedGetHelp = Utils.color(languageYML.getConfig().getString("wanted-get-help"));
+        wantedTopHelp = Utils.color(languageYML.getConfig().getString("wanted-top-help"));
+        wantedHelpHelp = Utils.color(languageYML.getConfig().getString("wanted-help-help"));
+        prevPageHelp = Utils.color(languageYML.getConfig().getString("prev-page-help"));
+        helpFooter = Utils.color(languageYML.getConfig().getString("help-footer"));
     }
 
     public void helpMessage1(CommandSender sender) {
