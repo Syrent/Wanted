@@ -118,8 +118,8 @@ public class WantedCommand implements CommandExecutor {
                 return true;
             }
 
-            //Set maximum command
-            if (args[0].equalsIgnoreCase("set-maximum")) {
+            //Maximum command
+            if (args[0].equalsIgnoreCase("maximum")) {
                 if (!isAdmin) {
                     sender.sendMessage(Main.getInstance().messages.getNeedPermission());
                     return true;

@@ -17,7 +17,7 @@ public class PlayerDeathListener implements Listener {
         Player victim = event.getEntity();
         Player killer = event.getEntity().getKiller();
 
-        int finalWanted = 0;
+        int finalWanted;
         if (killer != null) {
             int wanted = WantedManager.getInstance().getWanted(killer);
 

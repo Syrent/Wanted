@@ -19,7 +19,7 @@ public class TabCompleter implements org.bukkit.command.TabCompleter {
             arguments.add("add");
             arguments.add("take");
             arguments.add("clear");
-            arguments.add("set-maximum");
+            arguments.add("maximum");
             arguments.add("reload");
             arguments.add("help");
         }

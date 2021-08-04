@@ -33,13 +33,23 @@ public class RequestGUI {
                     ChatColor.translateAlternateColorCodes('&',
                             "&4&lWANTED GUI &8- &5Page &n" + i)));
         }
+
+        boolean isNewVersion = Arrays.stream(Material.values()).map(Material::name)
+                .collect(Collectors.toList()).contains("PLAYER_HEAD");
+        Material type = Material.matchMaterial(isNewVersion ? "PLAYER_HEAD" : "SKULL_ITEM");
+
         //Looping and placing heads for each player
         for (int i=1,slot ; i <= playerList.size() ; i++) {
             int page = (int) Math.ceil((float) i / 45);
             slot = i - ((page - 1) * 45) - 1;
 
             Player player = playerList.get(i - 1);
-            ItemStack playerItem = SkullBuilder.getInstance().getHeadFromCache(player);
+            ItemStack playerItem;
+            try {
+                playerItem = SkullBuilder.getInstance().getHeadFromCache(player);
+            } catch (NullPointerException e) {
+                playerItem = new ItemStack(type, 1, (short) 3);
+            }
             ItemMeta meta = playerItem.getItemMeta();
             assert meta != null;
             meta.setDisplayName(ChatColor.AQUA + player.getName());

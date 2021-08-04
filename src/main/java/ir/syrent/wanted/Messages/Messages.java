@@ -78,7 +78,7 @@ public class Messages {
         findUsage = messageFormatter(Main.getInstance().messagesYML.getConfig().getString("find-usage"));
         operation = messageFormatter(Main.getInstance().messagesYML.getConfig().getString("operation"));
         clearOperator = messageFormatter(Main.getInstance().messagesYML.getConfig().getString("clear-operator"));
-        setMaximumUsage = messageFormatter(Main.getInstance().messagesYML.getConfig().getString("set-maximum-usage"));
+        setMaximumUsage = messageFormatter(Main.getInstance().messagesYML.getConfig().getString("maximum-usage"));
         getWantedUsage = messageFormatter(Main.getInstance().messagesYML.getConfig().getString("get-wanted-usage"));
         clearWanted = messageFormatter(Main.getInstance().messagesYML.getConfig().getString("clear-wanted"));
         takeWanted = messageFormatter(Main.getInstance().messagesYML.getConfig().getString("take-wanted"));
@@ -95,46 +95,30 @@ public class Messages {
 
     public void helpMessage1(CommandSender sender) {
         sender.sendMessage("§7§l§m---------------§f[§r §bWanted v%version% §f]§7§l§m---------------§r".replace("%version%", getPlugin().getDescription().getVersion()));
-        if (sender.hasPermission("wanted.admin")) {
-            TextComponent reloadCommand = new TextComponent("§7- §a/wanted §breload");
-            reloadCommand.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/wanted reload"));
-            sender.spigot().sendMessage(reloadCommand);
-        }
-        if (sender.hasPermission("wanted.find") || sender.hasPermission("wanted.admin")) {
-            TextComponent findCommand = new TextComponent("§7- §a/wanted §bfind <player>");
-            findCommand.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/wanted find "));
-            sender.spigot().sendMessage(findCommand);
-        }
-        if (sender.hasPermission("wanted.admin") || sender.hasPermission("wanted.admin")) {
-            TextComponent setMaximumCommand = new TextComponent("§7- §a/wanted §bset-maximum <number>");
-            setMaximumCommand.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/wanted set-maximum "));
-            sender.spigot().sendMessage(setMaximumCommand);
-        }
-        if (sender.hasPermission("wanted.clear") || sender.hasPermission("wanted.admin")) {
-            TextComponent clearCommand = new TextComponent("§7- §a/wanted §bclear <player>");
-            clearCommand.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/wanted clear "));
-            sender.spigot().sendMessage(clearCommand);
-        }
-        if (sender.hasPermission("wanted.set") || sender.hasPermission("wanted.admin")) {
-            TextComponent setCommand = new TextComponent("§7- §a/wanted §bset <player> <number>");
-            setCommand.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/wanted set "));
-            sender.spigot().sendMessage(setCommand);
-        }
-        if (sender.hasPermission("wanted.take") || sender.hasPermission("wanted.admin")) {
-            TextComponent takeCommand = new TextComponent("§7- §a/wanted §btake <player> <number>");
-            takeCommand.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/wanted take "));
-            sender.spigot().sendMessage(takeCommand);
-        }
-        if (sender.hasPermission("wanted.add") || sender.hasPermission("wanted.admin")) {
-            TextComponent addCommand = new TextComponent("§7- §a/wanted §badd <player> <number>");
-            addCommand.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/wanted add "));
-            sender.spigot().sendMessage(addCommand);
-        }
-        if (sender.hasPermission("wanted.list") || sender.hasPermission("wanted.admin")) {
-            TextComponent wantedsCommand = new TextComponent("§7- §a/wanteds");
-            wantedsCommand.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/wanteds"));
-            sender.spigot().sendMessage(wantedsCommand);
-        }
+        TextComponent reloadCommand = new TextComponent("§7- §a/wanted §breload");
+        reloadCommand.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/wanted reload"));
+        sender.spigot().sendMessage(reloadCommand);
+        TextComponent findCommand = new TextComponent("§7- §a/wanted §bfind <player>");
+        findCommand.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/wanted find "));
+        sender.spigot().sendMessage(findCommand);
+        TextComponent setMaximumCommand = new TextComponent("§7- §a/wanted §bmaximum <number>");
+        setMaximumCommand.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/wanted maximum "));
+        sender.spigot().sendMessage(setMaximumCommand);
+        TextComponent clearCommand = new TextComponent("§7- §a/wanted §bclear <player>");
+        clearCommand.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/wanted clear "));
+        sender.spigot().sendMessage(clearCommand);
+        TextComponent setCommand = new TextComponent("§7- §a/wanted §bset <player> <number>");
+        setCommand.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/wanted set "));
+        sender.spigot().sendMessage(setCommand);
+        TextComponent takeCommand = new TextComponent("§7- §a/wanted §btake <player> <number>");
+        takeCommand.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/wanted take "));
+        sender.spigot().sendMessage(takeCommand);
+        TextComponent addCommand = new TextComponent("§7- §a/wanted §badd <player> <number>");
+        addCommand.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/wanted add "));
+        sender.spigot().sendMessage(addCommand);
+        TextComponent wantedsCommand = new TextComponent("§7- §a/wanteds");
+        wantedsCommand.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/wanteds"));
+        sender.spigot().sendMessage(wantedsCommand);
         TextComponent textComponent = new TextComponent("§e(Page 1/2) §7Next Page »");
         textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/wanted help 2"));
         sender.spigot().sendMessage(textComponent);
@@ -142,26 +126,18 @@ public class Messages {
 
     public void helpMessage2(CommandSender sender) {
         sender.sendMessage("§7§l§m---------------§f[§r §bWanted v%version% §f]§7§l§m---------------§r".replace("%version%", getPlugin().getDescription().getVersion()));
-        if (sender.hasPermission("wanted.gui") || sender.hasPermission("wanted.admin")) {
-            TextComponent wantedGUICommand = new TextComponent("§7- §a/wanted §bgui");
-            wantedGUICommand.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/wanted gui"));
-            sender.spigot().sendMessage(wantedGUICommand);
-        }
-        if (sender.hasPermission("wanted.get") || sender.hasPermission("wanted.admin")) {
-            TextComponent getWantedCommand = new TextComponent("§7- §a/wanted §bget <player>");
-            getWantedCommand.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/wanted get "));
-            sender.spigot().sendMessage(getWantedCommand);
-        }
-        if (sender.hasPermission("wanted.top") || sender.hasPermission("wanted.admin")) {
-            TextComponent topWantedCommand = new TextComponent("§7- §a/wanted §btop");
-            topWantedCommand.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/wanted top"));
-            sender.spigot().sendMessage(topWantedCommand);
-        }
-        if (sender.hasPermission("wanted.help") || sender.hasPermission("wanted.admin")) {
-            TextComponent helpCommand = new TextComponent("§7- §a/wanted §bhelp <page>");
-            helpCommand.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/wanted help "));
-            sender.spigot().sendMessage(helpCommand);
-        }
+        TextComponent wantedGUICommand = new TextComponent("§7- §a/wanted §bgui");
+        wantedGUICommand.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/wanted gui"));
+        sender.spigot().sendMessage(wantedGUICommand);
+        TextComponent getWantedCommand = new TextComponent("§7- §a/wanted §bget <player>");
+        getWantedCommand.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/wanted get "));
+        sender.spigot().sendMessage(getWantedCommand);
+        TextComponent topWantedCommand = new TextComponent("§7- §a/wanted §btop");
+        topWantedCommand.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/wanted top"));
+        sender.spigot().sendMessage(topWantedCommand);
+        TextComponent helpCommand = new TextComponent("§7- §a/wanted §bhelp <page>");
+        helpCommand.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/wanted help "));
+        sender.spigot().sendMessage(helpCommand);
         TextComponent textComponent = new TextComponent("§e(Page 2/2) §7Prev Page «");
         textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/wanted help 1"));
         sender.spigot().sendMessage(textComponent);
@@ -218,8 +194,9 @@ public class Messages {
     public String playerDeathLogger(PlayerDeathEvent event) {
         Player player = event.getEntity();
         Player killer = player.getKiller();
-        assert killer != null;
-        int wanted = WantedManager.getInstance().getWanteds().get(killer.getName());
+        if (killer == null) return null;
+        Integer wanted = WantedManager.getInstance().getWanted(player);
+        if (wanted == null) return null;
         return "[Player] [" + Main.getInstance().log.formatMessage() + "] "
                 + killer.getName() + " killed " + player.getName()
                 + " in " + player.getWorld().getName()
@@ -232,8 +209,9 @@ public class Messages {
     public String npcDeathLogger(NPCDeathEvent event) {
         Entity npc = event.getEvent().getEntity();
         Player killer = event.getEvent().getEntity().getKiller();
-        assert killer != null;
-        int wanted = WantedManager.getInstance().getWanteds().get(killer.getName());
+        if (killer == null) return null;
+        Integer wanted = WantedManager.getInstance().getWanted(killer);
+        if (wanted == null) return null;
         return "[NPC] [" + Main.getInstance().log.formatMessage() + "] "
                 + killer.getName() + " killed " + npc.getName()
                 + " in " + npc.getWorld().getName()
@@ -361,6 +339,10 @@ public class Messages {
 
     public String getMessageOnKillMob() {
         return messageOnKillMob;
+    }
+
+    public String getMessageOnKillNPC() {
+        return messageOnKillNPC;
     }
 
     public String getLoadingData() {

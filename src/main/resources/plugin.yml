@@ -12,3 +12,12 @@ softdepend:
 commands:
   wanteds:
   wanted:
+permissions:
+  wanted.use:
+    default: true
+  wanted.help:
+    default: true
+  wanted.get:
+    default: true
+  wanted.bypass:
+    default: not op
