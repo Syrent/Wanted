@@ -50,6 +50,25 @@ public class Messages {
     private String messageOnKillNPC;
     private String loadingData;
 
+    //Help messages
+    private String helpHeader;
+    private String wantedReloadHelp;
+    private String wantedFindHelp;
+    private String wantedMaximumHelp;
+    private String wantedClearHelp;
+    private String wantedSetHelp;
+    private String wantedTakeHelp;
+    private String wantedAddHelp;
+    private String wantedsHelp;
+    private String nextPageHelp;
+    private String wantedGUIHelp;
+    private String wantedGetHelp;
+    private String wantedTopHelp;
+    private String wantedHelpHelp;
+    private String prevPageHelp;
+    private String helpFooter;
+
+
     private String messageFormatter(String message) {
         return Utils.color(String.format("%s%s", getPrefix(), message));
     }
@@ -91,54 +110,72 @@ public class Messages {
         messageOnKillMob = messageFormatter(Main.getInstance().messagesYML.getConfig().getString("message-on-kill-mob"));
         messageOnKillNPC = messageFormatter(Main.getInstance().messagesYML.getConfig().getString("message-on-kill-npc"));
         loadingData = messageFormatter(Main.getInstance().messagesYML.getConfig().getString("loading-data"));
+
+        //Help messages
+        helpHeader = Utils.color(Main.getInstance().messagesYML.getConfig().getString("help-header"));
+        wantedReloadHelp = Utils.color(Main.getInstance().messagesYML.getConfig().getString("wanted-reload-help"));
+        wantedFindHelp = Utils.color(Main.getInstance().messagesYML.getConfig().getString("wanted-find-help"));
+        wantedMaximumHelp = Utils.color(Main.getInstance().messagesYML.getConfig().getString("wanted-maximum-help"));
+        wantedClearHelp = Utils.color(Main.getInstance().messagesYML.getConfig().getString("wanted-clear-help"));
+        wantedSetHelp = Utils.color(Main.getInstance().messagesYML.getConfig().getString("wanted-set-help"));
+        wantedTakeHelp = Utils.color(Main.getInstance().messagesYML.getConfig().getString("wanted-take-help"));
+        wantedAddHelp = Utils.color(Main.getInstance().messagesYML.getConfig().getString("wanted-add-help"));
+        wantedsHelp = Utils.color(Main.getInstance().messagesYML.getConfig().getString("wanteds-help"));
+        nextPageHelp = Utils.color(Main.getInstance().messagesYML.getConfig().getString("next-page-help"));
+        wantedGUIHelp = Utils.color(Main.getInstance().messagesYML.getConfig().getString("wanted-gui-help"));
+        wantedGetHelp = Utils.color(Main.getInstance().messagesYML.getConfig().getString("wanted-get-help"));
+        wantedTopHelp = Utils.color(Main.getInstance().messagesYML.getConfig().getString("wanted-top-help"));
+        wantedHelpHelp = Utils.color(Main.getInstance().messagesYML.getConfig().getString("wanted-help-help"));
+        prevPageHelp = Utils.color(Main.getInstance().messagesYML.getConfig().getString("prev-page-help"));
+        helpFooter = Utils.color(Main.getInstance().messagesYML.getConfig().getString("help-footer"));
     }
 
     public void helpMessage1(CommandSender sender) {
-        sender.sendMessage("§7§l§m---------------§f[§r §bWanted v%version% §f]§7§l§m---------------§r".replace("%version%", getPlugin().getDescription().getVersion()));
-        TextComponent reloadCommand = new TextComponent("§7- §a/wanted §breload");
+        sender.sendMessage(getHelpHeader().replace("%version%", getPlugin().getDescription().getVersion()));
+        TextComponent reloadCommand = new TextComponent(getWantedReloadHelp());
         reloadCommand.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/wanted reload"));
         sender.spigot().sendMessage(reloadCommand);
-        TextComponent findCommand = new TextComponent("§7- §a/wanted §bfind <player>");
+        TextComponent findCommand = new TextComponent(getWantedFindHelp());
         findCommand.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/wanted find "));
         sender.spigot().sendMessage(findCommand);
-        TextComponent setMaximumCommand = new TextComponent("§7- §a/wanted §bmaximum <number>");
+        TextComponent setMaximumCommand = new TextComponent(getWantedMaximumHelp());
         setMaximumCommand.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/wanted maximum "));
         sender.spigot().sendMessage(setMaximumCommand);
-        TextComponent clearCommand = new TextComponent("§7- §a/wanted §bclear <player>");
+        TextComponent clearCommand = new TextComponent(getWantedClearHelp());
         clearCommand.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/wanted clear "));
         sender.spigot().sendMessage(clearCommand);
-        TextComponent setCommand = new TextComponent("§7- §a/wanted §bset <player> <number>");
+        TextComponent setCommand = new TextComponent(getWantedSetHelp());
         setCommand.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/wanted set "));
         sender.spigot().sendMessage(setCommand);
-        TextComponent takeCommand = new TextComponent("§7- §a/wanted §btake <player> <number>");
+        TextComponent takeCommand = new TextComponent(getWantedTakeHelp());
         takeCommand.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/wanted take "));
         sender.spigot().sendMessage(takeCommand);
-        TextComponent addCommand = new TextComponent("§7- §a/wanted §badd <player> <number>");
+        TextComponent addCommand = new TextComponent(getWantedAddHelp());
         addCommand.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/wanted add "));
         sender.spigot().sendMessage(addCommand);
-        TextComponent wantedsCommand = new TextComponent("§7- §a/wanteds");
+        TextComponent wantedsCommand = new TextComponent(getWantedsHelp());
         wantedsCommand.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/wanteds"));
         sender.spigot().sendMessage(wantedsCommand);
-        TextComponent textComponent = new TextComponent("§e(Page 1/2) §7Next Page »");
+        TextComponent textComponent = new TextComponent(getNextPageHelp());
         textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/wanted help 2"));
         sender.spigot().sendMessage(textComponent);
     }
 
     public void helpMessage2(CommandSender sender) {
-        sender.sendMessage("§7§l§m---------------§f[§r §bWanted v%version% §f]§7§l§m---------------§r".replace("%version%", getPlugin().getDescription().getVersion()));
-        TextComponent wantedGUICommand = new TextComponent("§7- §a/wanted §bgui");
+        sender.sendMessage(getHelpHeader().replace("%version%", getPlugin().getDescription().getVersion()));
+        TextComponent wantedGUICommand = new TextComponent(getWantedGUIHelp());
         wantedGUICommand.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/wanted gui"));
         sender.spigot().sendMessage(wantedGUICommand);
-        TextComponent getWantedCommand = new TextComponent("§7- §a/wanted §bget <player>");
+        TextComponent getWantedCommand = new TextComponent(getWantedGetHelp());
         getWantedCommand.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/wanted get "));
         sender.spigot().sendMessage(getWantedCommand);
-        TextComponent topWantedCommand = new TextComponent("§7- §a/wanted §btop");
+        TextComponent topWantedCommand = new TextComponent(getWantedTopHelp());
         topWantedCommand.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/wanted top"));
         sender.spigot().sendMessage(topWantedCommand);
-        TextComponent helpCommand = new TextComponent("§7- §a/wanted §bhelp <page>");
+        TextComponent helpCommand = new TextComponent(getWantedHelpHelp());
         helpCommand.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/wanted help "));
         sender.spigot().sendMessage(helpCommand);
-        TextComponent textComponent = new TextComponent("§e(Page 2/2) §7Prev Page «");
+        TextComponent textComponent = new TextComponent(getPrevPageHelp());
         textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/wanted help 1"));
         sender.spigot().sendMessage(textComponent);
     }
@@ -347,5 +384,69 @@ public class Messages {
 
     public String getLoadingData() {
         return loadingData;
+    }
+
+    public String getHelpHeader() {
+        return helpHeader;
+    }
+
+    public String getWantedReloadHelp() {
+        return wantedReloadHelp;
+    }
+
+    public String getWantedFindHelp() {
+        return wantedFindHelp;
+    }
+
+    public String getWantedMaximumHelp() {
+        return wantedMaximumHelp;
+    }
+
+    public String getWantedClearHelp() {
+        return wantedClearHelp;
+    }
+
+    public String getWantedSetHelp() {
+        return wantedSetHelp;
+    }
+
+    public String getWantedTakeHelp() {
+        return wantedTakeHelp;
+    }
+
+    public String getWantedAddHelp() {
+        return wantedAddHelp;
+    }
+
+    public String getWantedsHelp() {
+        return wantedsHelp;
+    }
+
+    public String getNextPageHelp() {
+        return nextPageHelp;
+    }
+
+    public String getWantedGUIHelp() {
+        return wantedGUIHelp;
+    }
+
+    public String getWantedGetHelp() {
+        return wantedGetHelp;
+    }
+
+    public String getWantedTopHelp() {
+        return wantedTopHelp;
+    }
+
+    public String getWantedHelpHelp() {
+        return wantedHelpHelp;
+    }
+
+    public String getPrevPageHelp() {
+        return prevPageHelp;
+    }
+
+    public String getHelpFooter() {
+        return helpFooter;
     }
 }
