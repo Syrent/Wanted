@@ -1,6 +1,7 @@
 package ir.syrent.wanted.Events;
 
 import ir.syrent.wanted.Main;
+import ir.syrent.wanted.Wanted;
 import ir.syrent.wanted.WantedManager;
 import net.citizensnpcs.api.event.NPCDeathEvent;
 import org.bukkit.entity.EntityType;
@@ -23,6 +24,8 @@ public class NPCDeathListener implements Listener {
                 killer.sendMessage(Main.getInstance().messages.getMessageOnKillNPC()
                         .replace("%npc_name%", event.getEvent().getEntity().getName()).replace("%wanted%", String.valueOf(wanted)));
             }
+
+            Wanted.getInstance().runCommand(killer, event.getEvent().getEntity(), "NPC");
 
             Main.getInstance().log.logToFile(Main.getInstance().log.logTime(), Main.getInstance().messages.npcDeathLogger(event));
         }

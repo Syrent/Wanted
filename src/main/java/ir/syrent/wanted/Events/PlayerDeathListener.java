@@ -1,7 +1,9 @@
 package ir.syrent.wanted.Events;
 
 import ir.syrent.wanted.Main;
+import ir.syrent.wanted.Wanted;
 import ir.syrent.wanted.WantedManager;
+import net.citizensnpcs.api.CitizensAPI;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -15,7 +17,10 @@ public class PlayerDeathListener implements Listener {
         if (!Main.getInstance().getConfig().getBoolean("Wanted.ReceiveOnKill.Player.Enable")) return;
 
         Player victim = event.getEntity();
+        if (CitizensAPI.getNPCRegistry().isNPC(victim)) return;
         Player killer = event.getEntity().getKiller();
+
+        Wanted.getInstance().runCommand(killer, victim, "Player");
 
         if (!Main.getInstance().getConfig().getBoolean("Wanted.ClearWantedOnDeath")) return;
         if (killer == null) {
@@ -40,16 +45,14 @@ public class PlayerDeathListener implements Listener {
 
                 Main.getInstance().skullBuilder.cache.remove(victim);
 
-                if (!Main.getInstance().skullBuilder.cache.containsKey(killer)) {
+                if (!Main.getInstance().skullBuilder.cache.containsKey(killer))
                     Main.getInstance().skullBuilder.cache.put(killer, killer.serialize());
-                }
 
                 WantedManager.getInstance().setWanted(killer, (wanted + number));
                 finalWanted = wanted + number;
             } else {
-                if (!Main.getInstance().skullBuilder.cache.containsKey(killer)) {
+                if (!Main.getInstance().skullBuilder.cache.containsKey(killer))
                     Main.getInstance().skullBuilder.cache.put(killer, killer.serialize());
-                }
 
                 int defaultReceive = Main.getInstance().getConfig().getInt("Wanted.ReceiveOnKill.Player.Receive");
                 WantedManager.getInstance().addWanted(killer, defaultReceive);
@@ -62,7 +65,6 @@ public class PlayerDeathListener implements Listener {
             }
             break;
         }
-
         Main.getInstance().log.logToFile(Main.getInstance().log.logTime(), Main.getInstance().messages.playerDeathLogger(event));
     }
 }

@@ -1,7 +1,7 @@
 package ir.syrent.wanted.Events;
 
 import ir.syrent.wanted.Main;
-import ir.syrent.wanted.Utils.Utils;
+import ir.syrent.wanted.Wanted;
 import ir.syrent.wanted.WantedManager;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -29,6 +29,8 @@ public class EntityDamageByEntityListener implements Listener {
                         player.sendMessage(Main.getInstance().messages.getMessageOnKillMob()
                                 .replace("%mob%", event.getEntityType().name()).replace("%wanted%", split[1]));
                     }
+
+                    Wanted.getInstance().runCommand(player, event.getEntity(), "Mob");
                 }
             }
         }

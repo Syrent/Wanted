@@ -74,6 +74,7 @@ public final class Main extends JavaPlugin implements CommandExecutor {
         requestGUI = new RequestGUI();
         messages = new Messages();
         log = new Log();
+        new Wanted();
         new WantedManager();
     }
 

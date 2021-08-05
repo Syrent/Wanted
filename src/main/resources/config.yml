@@ -12,13 +12,32 @@ Wanted:
       Enable: true
       KillMessage: true
       Receive: 1
+      RunCommandOnKill:
+        Enable: false
+        Commands:
+          - 'KILLER;spawn'
+          - 'VICTIM;spawn'
+          - 'CONSOLE;say %victim% died'
+          - 'CONSOLE;say %killer% killed %victim%'
     NPC:
       Enable: true
       KillMessage: true
       Receive: 2
+      RunCommandOnKill:
+        Enable: false
+        Commands:
+          - 'KILLER;spawn'
+          - 'CONSOLE;say %victim% died'
+          - 'CONSOLE;say %killer% killed %victim%'
     Mob:
       Enable: false
       KillMessage: true
+      RunCommandOnKill:
+        Enable: false
+        Commands:
+          - 'KILLER;spawn'
+          - 'CONSOLE;say %victim% died'
+          - 'CONSOLE;say %killer% killed %victim%'
       # You can use "ENTITY;WANTED" to decide how many Wanted(s) should a player get when they kill specific mobs.
       Mobs:
         - COW;1
