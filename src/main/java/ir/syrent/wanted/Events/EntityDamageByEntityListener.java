@@ -1,38 +1,27 @@
 package ir.syrent.wanted.Events;
 
 import ir.syrent.wanted.Main;
-import ir.syrent.wanted.Wanted;
-import ir.syrent.wanted.WantedManager;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDeathEvent;
-
-import java.util.List;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 public class EntityDamageByEntityListener implements Listener {
 
     @EventHandler
-    public void onDamage(EntityDeathEvent event) {
-        if (!Main.getInstance().getConfig().getBoolean("Wanted.ReceiveOnKill.Mob.Enable")) return;
+    public void onDamage(EntityDamageByEntityEvent event) {
+        if (event.getEntity() instanceof Player && event.getDamager() instanceof Player) {
+            Player damaged = (Player) event.getEntity();
+            Player damager = (Player) event.getDamager();
 
-        if (event.getEntity().getKiller() instanceof Player) {
-            Player player = event.getEntity().getKiller();
-            List<String> list = Main.getInstance().getConfig().getStringList("Wanted.ReceiveOnKill.Mob.Mobs");
-            for (String mob : list) {
-                String[] split = mob.split(";");
-                if (event.getEntityType().equals(EntityType.valueOf(split[0]))) {
-                    WantedManager.getInstance().addWanted(player, Integer.parseInt(split[1]));
-
-                    if (Main.getInstance().getConfig().getBoolean("Wanted.ReceiveOnKill.Mob.KillMessage")) {
-                        player.sendMessage(Main.getInstance().messages.getMessageOnKillMob()
-                                .replace("%mob%", event.getEntityType().name()).replace("%wanted%", split[1]));
-                    }
-
-                    Wanted.getInstance().runCommand(player, event.getEntity(), "Mob");
-                }
+            if (!Main.getInstance().playerDamagedMap.containsKey(damaged)) {
+                if (Main.getInstance().playerDamagedMap.containsValue(damaged)) return;
+                Main.getInstance().playerDamagedMap.put(damaged, damager);
             }
+
         }
+
     }
+
+
 }

@@ -4,6 +4,7 @@ import ir.syrent.wanted.Main;
 import ir.syrent.wanted.Wanted;
 import ir.syrent.wanted.WantedManager;
 import net.citizensnpcs.api.CitizensAPI;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -17,7 +18,8 @@ public class PlayerDeathListener implements Listener {
         if (!Main.getInstance().getConfig().getBoolean("Wanted.ReceiveOnKill.Player.Enable")) return;
 
         Player victim = event.getEntity();
-        if (CitizensAPI.getNPCRegistry().isNPC(victim)) return;
+        if (Bukkit.getPluginManager().getPlugin("Citizens") != null)
+            if (CitizensAPI.getNPCRegistry().isNPC(victim)) return;
         Player killer = event.getEntity().getKiller();
 
         Wanted.getInstance().runCommand(killer, victim, "Player");
@@ -33,8 +35,13 @@ public class PlayerDeathListener implements Listener {
         int finalWanted;
         int wanted = WantedManager.getInstance().getWanted(killer);
 
+        Player fightStarter = Main.getInstance().playerDamagedMap.containsKey(victim) ?
+                Main.getInstance().playerDamagedMap.get(victim) : Main.getInstance().playerDamagedMap.get(killer);
+
         for (PermissionAttachmentInfo permissionList : victim.getEffectivePermissions()) {
             if (killer.hasPermission("wanted.bypass")) break;
+            if (Main.getInstance().getConfig().getBoolean("Wanted.ReceiveOnKill.Player.PreventReceiveIfDefender"))
+                if (!killer.equals(fightStarter)) break;
             String wantedPermission = permissionList.getPermission();
 
             if (wantedPermission.contains("wanted") && wantedPermission.contains("receive")) {
@@ -61,10 +68,14 @@ public class PlayerDeathListener implements Listener {
 
             if (Main.getInstance().getConfig().getBoolean("Wanted.ReceiveOnKill.Player.KillMessage")) {
                 killer.sendMessage(Main.getInstance().messages.getMessageOnKillPlayer()
-                        .replace("%player_name%", victim.getName()).replace("%wanted%", String.valueOf(finalWanted)));
+                        .replace("%player_name%", victim.getName()).replace("%wanted%", String.valueOf(finalWanted)).replace("%fight_starter%", fightStarter.getName()));
             }
             break;
         }
+        if (Main.getInstance().playerDamagedMap.containsKey(killer))
+            Main.getInstance().playerDamagedMap.remove(killer);
+        else Main.getInstance().playerDamagedMap.remove(victim);
+
         Main.getInstance().log.logToFile(Main.getInstance().log.logTime(), Main.getInstance().messages.playerDeathLogger(event));
     }
 }

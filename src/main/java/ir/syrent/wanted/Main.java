@@ -3,7 +3,7 @@ package ir.syrent.wanted;
 import ir.syrent.wanted.Commands.WantedCommand;
 import ir.syrent.wanted.Commands.WantedsCommand;
 import ir.syrent.wanted.DataManager.Log;
-import ir.syrent.wanted.DataManager.YamlGenerator;
+import ir.syrent.wanted.DataManager.LanguageGenerator;
 import ir.syrent.wanted.DataManager.WantedsYML;
 import ir.syrent.wanted.Dependencies.PlaceholderAPI;
 import ir.syrent.wanted.Events.*;
@@ -15,15 +15,19 @@ import ir.syrent.wanted.Utils.Utils;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.HashMap;
 
 public final class Main extends JavaPlugin implements CommandExecutor {
 
     private static Main plugin;
 
     public WantedsYML wantedsYML;
-    public YamlGenerator enUSLanguage;
-    public YamlGenerator zhCNLanguage;
+    public LanguageGenerator enUSLanguage;
+    public LanguageGenerator zhCNLanguage;
+    public LanguageGenerator viVNLanguage;
     public Messages messages;
     public Log log;
     public SkullBuilder skullBuilder;
@@ -32,16 +36,19 @@ public final class Main extends JavaPlugin implements CommandExecutor {
     public boolean placeholderAPIFound;
     public static String languageName;
 
+    public HashMap<Player, Player> playerDamagedMap = new HashMap<>();
+
     @Override
     public void onEnable() {
         plugin = this;
 
         initializeBstats();
         languageName = this.getConfig().getString("Wanted.LanguageFile");
+        initializeYamlFiles();
+        initializeInstances();
         dependencyChecker();
         registerCommands();
         registerEvents();
-        initializeInstances();
     }
 
     public void initializeBstats() {
@@ -59,17 +66,23 @@ public final class Main extends JavaPlugin implements CommandExecutor {
         getServer().getPluginManager().registerEvents(new PlayerJoinListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerQuitListener(), this);
         getServer().getPluginManager().registerEvents(new InventoryClickListener(), this);
+        getServer().getPluginManager().registerEvents(new EntityDeathListener(), this);
         getServer().getPluginManager().registerEvents(new EntityDamageByEntityListener(), this);
+    }
+
+    public void initializeYamlFiles() {
+        wantedsYML = new WantedsYML();
+        wantedsYML.saveDefaultConfig();
+        enUSLanguage = new LanguageGenerator(this.getDataFolder() + "/language", "en_US");
+        enUSLanguage.saveDefaultConfig();
+        zhCNLanguage = new LanguageGenerator(this.getDataFolder() + "/language", "zh_CN");
+        zhCNLanguage.saveDefaultConfig();
+        viVNLanguage = new LanguageGenerator(this.getDataFolder() + "/language", "vi_VN");
+        viVNLanguage.saveDefaultConfig();
     }
 
     public void initializeInstances() {
         this.saveDefaultConfig();
-        wantedsYML = new WantedsYML();
-        wantedsYML.saveDefaultConfig();
-        enUSLanguage = new YamlGenerator(this.getDataFolder() + "/language", "en_US");
-        enUSLanguage.saveDefaultConfig();
-        zhCNLanguage = new YamlGenerator(this.getDataFolder() + "/language", "zh_CN");
-        zhCNLanguage.saveDefaultConfig();
         skullBuilder = new SkullBuilder(this);
         requestGUI = new RequestGUI();
         messages = new Messages();

@@ -1,6 +1,6 @@
 package ir.syrent.wanted.Messages;
 
-import ir.syrent.wanted.DataManager.YamlGenerator;
+import ir.syrent.wanted.DataManager.LanguageGenerator;
 import ir.syrent.wanted.Main;
 import ir.syrent.wanted.Utils.Utils;
 import ir.syrent.wanted.WantedManager;
@@ -11,6 +11,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Messages {
 
@@ -50,6 +53,8 @@ public class Messages {
     private String messageOnKillMob;
     private String messageOnKillNPC;
     private String loadingData;
+    private String wantedSymbol;
+    private String playerWantedListFormat;
 
     //Help messages
     private String helpHeader;
@@ -67,7 +72,19 @@ public class Messages {
     private String wantedTopHelp;
     private String wantedHelpHelp;
     private String prevPageHelp;
-    private String helpFooter;
+
+    //WantedGUI
+    private String wantedGUITitle;
+    private String wantedGUIRefreshButton;
+    private String wantedGUINextPageButton;
+    private String wantedGUIPrevPageButton;
+    private String wantedGUIPlayerTitle;
+    private List<String> wantedGUIPlayerLore;
+
+    //BossBar
+    private String barTitle;
+    private String barColor;
+    private String barType;
 
 
     private String messageFormatter(String message) {
@@ -79,7 +96,7 @@ public class Messages {
     }
 
     public void reload() {
-        YamlGenerator languageYML = new YamlGenerator(Main.getInstance().getDataFolder() + "/language", Main.languageName);
+        LanguageGenerator languageYML = new LanguageGenerator(Main.getInstance().getDataFolder() + "/language", Main.languageName);
         
         prefix = languageYML.getConfig().getString("prefix");
         needPermission = messageFormatter(languageYML.getConfig().getString("need-permission"));
@@ -113,6 +130,8 @@ public class Messages {
         messageOnKillMob = messageFormatter(languageYML.getConfig().getString("message-on-kill-mob"));
         messageOnKillNPC = messageFormatter(languageYML.getConfig().getString("message-on-kill-npc"));
         loadingData = messageFormatter(languageYML.getConfig().getString("loading-data"));
+        wantedSymbol = Utils.color(languageYML.getConfig().getString("wanted-symbol"));
+        playerWantedListFormat = Utils.color(languageYML.getConfig().getString("player-wanted-list-format"));
 
         //Help messages
         helpHeader = Utils.color(languageYML.getConfig().getString("help-header"));
@@ -130,7 +149,22 @@ public class Messages {
         wantedTopHelp = Utils.color(languageYML.getConfig().getString("wanted-top-help"));
         wantedHelpHelp = Utils.color(languageYML.getConfig().getString("wanted-help-help"));
         prevPageHelp = Utils.color(languageYML.getConfig().getString("prev-page-help"));
-        helpFooter = Utils.color(languageYML.getConfig().getString("help-footer"));
+
+        //WantedGUI
+        wantedGUITitle = Utils.color(languageYML.getConfig().getString("wanted-gui-title"));
+        wantedGUIRefreshButton = Utils.color(languageYML.getConfig().getString("wanted-gui-refresh-button"));
+        wantedGUINextPageButton = Utils.color(languageYML.getConfig().getString("wanted-gui-next-page-button"));
+        wantedGUIPrevPageButton = Utils.color(languageYML.getConfig().getString("wanted-gui-prev-page-button"));
+        wantedGUIPlayerTitle = Utils.color(languageYML.getConfig().getString("wanted-gui-player-title"));
+        wantedGUIPlayerLore = new ArrayList<>();
+        for (String line : languageYML.getConfig().getStringList("wanted-gui-player-lore")) {
+            wantedGUIPlayerLore.add(Utils.color(line));
+        }
+
+        //BossBar
+        barTitle = Utils.color(languageYML.getConfig().getString("bar-title"));
+        barColor = Utils.color(languageYML.getConfig().getString("bar-color"));
+        barType = Utils.color(languageYML.getConfig().getString("bar-type"));
     }
 
     public void helpMessage1(CommandSender sender) {
@@ -184,51 +218,19 @@ public class Messages {
     }
 
     public String wantedSymbol(int count) {
-        String format;
-        switch (count) {
-            case 1:
-                format = "&b%player% &a» &7[&6✯&7]";
-                break;
-            case 2:
-                format = "&b%player% &a» &7[&6✯✯&7]";
-                break;
-            case 3:
-                format = "&b%player% &a» &7[&6✯✯✯&7]";
-                break;
-            case 4:
-                format = "&b%player% &a» &7[&6✯✯✯✯&7]";
-                break;
-            case 5:
-                format = "&b%player% &a» &7[&6✯✯✯✯✯&7]";
-                break;
-            default:
-                throw new IllegalStateException("Unexpected value: " + count);
+        StringBuilder star = new StringBuilder();
+        for (int i = 0; i < count; i++) {
+            star.append(getWantedSymbol());
         }
-        return Utils.color(format);
+        return Utils.color(getPlayerWantedListFormat().replace("%symbol%", star));
     }
 
     public String rawWantedSymbol(int count) {
-        String format;
-        switch (count) {
-            case 1:
-                format = "&6✯";
-                break;
-            case 2:
-                format = "&6✯✯";
-                break;
-            case 3:
-                format = "&6✯✯✯";
-                break;
-            case 4:
-                format = "&6✯✯✯✯";
-                break;
-            case 5:
-                format = "&6✯✯✯✯✯";
-                break;
-            default:
-                throw new IllegalStateException("Unexpected value: " + count);
+        StringBuilder star = new StringBuilder();
+        for (int i = 0; i < count; i++) {
+            star.append(getWantedSymbol());
         }
-        return Utils.color(format);
+        return Utils.color("%star%".replace("%symbol%", star));
     }
 
     public String playerDeathLogger(PlayerDeathEvent event) {
@@ -449,7 +451,47 @@ public class Messages {
         return prevPageHelp;
     }
 
-    public String getHelpFooter() {
-        return helpFooter;
+    public String getWantedGUITitle() {
+        return wantedGUITitle;
+    }
+
+    public String getWantedGUIRefreshButton() {
+        return wantedGUIRefreshButton;
+    }
+
+    public String getWantedGUINextPageButton() {
+        return wantedGUINextPageButton;
+    }
+
+    public String getWantedGUIPrevPageButton() {
+        return wantedGUIPrevPageButton;
+    }
+
+    public String getWantedGUIPlayerTitle() {
+        return wantedGUIPlayerTitle;
+    }
+
+    public List<String> getWantedGUIPlayerLore() {
+        return wantedGUIPlayerLore;
+    }
+
+    public String getWantedSymbol() {
+        return wantedSymbol;
+    }
+
+    public String getPlayerWantedListFormat() {
+        return playerWantedListFormat;
+    }
+
+    public String getBarTitle() {
+        return barTitle;
+    }
+
+    public String getBarColor() {
+        return barColor;
+    }
+
+    public String getBarType() {
+        return barType;
     }
 }

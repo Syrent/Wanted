@@ -5,6 +5,9 @@ import ir.syrent.wanted.Utils.SkullBuilder;
 import ir.syrent.wanted.WantedManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -12,7 +15,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -27,6 +29,7 @@ import java.util.Map;
 public class WantedCommand implements CommandExecutor {
 
     HashMap<Player, Player> getTarget = new HashMap<>();
+    HashMap<Player, BossBar> playerBossBarHashMap = new HashMap<>();
 
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @Nullable String[] args) {
         boolean isAdmin = sender.hasPermission("wanted.admin");
@@ -64,7 +67,9 @@ public class WantedCommand implements CommandExecutor {
                 return true;
             }
 
-            //WantedFinder
+
+            HashMap<Player, BossBar> bossBarHashMap = new HashMap<>();
+            //Find Wanted
             if (args[0].equalsIgnoreCase("find")) {
                 if (!(sender instanceof Player)) {
                     sender.sendMessage(Main.getInstance().messages.getConsoleSender());
@@ -120,7 +125,33 @@ public class WantedCommand implements CommandExecutor {
                         }
                         player.setCompassTarget(getTarget.get(player).getLocation());
                     }
-                }.runTaskTimerAsynchronously(Main.getInstance(), 0, Main.getInstance().getConfig().getInt("Wanted.CompassRefreshInterval"));
+                }.runTaskTimerAsynchronously(Main.getInstance(), 0,
+                        Main.getInstance().getConfig().getInt("Wanted.CompassRefreshInterval"));
+
+                if (!Main.getInstance().getConfig().getBoolean("Wanted.TackerBossBar.Enable")) return true;
+
+                BossBar bossBar = Main.getInstance().getServer().createBossBar(
+                        Main.getInstance().messages.getBarTitle().replace("%distance%",
+                                String.valueOf((int) player.getLocation().distance(getTarget.get(player).getLocation()))),
+                        BarColor.valueOf(Main.getInstance().messages.getBarColor()), BarStyle.valueOf(Main.getInstance().messages.getBarType()));
+                playerBossBarHashMap.put(player, bossBar);
+                playerBossBarHashMap.get(player).addPlayer(player);
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        if (!target.isOnline()) {
+                            playerBossBarHashMap.get(player).removePlayer(player);
+                            playerBossBarHashMap.remove(player);
+                            cancel();
+                            return;
+                        }
+
+                        playerBossBarHashMap.get(player).setTitle(Main.getInstance().messages.getBarTitle().replace("%distance%",
+                                String.valueOf((int) player.getLocation().distance(getTarget.get(player).getLocation()))));
+                    }
+                }.runTaskTimerAsynchronously(Main.getInstance(), 0,
+                        Main.getInstance().getConfig().getInt("Wanted.TackerBossBar.RefreshInterval"));
+
                 return true;
             }
 
@@ -161,15 +192,14 @@ public class WantedCommand implements CommandExecutor {
                     return true;
                 }
 
-                sender.sendMessage(Main.getInstance().messages.getPluginReloaded());
                 Main.getInstance().reloadConfig();
 
+                Main.languageName = Main.getInstance().getConfig().getString("Wanted.LanguageFile");
                 Main.getInstance().messages.reload();
                 File languageDirectory = new File(Main.getInstance().getDataFolder() + "/language");
                 for (File configFile : languageDirectory.listFiles()) {
 
-                    FileConfiguration dataConfig;
-                    dataConfig = YamlConfiguration.loadConfiguration(configFile);
+                    FileConfiguration dataConfig = YamlConfiguration.loadConfiguration(configFile);
 
                     InputStream defaultStream = Main.getInstance().getResource("language/" + configFile.getName()  + ".yml");
                     if (defaultStream != null) {
@@ -177,6 +207,8 @@ public class WantedCommand implements CommandExecutor {
                         dataConfig.setDefaults(defaultConfig);
                     }
                 }
+
+                sender.sendMessage(Main.getInstance().messages.getPluginReloaded());
                 return true;
             }
 

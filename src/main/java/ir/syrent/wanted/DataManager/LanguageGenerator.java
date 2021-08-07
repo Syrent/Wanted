@@ -8,14 +8,14 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-public class YamlGenerator {
+public class LanguageGenerator {
 
     private FileConfiguration dataConfig = null;
     private File configFile;
     private String path;
     private String name;
 
-    public YamlGenerator(String path, String name) {
+    public LanguageGenerator(String path, String name) {
         this.path = path;
         this.name = name;
         this.configFile = new File(path, name + ".yml");

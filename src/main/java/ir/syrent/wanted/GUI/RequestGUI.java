@@ -30,9 +30,7 @@ public class RequestGUI {
         if (playerList.size() == 0) return; //No wanteds found
 
         for (int i=1 ; i <= Math.ceil((float) playerList.size() / 45) ; i++) {
-            playersGUI.add(Bukkit.createInventory(null, 54,
-                    ChatColor.translateAlternateColorCodes('&',
-                            "&4&lWANTED GUI &8- &5Page &n" + i)));
+            playersGUI.add(Bukkit.createInventory(null, 54, Main.getInstance().messages.getWantedGUITitle().replace("%page%", String.valueOf(i))));
         }
 
         boolean isNewVersion = Arrays.stream(Material.values()).map(Material::name)
@@ -53,16 +51,19 @@ public class RequestGUI {
             }
             ItemMeta meta = playerItem.getItemMeta();
             assert meta != null;
-            meta.setDisplayName(ChatColor.AQUA + player.getName());
+            meta.setDisplayName(Main.getInstance().messages.getWantedGUIPlayerTitle().replace("%player_name%", player.getName()));
 
             List<String> lore = new ArrayList<>();
-            lore.add(Utils.color("&7Wanteds: &b" + WantedManager.getInstance().getWanted(player)));
-            lore.add(Utils.color("&7World: &b" + player.getWorld().getName()));
-            lore.add(Utils.color("&7Location: " + String.format(
-                    "&eX: &b%.0f&7, &eY: &b%.0f&7, &eZ: &b%.0f",
-                    player.getLocation().getX(),
-                    player.getLocation().getY(),
-                    player.getLocation().getZ())));
+            for (String line : Main.getInstance().messages.getWantedGUIPlayerLore()) {
+                lore.add(line.replace("%wanted%", String.valueOf(WantedManager.getInstance().getWanted(player)))
+                .replace("%world%", player.getWorld().getName())
+                .replace("%location%",
+                        Utils.color(String.format(
+                                "&eX: &b%.0f&7, &eY: &b%.0f&7, &eZ: &b%.0f",
+                                player.getLocation().getX(),
+                                player.getLocation().getY(),
+                                player.getLocation().getZ()))));
+            }
             meta.setLore(lore);
 
             playerItem.setItemMeta(meta);
@@ -75,13 +76,13 @@ public class RequestGUI {
                     "lY3JhZnQubmV0L3RleHR1cmUvYWFiOTVhODc1MWFlYWEzYzY3MWE4ZTkwYjgzZGU3NmEwMjA0ZjFiZTY1NzUyYWMzMWJlMmY5OGZlYjY0YmY3ZiJ9fX0=");
             ItemMeta nextPageMeta = nextPage.getItemMeta();
             assert nextPageMeta != null;
-            nextPageMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&e» &aNext Page &e»"));
+            nextPageMeta.setDisplayName(Main.getInstance().messages.getWantedGUINextPageButton());
             nextPage.setItemMeta(nextPageMeta);
             ItemStack prevPage = SkullBuilder.getInstance().getHead("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5" +
                     "lY3JhZnQubmV0L3RleHR1cmUvMzJmZjhhYWE0YjJlYzMwYmM1NTQxZDQxYzg3ODIxOTliYWEyNWFlNmQ4NTRjZGE2NTFmMTU5OWU2NTRjZmM3OSJ9fX0=");
             ItemMeta prevPageMeta = prevPage.getItemMeta();
             assert prevPageMeta != null;
-            prevPageMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&e« &aPrevious Page &e«"));
+            prevPageMeta.setDisplayName(Main.getInstance().messages.getWantedGUIPrevPageButton());
             prevPage.setItemMeta(prevPageMeta);
 
             playersGUI.get(0).setItem(52, nextPage);
@@ -98,7 +99,7 @@ public class RequestGUI {
         ItemStack refresh = getRefreshButtonItem();
         ItemMeta refreshMeta = refresh.getItemMeta();
         assert refreshMeta != null;
-        refreshMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&6&l• &eRefresh &6&l•"));
+        refreshMeta.setDisplayName(Main.getInstance().messages.getWantedGUIRefreshButton());
         refresh.setItemMeta(refreshMeta);
         for (Inventory inv : playersGUI) {
             inv.setItem(49, refresh);

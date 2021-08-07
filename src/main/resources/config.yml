@@ -3,6 +3,9 @@ Wanted:
   Maximum: 5
   # Refresh interval of the compass, Recommended to keep this 10-20. In ticks (20 Ticks = 1 second)
   CompassRefreshInterval: 20
+  TackerBossBar:
+    Enable: true
+    RefreshInterval: 20
   LanguageFile: en_US
   ClearWantedOnDeath: true
   ReceiveOnKill:
@@ -11,6 +14,8 @@ Wanted:
     Player:
       Enable: true
       KillMessage: true
+      # Prevent Wanted receive if the killer is not the fight starter.
+      PreventReceiveIfDefender: false
       Receive: 1
       RunCommandOnKill:
         Enable: false
