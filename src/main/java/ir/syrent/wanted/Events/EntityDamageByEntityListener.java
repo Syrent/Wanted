@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
 
 public class EntityDamageByEntityListener implements Listener {
 
@@ -20,7 +21,20 @@ public class EntityDamageByEntityListener implements Listener {
             }
 
         }
+    }
 
+    @EventHandler
+    public void onShoot(ProjectileHitEvent event) {
+        if (event.getEntity().getShooter()  instanceof Player && event.getHitEntity() instanceof Player) {
+            Player damaged = (Player) event.getHitEntity();
+            Player damager = (Player) event.getEntity().getShooter();
+
+            if (!Main.getInstance().playerDamagedMap.containsKey(damaged)) {
+                if (Main.getInstance().playerDamagedMap.containsValue(damaged)) return;
+                Main.getInstance().playerDamagedMap.put(damaged, damager);
+            }
+
+        }
     }
 
 

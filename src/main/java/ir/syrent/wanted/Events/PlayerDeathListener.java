@@ -68,10 +68,12 @@ public class PlayerDeathListener implements Listener {
 
             if (Main.getInstance().getConfig().getBoolean("Wanted.ReceiveOnKill.Player.KillMessage")) {
                 killer.sendMessage(Main.getInstance().messages.getMessageOnKillPlayer()
-                        .replace("%player_name%", victim.getName()).replace("%wanted%", String.valueOf(finalWanted)).replace("%fight_starter%", fightStarter.getName()));
+                        .replace("%player_name%", victim.getName()).replace("%wanted%", String.valueOf(finalWanted))
+                        .replace("%fight_starter%", fightStarter == null ? "UNKNOWN" : fightStarter.getName()));
             }
             break;
         }
+
         if (Main.getInstance().playerDamagedMap.containsKey(killer))
             Main.getInstance().playerDamagedMap.remove(killer);
         else Main.getInstance().playerDamagedMap.remove(victim);

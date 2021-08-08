@@ -130,6 +130,8 @@ public class WantedCommand implements CommandExecutor {
 
                 if (!Main.getInstance().getConfig().getBoolean("Wanted.TackerBossBar.Enable")) return true;
 
+                if (playerBossBarHashMap.containsKey(player)) playerBossBarHashMap.get(player).removePlayer(player);
+                playerBossBarHashMap.remove(player);
                 BossBar bossBar = Main.getInstance().getServer().createBossBar(
                         Main.getInstance().messages.getBarTitle().replace("%distance%",
                                 String.valueOf((int) player.getLocation().distance(getTarget.get(player).getLocation()))),
@@ -146,8 +148,17 @@ public class WantedCommand implements CommandExecutor {
                             return;
                         }
 
+                        if (player.getLocation().distance(getTarget.get(player).getLocation()) <= 100) {
+                            playerBossBarHashMap.get(player).setTitle(Main.getInstance().messages.getCloseBarTitle().replace("%distance%",
+                                    String.valueOf((int) player.getLocation().distance(getTarget.get(player).getLocation()))));
+                            playerBossBarHashMap.get(player).setColor(BarColor.valueOf(Main.getInstance().messages.getCloseBarColor()));
+                            return;
+                        }
+
                         playerBossBarHashMap.get(player).setTitle(Main.getInstance().messages.getBarTitle().replace("%distance%",
                                 String.valueOf((int) player.getLocation().distance(getTarget.get(player).getLocation()))));
+                        playerBossBarHashMap.get(player).setStyle(BarStyle.valueOf(Main.getInstance().messages.getBarType()));
+                        playerBossBarHashMap.get(player).setColor(BarColor.valueOf(Main.getInstance().messages.getBarColor()));
                     }
                 }.runTaskTimerAsynchronously(Main.getInstance(), 0,
                         Main.getInstance().getConfig().getInt("Wanted.TackerBossBar.RefreshInterval"));

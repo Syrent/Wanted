@@ -85,6 +85,10 @@ public class Messages {
     private String barTitle;
     private String barColor;
     private String barType;
+    //Close BossBar
+    private String closeBarTitle;
+    private String closeBarColor;
+    private String closeBarType;
 
 
     private String messageFormatter(String message) {
@@ -165,6 +169,10 @@ public class Messages {
         barTitle = Utils.color(languageYML.getConfig().getString("bar-title"));
         barColor = Utils.color(languageYML.getConfig().getString("bar-color"));
         barType = Utils.color(languageYML.getConfig().getString("bar-type"));
+        //Close BossBar
+        closeBarTitle = Utils.color(languageYML.getConfig().getString("close-bar-title"));
+        closeBarColor = Utils.color(languageYML.getConfig().getString("close-bar-color"));
+        closeBarType = Utils.color(languageYML.getConfig().getString("close-bar-type"));
     }
 
     public void helpMessage1(CommandSender sender) {
@@ -493,5 +501,17 @@ public class Messages {
 
     public String getBarType() {
         return barType;
+    }
+
+    public String getCloseBarTitle() {
+        return closeBarTitle;
+    }
+
+    public String getCloseBarColor() {
+        return closeBarColor;
+    }
+
+    public String getCloseBarType() {
+        return closeBarType;
     }
 }
