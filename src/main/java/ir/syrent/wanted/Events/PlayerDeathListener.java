@@ -1,6 +1,7 @@
 package ir.syrent.wanted.Events;
 
 import ir.syrent.wanted.Main;
+import ir.syrent.wanted.Utils.Utils;
 import ir.syrent.wanted.Wanted;
 import ir.syrent.wanted.WantedManager;
 import net.citizensnpcs.api.CitizensAPI;
@@ -24,12 +25,13 @@ public class PlayerDeathListener implements Listener {
 
         Wanted.getInstance().runCommand(killer, victim, "Player");
 
-        if (!Main.getInstance().getConfig().getBoolean("Wanted.ClearWantedOnDeath")) return;
-        if (killer == null) {
-            if (WantedManager.getInstance().getWanted(victim) != 0)
-                WantedManager.getInstance().setWanted(victim, 0);
-            Main.getInstance().skullBuilder.cache.remove(victim);
-            return;
+        if (Main.getInstance().getConfig().getBoolean("Wanted.ClearWantedOnDeath")) {
+            if (killer == null) {
+                if (WantedManager.getInstance().getWanted(victim) != 0)
+                    WantedManager.getInstance().setWanted(victim, 0);
+                Main.getInstance().skullBuilder.cache.remove(victim);
+                return;
+            }
         }
 
         int finalWanted;

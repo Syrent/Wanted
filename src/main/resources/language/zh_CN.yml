@@ -60,8 +60,3 @@ wanted-gui-player-lore:
   - "&7世界&f&l: &a%world%"
   - "&7坐标&f&l: &a%location%"
 bar-title: "&7距离&f&l: &a%distance%个方块"
-bar-color: "GREEN"
-bar-type: "SOLID"
-close-bar-title: "&7距离&f&l: &a%distance%个方块"
-close-bar-color: "YELLOW"
-close-bar-type: "SOLID"

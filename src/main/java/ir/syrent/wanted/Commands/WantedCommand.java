@@ -128,40 +128,59 @@ public class WantedCommand implements CommandExecutor {
                 }.runTaskTimerAsynchronously(Main.getInstance(), 0,
                         Main.getInstance().getConfig().getInt("Wanted.CompassRefreshInterval"));
 
-                if (!Main.getInstance().getConfig().getBoolean("Wanted.TackerBossBar.Enable")) return true;
+                if (!Main.getInstance().getConfig().getBoolean("Wanted.TrackerBossBar.Enable")) return true;
 
                 if (playerBossBarHashMap.containsKey(player)) playerBossBarHashMap.get(player).removePlayer(player);
                 playerBossBarHashMap.remove(player);
                 BossBar bossBar = Main.getInstance().getServer().createBossBar(
                         Main.getInstance().messages.getBarTitle().replace("%distance%",
                                 String.valueOf((int) player.getLocation().distance(getTarget.get(player).getLocation()))),
-                        BarColor.valueOf(Main.getInstance().messages.getBarColor()), BarStyle.valueOf(Main.getInstance().messages.getBarType()));
+                        BarColor.valueOf(Main.getInstance().getConfig().getString("Wanted.TrackerBossBar.Default.Color")),
+                        BarStyle.valueOf(Main.getInstance().getConfig().getString("Wanted.TrackerBossBar.Default.Type")));
+
                 playerBossBarHashMap.put(player, bossBar);
                 playerBossBarHashMap.get(player).addPlayer(player);
                 new BukkitRunnable() {
                     @Override
                     public void run() {
+                        BossBar playerBar = playerBossBarHashMap.get(player);
+                        Player playerTarget = getTarget.get(player);
                         if (!target.isOnline()) {
-                            playerBossBarHashMap.get(player).removePlayer(player);
+                            if (playerBossBarHashMap.containsKey(player)) playerBar.removePlayer(player);
                             playerBossBarHashMap.remove(player);
                             cancel();
                             return;
                         }
 
-                        if (player.getLocation().distance(getTarget.get(player).getLocation()) <= 100) {
-                            playerBossBarHashMap.get(player).setTitle(Main.getInstance().messages.getCloseBarTitle().replace("%distance%",
-                                    String.valueOf((int) player.getLocation().distance(getTarget.get(player).getLocation()))));
-                            playerBossBarHashMap.get(player).setColor(BarColor.valueOf(Main.getInstance().messages.getCloseBarColor()));
-                            return;
-                        }
-
                         playerBossBarHashMap.get(player).setTitle(Main.getInstance().messages.getBarTitle().replace("%distance%",
                                 String.valueOf((int) player.getLocation().distance(getTarget.get(player).getLocation()))));
-                        playerBossBarHashMap.get(player).setStyle(BarStyle.valueOf(Main.getInstance().messages.getBarType()));
-                        playerBossBarHashMap.get(player).setColor(BarColor.valueOf(Main.getInstance().messages.getBarColor()));
+
+                        for (String barID : Main.getInstance().getConfig().getConfigurationSection("Wanted.TrackerBossBar.Custom").getKeys(false)) {
+
+                            int distance = Main.getInstance().getConfig().getInt("Wanted.TrackerBossBar.Custom." + barID + ".Distance");
+                            boolean isProgressive = Main.getInstance().getConfig().getBoolean("Wanted.TrackerBossBar.Custom." + barID + ".Progress");
+                            BarColor barColor = BarColor.valueOf(
+                                    Main.getInstance().getConfig().getString("Wanted.TrackerBossBar.Custom." + barID + ".Color"));
+                            BarStyle barStyle = BarStyle.valueOf(
+                                    Main.getInstance().getConfig().getString("Wanted.TrackerBossBar.Custom." + barID + ".Type"));
+
+                            if (player.getLocation().distance(playerTarget.getLocation()) <= distance) {
+                                /*if (isProgressive)
+                                    if (player.getLocation().distance(getTarget.get(player).getLocation()) <= 100)
+                                        playerBar.setProgress(distance);*/
+                                playerBar.setColor(barColor);
+                                playerBar.setStyle(barStyle);
+                                return;
+                            }
+                        }
+
+                        playerBossBarHashMap.get(player).setColor(BarColor.valueOf(
+                                Main.getInstance().getConfig().getString("Wanted.TrackerBossBar.Default.Color")));
+                        playerBossBarHashMap.get(player).setStyle(BarStyle.valueOf(
+                                Main.getInstance().getConfig().getString("Wanted.TrackerBossBar.Default.Type")));
                     }
                 }.runTaskTimerAsynchronously(Main.getInstance(), 0,
-                        Main.getInstance().getConfig().getInt("Wanted.TackerBossBar.RefreshInterval"));
+                        Main.getInstance().getConfig().getInt("Wanted.TrackerBossBar.RefreshInterval"));
 
                 return true;
             }
