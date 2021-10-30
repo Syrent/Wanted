@@ -1,11 +1,13 @@
 package ir.syrent.wanted;
 
+import ir.syrent.wanted.Commands.ComplaintCommand;
 import ir.syrent.wanted.Commands.WantedCommand;
 import ir.syrent.wanted.Commands.WantedsCommand;
-import ir.syrent.wanted.DataManager.Log;
 import ir.syrent.wanted.DataManager.LanguageGenerator;
+import ir.syrent.wanted.DataManager.Log;
 import ir.syrent.wanted.DataManager.WantedsYML;
 import ir.syrent.wanted.Dependencies.PlaceholderAPI;
+import ir.syrent.wanted.Dependencies.WorldGuard;
 import ir.syrent.wanted.Events.*;
 import ir.syrent.wanted.GUI.RequestGUI;
 import ir.syrent.wanted.Messages.Messages;
@@ -15,7 +17,6 @@ import ir.syrent.wanted.Utils.Utils;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
@@ -32,11 +33,12 @@ public final class Main extends JavaPlugin implements CommandExecutor {
     public Log log;
     public SkullBuilder skullBuilder;
     public RequestGUI requestGUI;
+    public WorldGuard worldGuard;
 
     public boolean placeholderAPIFound;
     public static String languageName;
 
-    public HashMap<Player, Player> playerDamagedMap = new HashMap<>();
+    public HashMap<String, String> playerDamagedMap = new HashMap<>();
 
     @Override
     public void onEnable() {
@@ -58,11 +60,13 @@ public final class Main extends JavaPlugin implements CommandExecutor {
     public void registerCommands() {
         getCommand("wanted").setExecutor(new WantedCommand());
         getCommand("wanteds").setExecutor(new WantedsCommand());
+        getCommand("complaint").setExecutor(new ComplaintCommand());
         getCommand("wanted").setTabCompleter(new TabCompleter());
     }
 
     public void registerEvents() {
         getServer().getPluginManager().registerEvents(new PlayerDeathListener(), this);
+        getServer().getPluginManager().registerEvents(new PlayerDeathListenerComplaint(), this);
         getServer().getPluginManager().registerEvents(new PlayerJoinListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerQuitListener(), this);
         getServer().getPluginManager().registerEvents(new InventoryClickListener(), this);
@@ -109,6 +113,14 @@ public final class Main extends JavaPlugin implements CommandExecutor {
         } else {
             this.getLogger().info(Utils.color("Citizens not found! disabling hook..."));
             placeholderAPIFound = false;
+        }
+
+        if (Bukkit.getPluginManager().getPlugin("WorldGuard") != null) {
+            this.getLogger().info(Utils.color("WorldGuard found! enabling hook..."));
+            worldGuard = new WorldGuard();
+            this.getLogger().info(Utils.color("WorldGuard hook enabled!"));
+        } else {
+            this.getLogger().info(Utils.color("WorldGuard not found! disabling hook..."));
         }
     }
 

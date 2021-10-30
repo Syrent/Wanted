@@ -12,8 +12,8 @@ public class LanguageGenerator {
 
     private FileConfiguration dataConfig = null;
     private File configFile;
-    private String path;
-    private String name;
+    private final String path;
+    private final String name;
 
     public LanguageGenerator(String path, String name) {
         this.path = path;

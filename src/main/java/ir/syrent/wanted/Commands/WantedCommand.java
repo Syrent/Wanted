@@ -43,7 +43,7 @@ public class WantedCommand implements CommandExecutor {
 
                 Player player = (Player) sender;
 
-                if (!isAdmin || !player.hasPermission("wanted.get")) {
+                if (!isAdmin && !player.hasPermission("wanted.get")) {
                     player.sendMessage(Main.getInstance().messages.getNeedPermission());
                     return true;
                 }
@@ -59,7 +59,7 @@ public class WantedCommand implements CommandExecutor {
                     return true;
                 }
 
-                int wanted = WantedManager.getInstance().getWanted(player);
+                int wanted = WantedManager.getInstance().getWanted(player.getName());
 
                 player.sendMessage(Main.getInstance().messages.getGetPlayerWanted()
                         .replace("%wanted%", String.valueOf(wanted))
@@ -68,7 +68,6 @@ public class WantedCommand implements CommandExecutor {
             }
 
 
-            HashMap<Player, BossBar> bossBarHashMap = new HashMap<>();
             //Find Wanted
             if (args[0].equalsIgnoreCase("find")) {
                 if (!(sender instanceof Player)) {
@@ -77,13 +76,15 @@ public class WantedCommand implements CommandExecutor {
                 }
 
                 Player player = (Player) sender;
-                if (!(player.hasPermission("wanted.find") || isAdmin)) {
+                if (!player.hasPermission("wanted.find") && !isAdmin) {
                     sender.sendMessage(Main.getInstance().messages.getNeedPermission());
                     return true;
                 }
 
                 if (args.length == 1) {
-                    sender.sendMessage(Main.getInstance().messages.getFindUsage());
+                    getTarget.remove(player);
+                    if (playerBossBarHashMap.containsKey(player)) playerBossBarHashMap.get(player).removePlayer(player);
+                    playerBossBarHashMap.remove(player);
                     return true;
                 }
 
@@ -118,10 +119,11 @@ public class WantedCommand implements CommandExecutor {
                 new BukkitRunnable() {
                     @Override
                     public void run() {
-                        if (!target.isOnline()) {
+                        if (!target.isOnline() || !getTarget.containsKey(player)) {
                             player.sendMessage(Main.getInstance().messages.getPlayerLeaveOnFinding()
                                     .replace("%player%", target.getName()));
                             cancel();
+                            return;
                         }
                         player.setCompassTarget(getTarget.get(player).getLocation());
                     }
@@ -144,19 +146,22 @@ public class WantedCommand implements CommandExecutor {
                     @Override
                     public void run() {
                         BossBar playerBar = playerBossBarHashMap.get(player);
-                        Player playerTarget = getTarget.get(player);
                         if (!target.isOnline()) {
                             if (playerBossBarHashMap.containsKey(player)) playerBar.removePlayer(player);
                             playerBossBarHashMap.remove(player);
                             cancel();
                             return;
                         }
+                        if (!playerBossBarHashMap.containsKey(player)) {
+                            cancel();
+                            return;
+                        }
 
+                        double playerDistance = player.getLocation().distance(getTarget.get(player).getLocation());
                         playerBossBarHashMap.get(player).setTitle(Main.getInstance().messages.getBarTitle().replace("%distance%",
-                                String.valueOf((int) player.getLocation().distance(getTarget.get(player).getLocation()))));
+                        String.valueOf((int) playerDistance)));
 
                         for (String barID : Main.getInstance().getConfig().getConfigurationSection("Wanted.TrackerBossBar.Custom").getKeys(false)) {
-
                             int distance = Main.getInstance().getConfig().getInt("Wanted.TrackerBossBar.Custom." + barID + ".Distance");
                             boolean isProgressive = Main.getInstance().getConfig().getBoolean("Wanted.TrackerBossBar.Custom." + barID + ".Progress");
                             BarColor barColor = BarColor.valueOf(
@@ -164,14 +169,16 @@ public class WantedCommand implements CommandExecutor {
                             BarStyle barStyle = BarStyle.valueOf(
                                     Main.getInstance().getConfig().getString("Wanted.TrackerBossBar.Custom." + barID + ".Type"));
 
-                            if (player.getLocation().distance(playerTarget.getLocation()) <= distance) {
-                                /*if (isProgressive)
-                                    if (player.getLocation().distance(getTarget.get(player).getLocation()) <= 100)
-                                        playerBar.setProgress(distance);*/
+                            if ((int) playerDistance <= distance) {
                                 playerBar.setColor(barColor);
                                 playerBar.setStyle(barStyle);
+                                if (playerDistance <= 100) {
+                                    if (isProgressive)
+                                        playerBar.setProgress(playerDistance / 100);
+                                }
                                 return;
                             }
+                            if (playerBar.getProgress() != 1) playerBar.setProgress(1);
                         }
 
                         playerBossBarHashMap.get(player).setColor(BarColor.valueOf(
@@ -244,7 +251,7 @@ public class WantedCommand implements CommandExecutor {
 
             //ClearWanted command
             if (args[0].equalsIgnoreCase("clear")) {
-                if (!(sender.hasPermission("wanted.clear") || isAdmin)) {
+                if (!sender.hasPermission("wanted.clear") && !isAdmin) {
                     sender.sendMessage(Main.getInstance().messages.getNeedPermission());
                     return true;
                 }
@@ -261,7 +268,7 @@ public class WantedCommand implements CommandExecutor {
                     return true;
                 }
 
-                WantedManager.getInstance().setWanted(target, 0);
+                WantedManager.getInstance().setWanted(target.getName(), 0);
                 SkullBuilder.getInstance().cache.remove(target);
 
                 sender.sendMessage(Main.getInstance().messages.getClearWanted());
@@ -270,7 +277,7 @@ public class WantedCommand implements CommandExecutor {
 
             //TakeWanted command
             if (args[0].equalsIgnoreCase("take")) {
-                if (!(sender.hasPermission("wanted.take") || isAdmin)) {
+                if (!sender.hasPermission("wanted.take") && !isAdmin) {
                     sender.sendMessage(Main.getInstance().messages.getNeedPermission());
                     return true;
                 }
@@ -303,7 +310,7 @@ public class WantedCommand implements CommandExecutor {
             }
             //AddWanted command
             if (args[0].equalsIgnoreCase("add")) {
-                if (!(sender.hasPermission("wanted.add") || isAdmin)) {
+                if (!sender.hasPermission("wanted.add") && !isAdmin) {
                     sender.sendMessage(Main.getInstance().messages.getNeedPermission());
                     return true;
                 }
@@ -337,7 +344,7 @@ public class WantedCommand implements CommandExecutor {
 
             //SetWanted command
             if (args[0].equalsIgnoreCase("set")) {
-                if (!(sender.hasPermission("wanted.set") || isAdmin)) {
+                if (!sender.hasPermission("wanted.set") && !isAdmin) {
                     sender.sendMessage(Main.getInstance().messages.getNeedPermission());
                     return true;
                 }
@@ -362,7 +369,7 @@ public class WantedCommand implements CommandExecutor {
                     return true;
                 }
 
-                if (WantedManager.getInstance().setWanted(target, wanted) != 0)
+                if (WantedManager.getInstance().setWanted(target.getName(), wanted) != 0)
                     SkullBuilder.getInstance().saveHead(target);
 
                 sender.sendMessage(Main.getInstance().messages.getSetWanted());
@@ -371,7 +378,7 @@ public class WantedCommand implements CommandExecutor {
 
             //TopWanted command
             if (args[0].equalsIgnoreCase("top")) {
-                if (!(sender.hasPermission("wanted.top") || isAdmin)) {
+                if (!sender.hasPermission("wanted.top") && !isAdmin) {
                     sender.sendMessage(Main.getInstance().messages.getNeedPermission());
                     return true;
                 }
@@ -430,7 +437,7 @@ public class WantedCommand implements CommandExecutor {
                 }
 
                 Player player = (Player) sender;
-                if (!(sender.hasPermission("wanted.gui") || sender.hasPermission("wanted.admin"))) {
+                if (!sender.hasPermission("wanted.gui") && !sender.hasPermission("wanted.admin")) {
                     sender.sendMessage(Main.getInstance().messages.getNeedPermission());
                     return true;
                 }
@@ -440,7 +447,7 @@ public class WantedCommand implements CommandExecutor {
             }
             //Help command
             if (args[0].equalsIgnoreCase("help")) {
-                if (!(sender.hasPermission("wanted.help") || sender.hasPermission("wanted.admin"))) {
+                if (!sender.hasPermission("wanted.help") && !sender.hasPermission("wanted.admin")) {
                     sender.sendMessage(Main.getInstance().messages.getNeedPermission());
                     return true;
                 }
@@ -468,14 +475,14 @@ public class WantedCommand implements CommandExecutor {
 
         Player player = (Player) sender;
 
-        if (!isAdmin || !player.hasPermission("wanted.use")) {
+        if (!isAdmin && !player.hasPermission("wanted.use")) {
             player.sendMessage(Main.getInstance().messages.getNeedPermission());
             return true;
         }
 
         try {
             sender.sendMessage(Main.getInstance().messages.getPlayerWanted().replace("%wanted%",
-                    String.valueOf(WantedManager.getInstance().getWanted(player))));
+                    String.valueOf(WantedManager.getInstance().getWanted(player.getName()))));
             return true;
         } catch (Exception e) {
             sender.sendMessage(Main.getInstance().messages.getPlayerWanted().replace("%wanted%", "0"));

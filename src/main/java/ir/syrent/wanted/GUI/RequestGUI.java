@@ -5,9 +5,7 @@ import ir.syrent.wanted.Utils.SkullBuilder;
 import ir.syrent.wanted.Utils.Utils;
 import ir.syrent.wanted.WantedManager;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.block.Skull;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -55,7 +53,7 @@ public class RequestGUI {
 
             List<String> lore = new ArrayList<>();
             for (String line : Main.getInstance().messages.getWantedGUIPlayerLore()) {
-                lore.add(line.replace("%wanted%", String.valueOf(WantedManager.getInstance().getWanted(player)))
+                lore.add(line.replace("%wanted%", String.valueOf(WantedManager.getInstance().getWanted(player.getName())))
                 .replace("%world%", player.getWorld().getName())
                 .replace("%location%",
                         Utils.color(String.format(

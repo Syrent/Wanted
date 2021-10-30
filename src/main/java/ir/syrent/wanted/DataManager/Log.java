@@ -1,7 +1,6 @@
 package ir.syrent.wanted.DataManager;
 
 import ir.syrent.wanted.Main;
-import org.bukkit.ChatColor;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -29,7 +28,7 @@ public class Log {
 
         if (!logsFolder.exists()) { // Check if logs folder exists
             logsFolder.mkdirs(); // if not then create it
-            Main.getInstance().getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "Created the logs folder"); // Send a message to console that the folder has been created
+            Main.getInstance().getLogger().info("Created the logs folder");
         }
     }
 

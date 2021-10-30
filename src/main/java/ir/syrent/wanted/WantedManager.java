@@ -2,7 +2,6 @@ package ir.syrent.wanted;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
-import org.bukkit.permissions.PermissionAttachmentInfo;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,7 +29,7 @@ public class WantedManager {
     }
 
     public int addWanted(Player player, int wanted) {
-        int currentWanted = getWanted(player);
+        int currentWanted = getWanted(player.getName());
         int maximumWanted = Main.getInstance().getConfig().getInt("Wanted.Maximum");
 
         int newWanted = Math.min(Math.max(currentWanted + wanted, 0), maximumWanted);
@@ -44,14 +43,14 @@ public class WantedManager {
         return newWanted;
     }
 
-    public int setWanted(Player player, int wanted) {
+    public int setWanted(String player, int wanted) {
         int maximumWanted = Main.getInstance().getConfig().getInt("Wanted.Maximum");
 
         int newWanted = Math.min(Math.max(wanted, 0), maximumWanted);
 
-        wantedSection.set(player.getName(), newWanted == 0 ? null : newWanted);
-        if (newWanted == 0) wanteds.remove(player.getName());
-        else wanteds.put(player.getName(), newWanted);
+        wantedSection.set(player, newWanted == 0 ? null : newWanted);
+        if (newWanted == 0) wanteds.remove(player);
+        else wanteds.put(player, newWanted);
 
         Main.getInstance().wantedsYML.saveConfig();
 
@@ -59,7 +58,7 @@ public class WantedManager {
     }
 
     public int takeWanted(Player player, int wanted) {
-        int currentWanted = getWanted(player);
+        int currentWanted = getWanted(player.getName());
         int maximumWanted = Main.getInstance().getConfig().getInt("Wanted.Maximum");
 
         int newWanted = Math.min(Math.max(currentWanted - wanted, 0), maximumWanted);
@@ -73,12 +72,12 @@ public class WantedManager {
         return newWanted;
     }
 
-    public int getWanted(Player player) {
-        if (wanteds.containsKey(player.getName()))
-            return wanteds.get(player.getName());
+    public int getWanted(String player) {
+        if (wanteds.containsKey(player))
+            return wanteds.get(player);
         else
-        if (wantedSection.contains(player.getName()))
-            return wantedSection.getInt(player.getName());
+        if (wantedSection.contains(player))
+            return wantedSection.getInt(player);
         else
             return 0;
     }

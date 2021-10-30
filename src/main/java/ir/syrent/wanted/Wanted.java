@@ -15,13 +15,17 @@ public class Wanted {
     }
 
     public void runCommand(Player killer, LivingEntity victim, String type) {
-        if (!Main.getInstance().getConfig().getBoolean("Wanted.ReceiveOnKill" + type + "RunCommandOnKill.Enable")) return;
+        if (!Main.getInstance().getConfig().getBoolean("Wanted.ReceiveOnKill." + type + ".RunCommandOnKill.Enable")) return;
 
         for (String command : Main.getInstance().getConfig().getStringList("Wanted.ReceiveOnKill." + type + ".RunCommandOnKill.Commands")) {
             String[] splitCommand = command.split(";");
             String commandExecutor = splitCommand[0];
             String originalCommand = splitCommand[1].replace("%victim%", victim.getName())
                     .replace("%killer%", killer == null ? "UNKNOWN OBJECT" : killer.getName());
+            if (victim instanceof Player)
+                originalCommand = originalCommand
+                        .replace("%wanted_level%", String.valueOf(WantedManager.getInstance().getWanted(victim.getName())));
+
             switch (commandExecutor) {
                 case "KILLER":
                     if (killer != null)

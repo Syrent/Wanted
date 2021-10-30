@@ -9,15 +9,17 @@ website: syrent.ir
 softdepend:
   - PlaceholderAPI
   - Citizens
+  - WorldGuard
 commands:
   wanteds:
   wanted:
+  complaint:
 permissions:
   wanted.use:
     default: true
   wanted.help:
     default: true
-  wanted.get:
+  wanted.complaint:
     default: true
   wanted.bypass:
-    default: not op
+    default: false

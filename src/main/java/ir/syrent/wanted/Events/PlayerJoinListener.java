@@ -12,7 +12,7 @@ public class PlayerJoinListener implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        if (WantedManager.getInstance().getWanted(player) != 0) {
+        if (WantedManager.getInstance().getWanted(player.getName()) != 0) {
             SkullBuilder.getInstance().saveHead(player);
         }
     }

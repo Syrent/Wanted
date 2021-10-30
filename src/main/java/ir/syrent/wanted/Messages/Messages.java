@@ -68,6 +68,7 @@ public class Messages {
     private String wantedsHelp;
     private String nextPageHelp;
     private String wantedGUIHelp;
+    private String wantedComplaintHelp;
     private String wantedGetHelp;
     private String wantedTopHelp;
     private String wantedHelpHelp;
@@ -83,6 +84,13 @@ public class Messages {
 
     //BossBar
     private String barTitle;
+
+    //Complaint
+    private String complaintConfirm;
+    private String complaintExpire;
+    private String complaintAlreadyExpire;
+    private String complaintSubmit;
+    private String cantComplaint;
 
 
     private String messageFormatter(String message) {
@@ -143,6 +151,7 @@ public class Messages {
         wantedsHelp = Utils.color(languageYML.getConfig().getString("wanteds-help"));
         nextPageHelp = Utils.color(languageYML.getConfig().getString("next-page-help"));
         wantedGUIHelp = Utils.color(languageYML.getConfig().getString("wanted-gui-help"));
+        wantedComplaintHelp = Utils.color(languageYML.getConfig().getString("wanted-complaint-help"));
         wantedGetHelp = Utils.color(languageYML.getConfig().getString("wanted-get-help"));
         wantedTopHelp = Utils.color(languageYML.getConfig().getString("wanted-top-help"));
         wantedHelpHelp = Utils.color(languageYML.getConfig().getString("wanted-help-help"));
@@ -161,6 +170,13 @@ public class Messages {
 
         //BossBar
         barTitle = Utils.color(languageYML.getConfig().getString("bar-title"));
+
+        //Complaint
+        complaintConfirm = Utils.color(languageYML.getConfig().getString("complaint-confirm"));
+        complaintExpire = Utils.color(languageYML.getConfig().getString("complaint-expire"));
+        complaintAlreadyExpire = Utils.color(languageYML.getConfig().getString("complaint-already-expire"));
+        complaintSubmit = Utils.color(languageYML.getConfig().getString("complaint-submit"));
+        cantComplaint = Utils.color(languageYML.getConfig().getString("cant-complain"));
     }
 
     public void helpMessage1(CommandSender sender) {
@@ -208,6 +224,9 @@ public class Messages {
         TextComponent helpCommand = new TextComponent(getWantedHelpHelp());
         helpCommand.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/wanted help "));
         sender.spigot().sendMessage(helpCommand);
+        TextComponent complaintCommand = new TextComponent(getWantedComplaintHelp());
+        complaintCommand.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/complaint"));
+        sender.spigot().sendMessage(complaintCommand);
         TextComponent textComponent = new TextComponent(getPrevPageHelp());
         textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/wanted help 1"));
         sender.spigot().sendMessage(textComponent);
@@ -226,14 +245,14 @@ public class Messages {
         for (int i = 0; i < count; i++) {
             star.append(getWantedSymbol());
         }
-        return Utils.color("%star%".replace("%symbol%", star));
+        return Utils.color(getPlayerWantedListFormat().replace("%symbol%", star));
     }
 
     public String playerDeathLogger(PlayerDeathEvent event) {
         Player player = event.getEntity();
         Player killer = player.getKiller();
         if (killer == null) return null;
-        Integer wanted = WantedManager.getInstance().getWanted(player);
+        Integer wanted = WantedManager.getInstance().getWanted(player.getName());
         if (wanted == null) return null;
         return "[Player] [" + Main.getInstance().log.formatMessage() + "] "
                 + killer.getName() + " killed " + player.getName()
@@ -248,7 +267,7 @@ public class Messages {
         Entity npc = event.getEvent().getEntity();
         Player killer = event.getEvent().getEntity().getKiller();
         if (killer == null) return null;
-        Integer wanted = WantedManager.getInstance().getWanted(killer);
+        Integer wanted = WantedManager.getInstance().getWanted(killer.getName());
         if (wanted == null) return null;
         return "[NPC] [" + Main.getInstance().log.formatMessage() + "] "
                 + killer.getName() + " killed " + npc.getName()
@@ -481,5 +500,29 @@ public class Messages {
 
     public String getBarTitle() {
         return barTitle;
+    }
+
+    public String getComplaintConfirm() {
+        return complaintConfirm;
+    }
+
+    public String getComplaintExpire() {
+        return complaintExpire;
+    }
+
+    public String getComplaintAlreadyExpire() {
+        return complaintAlreadyExpire;
+    }
+
+    public String getComplaintSubmit() {
+        return complaintSubmit;
+    }
+
+    public String getCantComplaint() {
+        return cantComplaint;
+    }
+
+    public String getWantedComplaintHelp() {
+        return wantedComplaintHelp;
     }
 }

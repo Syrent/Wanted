@@ -23,7 +23,8 @@ public class InventoryClickListener implements Listener {
         if (event.getCurrentItem() == null) return;
 
         Player player = (Player) event.getWhoClicked();
-        if (event.getView().getTitle().contains("WANTED GUI")) {
+        if (ChatColor.stripColor(event.getView().getTitle()).contains(ChatColor.stripColor(
+                Main.getInstance().messages.getWantedGUITitle().replace("%page%", "")))) {
             event.setCancelled(true);
 
             //if (!(event.getSlot() == 46 || event.getSlot() == 52 || event.getSlot() == 49)) return;

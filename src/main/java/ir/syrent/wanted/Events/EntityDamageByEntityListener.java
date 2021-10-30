@@ -15,9 +15,9 @@ public class EntityDamageByEntityListener implements Listener {
             Player damaged = (Player) event.getEntity();
             Player damager = (Player) event.getDamager();
 
-            if (!Main.getInstance().playerDamagedMap.containsKey(damaged)) {
-                if (Main.getInstance().playerDamagedMap.containsValue(damaged)) return;
-                Main.getInstance().playerDamagedMap.put(damaged, damager);
+            if (!Main.getInstance().playerDamagedMap.containsKey(damaged.getName())) {
+                if (Main.getInstance().playerDamagedMap.containsValue(damaged.getName())) return;
+                Main.getInstance().playerDamagedMap.put(damaged.getName(), damager.getName());
             }
 
         }
@@ -29,9 +29,9 @@ public class EntityDamageByEntityListener implements Listener {
             Player damaged = (Player) event.getHitEntity();
             Player damager = (Player) event.getEntity().getShooter();
 
-            if (!Main.getInstance().playerDamagedMap.containsKey(damaged)) {
-                if (Main.getInstance().playerDamagedMap.containsValue(damaged)) return;
-                Main.getInstance().playerDamagedMap.put(damaged, damager);
+            if (!Main.getInstance().playerDamagedMap.containsKey(damaged.getName())) {
+                if (Main.getInstance().playerDamagedMap.containsValue(damaged.getName())) return;
+                Main.getInstance().playerDamagedMap.put(damaged.getName(), damager.getName());
             }
 
         }
