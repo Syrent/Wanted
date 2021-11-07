@@ -97,6 +97,10 @@ public class WantedCommand implements CommandExecutor {
                     sender.sendMessage(Main.getInstance().messages.getPlayerNotFound());
                     return true;
                 }
+                if (!player.getWorld().getName().equals(target.getWorld().getName())) {
+                    sender.sendMessage(Main.getInstance().messages.getDifferentWorld());
+                    return true;
+                }
 
                 if (!player.getInventory().contains(Material.COMPASS)) {
                     sender.sendMessage(Main.getInstance().messages.getNeedGPS());

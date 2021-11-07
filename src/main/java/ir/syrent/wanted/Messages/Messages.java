@@ -55,6 +55,7 @@ public class Messages {
     private String loadingData;
     private String wantedSymbol;
     private String playerWantedListFormat;
+    private String differentWorld;
 
     //Help messages
     private String helpHeader;
@@ -138,6 +139,7 @@ public class Messages {
         loadingData = messageFormatter(languageYML.getConfig().getString("loading-data"));
         wantedSymbol = Utils.color(languageYML.getConfig().getString("wanted-symbol"));
         playerWantedListFormat = Utils.color(languageYML.getConfig().getString("player-wanted-list-format"));
+        differentWorld = Utils.color(languageYML.getConfig().getString("different-world"));
 
         //Help messages
         helpHeader = Utils.color(languageYML.getConfig().getString("help-header"));
@@ -524,5 +526,9 @@ public class Messages {
 
     public String getWantedComplaintHelp() {
         return wantedComplaintHelp;
+    }
+
+    public String getDifferentWorld() {
+        return differentWorld;
     }
 }

@@ -43,32 +43,37 @@ public class ComplaintCommand implements CommandExecutor {
 
             for (PermissionAttachmentInfo permissionList : player.getEffectivePermissions()) {
                 Player killerPlayer = Bukkit.getPlayerExact(killer);
-                if (killerPlayer != null)
+                if (killerPlayer != null) {
                     if (killerPlayer.hasPermission("wanted.bypass")) break;
+                }
 
-                if (Main.getInstance().getConfig().getBoolean("Wanted.ReceiveOnKill.Player.PreventReceiveIfDefender"))
+                if (Main.getInstance().getConfig().getBoolean("Wanted.ReceiveOnKill.Player.PreventReceiveIfDefender")) {
                     if (!killer.equals(fightStarter)) break;
+                }
                 String wantedPermission = permissionList.getPermission();
 
                 if (wantedPermission.contains("wanted") && wantedPermission.contains("receive")) {
                     String[] permissionSplit = wantedPermission.split("\\.");
                     int number = Integer.parseInt(permissionSplit[2]);
-                    if (WantedManager.getInstance().getWanted(player.getName()) != 0)
+                    if (WantedManager.getInstance().getWanted(player.getName()) != 0) {
                         WantedManager.getInstance().setWanted(player.getName(), 0);
+                    }
 
                     Main.getInstance().skullBuilder.cache.remove(player);
 
                     if (killerPlayer != null) {
-                        if (!Main.getInstance().skullBuilder.cache.containsKey(killerPlayer))
+                        if (!Main.getInstance().skullBuilder.cache.containsKey(killerPlayer)) {
                             Main.getInstance().skullBuilder.cache.put(killerPlayer, killerPlayer.serialize());
+                        }
                     }
 
                     WantedManager.getInstance().setWanted(killer, (wanted + number));
                     finalWanted = wanted + number;
                 } else {
                     if (killerPlayer != null) {
-                        if (!Main.getInstance().skullBuilder.cache.containsKey(killerPlayer))
+                        if (!Main.getInstance().skullBuilder.cache.containsKey(killerPlayer)) {
                             Main.getInstance().skullBuilder.cache.put(killerPlayer, killerPlayer.serialize());
+                        }
                     }
 
                     int defaultReceive = Main.getInstance().getConfig().getInt("Wanted.ReceiveOnKill.Player.Receive");
@@ -81,6 +86,7 @@ public class ComplaintCommand implements CommandExecutor {
                             .replace("%player_name%", player.getName()).replace("%wanted%", String.valueOf(finalWanted))
                             .replace("%fight_starter%", fightStarter == null ? "UNKNOWN" : fightStarter)
                             .replace("%region%", Main.getInstance().worldGuard == null ?
+                                    "UNKNOWN" : Main.getInstance().worldGuard.getRegionName(player.getLocation()) == null ?
                                     "UNKNOWN" : Main.getInstance().worldGuard.getRegionName(player.getLocation()))
                     );
                 }

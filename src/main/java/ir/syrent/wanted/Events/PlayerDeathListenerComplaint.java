@@ -23,6 +23,7 @@ public class PlayerDeathListenerComplaint implements Listener {
         if (!Main.getInstance().getConfig().getBoolean("Wanted.ComplaintMode.Enable")) return;
 
         Player victim = event.getEntity();
+        if (!(victim.getKiller() instanceof Player)) return;
         if (!victim.hasPermission("wanted.complaint")) return;
 
         if (Main.getInstance().getConfig().getBoolean("Wanted.WorldGuard.Enable") && Main.getInstance().worldGuard != null) {
@@ -36,16 +37,20 @@ public class PlayerDeathListenerComplaint implements Listener {
         if (Bukkit.getPluginManager().getPlugin("Citizens") != null)
             if (CitizensAPI.getNPCRegistry().isNPC(victim)) return;
         Player killer = victim.getKiller();
+        if (killer == null) return;
+
         if (killer.hasPermission("wanted.bypass")) return;
 
         String fightStarter = Main.getInstance().playerDamagedMap.containsKey(victim.getName()) ?
                 Main.getInstance().playerDamagedMap.get(victim.getName()) : Main.getInstance().playerDamagedMap.get(killer.getName());
         if (Main.getInstance().getConfig().getBoolean("Wanted.ReceiveOnKill.Player.PreventReceiveIfDefender")) {
-            if (Main.getInstance().playerDamagedMap.containsKey(killer.getName())) {
-                Main.getInstance().playerDamagedMap.remove(killer.getName());
-            } else {
-                Main.getInstance().playerDamagedMap.remove(victim.getName());
-            }
+            Bukkit.getScheduler().runTaskLater(Main.getInstance(), () -> {
+                if (Main.getInstance().playerDamagedMap.containsKey(killer.getName())) {
+                    Main.getInstance().playerDamagedMap.remove(killer.getName());
+                } else {
+                    Main.getInstance().playerDamagedMap.remove(victim.getName());
+                }
+            }, Main.getInstance().getConfig().getInt("Wanted.ComplaintMode.ExpireTime") * 20L);
             if (victim.getName().equals(fightStarter)) return;
         }
 

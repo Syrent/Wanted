@@ -67,7 +67,6 @@ public final class Main extends JavaPlugin implements CommandExecutor {
     public void registerEvents() {
         getServer().getPluginManager().registerEvents(new PlayerDeathListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerDeathListenerComplaint(), this);
-        getServer().getPluginManager().registerEvents(new PlayerJoinListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerQuitListener(), this);
         getServer().getPluginManager().registerEvents(new InventoryClickListener(), this);
         getServer().getPluginManager().registerEvents(new EntityDeathListener(), this);

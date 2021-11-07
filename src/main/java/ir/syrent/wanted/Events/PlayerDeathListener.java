@@ -77,6 +77,7 @@ public class PlayerDeathListener implements Listener {
                         .replace("%player_name%", victim.getName()).replace("%wanted%", String.valueOf(finalWanted))
                         .replace("%fight_starter%", fightStarter == null ? "UNKNOWN" : fightStarter)
                         .replace("%region%", Main.getInstance().worldGuard == null ?
+                                "UNKNOWN" : Main.getInstance().worldGuard.getRegionName(victim.getLocation()) == null ?
                                 "UNKNOWN" : Main.getInstance().worldGuard.getRegionName(victim.getLocation()))
                 );
             }
