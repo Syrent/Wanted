@@ -52,6 +52,8 @@ public class RequestGUI {
             meta.setDisplayName(Main.getInstance().messages.getWantedGUIPlayerTitle().replace("%player_name%", player.getName()));
 
             List<String> lore = new ArrayList<>();
+            String victim = Main.getInstance().playerVictimMap.get(player.getName());
+
             for (String line : Main.getInstance().messages.getWantedGUIPlayerLore()) {
                 lore.add(line.replace("%wanted%", String.valueOf(WantedManager.getInstance().getWanted(player.getName())))
                 .replace("%world%", player.getWorld().getName())
@@ -60,7 +62,8 @@ public class RequestGUI {
                                 "&eX: &b%.0f&7, &eY: &b%.0f&7, &eZ: &b%.0f",
                                 player.getLocation().getX(),
                                 player.getLocation().getY(),
-                                player.getLocation().getZ()))));
+                                player.getLocation().getZ())))
+                .replace("%last_victim%", victim == null ? "Unknown" : victim));
             }
             meta.setLore(lore);
 

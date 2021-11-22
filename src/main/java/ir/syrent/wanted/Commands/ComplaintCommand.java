@@ -90,6 +90,7 @@ public class ComplaintCommand implements CommandExecutor {
                                     "UNKNOWN" : Main.getInstance().worldGuard.getRegionName(player.getLocation()))
                     );
                 }
+                Main.getInstance().playerVictimMap.put(killer, player.getName());
 
                 if (Main.getInstance().playerDamagedMap.containsKey(killerPlayer.getName()))
                     Main.getInstance().playerDamagedMap.remove(killerPlayer.getName());

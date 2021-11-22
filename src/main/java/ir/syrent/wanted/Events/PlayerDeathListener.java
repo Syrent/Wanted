@@ -1,5 +1,6 @@
 package ir.syrent.wanted.Events;
 
+import ir.syrent.wanted.Commands.WantedCommand;
 import ir.syrent.wanted.Main;
 import ir.syrent.wanted.Wanted;
 import ir.syrent.wanted.WantedManager;
@@ -33,16 +34,18 @@ public class PlayerDeathListener implements Listener {
         if (Bukkit.getPluginManager().getPlugin("Citizens") != null)
             if (CitizensAPI.getNPCRegistry().isNPC(victim)) return;
         Player killer = victim.getKiller();
+        if (killer == null) return;
 
         Wanted.getInstance().runCommand(killer, victim, "Player");
         if (killer.hasPermission("wanted.hunter"))
             Wanted.getInstance().runCommand(killer, victim, "Wanted");
 
-        int finalWanted;
+        int finalWanted = 1;
         int wanted = WantedManager.getInstance().getWanted(killer.getName());
 
         String fightStarter = Main.getInstance().playerDamagedMap.containsKey(victim.getName()) ?
                 Main.getInstance().playerDamagedMap.get(victim.getName()) : Main.getInstance().playerDamagedMap.get(killer.getName());
+        Main.getInstance().playerVictimMap.put(killer.getName(), victim.getName());
 
         for (PermissionAttachmentInfo permissionList : victim.getEffectivePermissions()) {
             if (killer.hasPermission("wanted.bypass")) break;
@@ -72,6 +75,17 @@ public class PlayerDeathListener implements Listener {
                 finalWanted = defaultReceive;
             }
 
+            break;
+        }
+
+        if (Main.getInstance().playerDamagedMap.containsKey(killer.getName()))
+            Main.getInstance().playerDamagedMap.remove(killer.getName());
+        else Main.getInstance().playerDamagedMap.remove(victim.getName());
+
+        if (Main.getInstance().getConfig().getBoolean("Wanted.ClearWantedOnDeath")) {
+            if (Main.getInstance().getConfig().getBoolean("Wanted.RemoveWantedOnlyIfKilledByHunter")
+                && !killer.hasPermission("wanted.hunter")) return;
+
             if (Main.getInstance().getConfig().getBoolean("Wanted.ReceiveOnKill.Player.KillMessage")) {
                 killer.sendMessage(Main.getInstance().messages.getMessageOnKillPlayer()
                         .replace("%player_name%", victim.getName()).replace("%wanted%", String.valueOf(finalWanted))
@@ -81,19 +95,18 @@ public class PlayerDeathListener implements Listener {
                                 "UNKNOWN" : Main.getInstance().worldGuard.getRegionName(victim.getLocation()))
                 );
             }
-
-            break;
-        }
-
-        if (Main.getInstance().playerDamagedMap.containsKey(killer.getName()))
-            Main.getInstance().playerDamagedMap.remove(killer.getName());
-        else Main.getInstance().playerDamagedMap.remove(victim.getName());
-
-        if (Main.getInstance().getConfig().getBoolean("Wanted.ClearWantedOnDeath")) {
             if (WantedManager.getInstance().getWanted(victim.getName()) != 0)
                 WantedManager.getInstance().setWanted(victim.getName(), 0);
             Main.getInstance().skullBuilder.cache.remove(victim);
             return;
+        }
+
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (WantedCommand.getTarget.containsKey(player)) {
+                WantedCommand.getTarget.remove(player);
+            }
+            if (WantedCommand.playerBossBarHashMap.containsKey(player)) WantedCommand.playerBossBarHashMap.get(player).removePlayer(player);
+            WantedCommand.playerBossBarHashMap.remove(player);
         }
 
 

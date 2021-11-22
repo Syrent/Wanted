@@ -3,19 +3,36 @@ Wanted:
   Maximum: 5
   # Refresh interval of the compass, Recommended to keep this 10-20. In ticks (20 Ticks = 1 second)
   CompassRefreshInterval: 20
-  # !!! ** Only supports WorldGuard 7.X ** !!!
-  # !!! ** Only supports WorldGuard 7.X ** !!!
-  # !!! ** Only supports WorldGuard 7.X ** !!!
-  WorldGuard:
+  StopFindingAfterDeath: true
+  RemoveWantedOnlyIfKilledByHunter: false
+  # In the arrest mode there is no need to kill Wanted player.
+  # The Hunters/Police can use /wanted arrest <player> command to arrest Wanted player
+  ArrestMode:
+    # Should arrest mode be enabled?
     Enable: false
+    # Prevent to player arrest himself
+    PreventSelfArrest: true
+    # The minimum distance between Player and the target to arrest
+    Distance: 10
+  # !!! ** Only supports WorldGuard 7.X ** !!!
+  # !!! ** Only supports WorldGuard 7.X ** !!!
+  # !!! ** Only supports WorldGuard 7.X ** !!!
+  # Use this feature to blacklist/whitelist regions in server
+  WorldGuard:
+    # Should WorldGuard RegionFilter be enabled
+    Enable: false
+    # Revert the blacklist regions to whitelist regions
     RevertBlacklist: false
+    # The list of blacklisted regions
     BlacklistRegions:
       - example1
+  # ComplaintMode is a feature that prevents the killer wanted receive and allow victims to complain killers
   # Conditions:
   # - The victim should have wanted.complaint permission
   # - The killer should not be op or have access to wanted.bypass
   # - ComplaintMode should be enabled on the config file.
   ComplaintMode:
+    # Should complaint mode be enabled?
     Enable: false
     ExpireTime: 15
   TrackerBossBar:

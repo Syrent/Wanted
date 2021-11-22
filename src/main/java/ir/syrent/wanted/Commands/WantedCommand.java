@@ -19,17 +19,17 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class WantedCommand implements CommandExecutor {
 
-    HashMap<Player, Player> getTarget = new HashMap<>();
-    HashMap<Player, BossBar> playerBossBarHashMap = new HashMap<>();
+    public static HashMap<Player, Player> getTarget = new HashMap<>();
+    public static HashMap<Player, BossBar> playerBossBarHashMap = new HashMap<>();
 
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @Nullable String[] args) {
         boolean isAdmin = sender.hasPermission("wanted.admin");
@@ -196,6 +196,65 @@ public class WantedCommand implements CommandExecutor {
                 return true;
             }
 
+            //Arrest Wanted
+            if (args[0].equalsIgnoreCase("arrest")) {
+                if (!Main.getInstance().getConfig().getBoolean("Wanted.ArrestMode.Enable")) {
+                    sender.sendMessage(Main.getInstance().messages.getArrestIsDisabled());
+                    return true;
+                }
+
+                if (!(sender instanceof Player)) {
+                    sender.sendMessage(Main.getInstance().messages.getConsoleSender());
+                    return true;
+                }
+
+                Player player = (Player) sender;
+                if (!player.hasPermission("wanted.arrest") && !isAdmin) {
+                    sender.sendMessage(Main.getInstance().messages.getNeedPermission());
+                    return true;
+                }
+
+                if (args.length == 1) {
+                    player.sendMessage(Main.getInstance().messages.getArrestUsage());
+                    return true;
+                }
+
+                Player target = Bukkit.getPlayerExact(args[1]);
+
+                if (Main.getInstance().getConfig().getBoolean("Wanted.ArrestMode.PreventSelfArrest")) {
+                    if (target == sender) {
+                        sender.sendMessage(Main.getInstance().messages.getSelfArrest());
+                        return true;
+                    }
+                }
+
+                if (target == null) {
+                    sender.sendMessage(Main.getInstance().messages.getPlayerNotFound());
+                    return true;
+                }
+
+                if (player.getLocation().distance(target.getLocation()) > Main.getInstance().getConfig().getDouble("Wanted.ArrestMode.Distance")) {
+
+                }
+
+                player.sendMessage(Main.getInstance().messages.getSuccessfullyArrest().replace("%target%", target.getName()));
+                for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+                    if (onlinePlayer.hasPermission("wanted.arrest.notify")) {
+                        if (sender == onlinePlayer) continue;
+                        onlinePlayer.sendMessage(Main.getInstance().messages.getTargetWarn()
+                                .replace("%player%", player.getName())
+                                .replace("%target%", target.getName())
+                        );
+                    }
+                }
+
+                getTarget.remove(player);
+
+                if (playerBossBarHashMap.containsKey(player)) playerBossBarHashMap.get(player).removePlayer(player);
+                playerBossBarHashMap.remove(player);
+                return true;
+            }
+
             //Maximum command
             if (args[0].equalsIgnoreCase("maximum")) {
                 if (!isAdmin) {
@@ -342,7 +401,7 @@ public class WantedCommand implements CommandExecutor {
                 if (WantedManager.getInstance().addWanted(target, wanted) != 0)
                     SkullBuilder.getInstance().saveHead(target);
 
-                sender.sendMessage(Main.getInstance().messages.getTakeWanted());
+                sender.sendMessage(Main.getInstance().messages.getAddWanted());
                 return true;
             }
 
@@ -447,6 +506,97 @@ public class WantedCommand implements CommandExecutor {
                 }
 
                 Main.getInstance().requestGUI.open(player);
+                return true;
+            }
+
+            //Log command
+            if (args[0].equalsIgnoreCase("log")) {
+                if (!(sender instanceof Player)) {
+                    sender.sendMessage(Main.getInstance().messages.getConsoleSender());
+                    return true;
+                }
+
+                Player player = (Player) sender;
+                if (!sender.hasPermission("wanted.log") && !sender.hasPermission("wanted.admin")) {
+                    sender.sendMessage(Main.getInstance().messages.getNeedPermission());
+                    return true;
+                }
+
+                if (args.length < 3) {
+                    player.sendMessage(Main.getInstance().messages.getLogUsage());
+                    return true;
+                }
+
+                Pattern datePattern = Pattern.compile("(\\d\\d:\\d\\d:\\d\\d)");
+                Pattern namePattern = Pattern.compile("(\\w*)[a-z]");
+                Pattern locationPattern = Pattern.compile("X:\\d* Y:\\d* Z:\\d*");
+                Pattern wantedPattern = Pattern.compile("\\bN\\d*");
+
+                for (File file : Main.getInstance().logDirectory.listFiles()) {
+                    if (args[1].equals(file.getName())) {
+                        try {
+                            Scanner reader = new Scanner(file);
+                            int counter = 0;
+
+                            player.sendMessage(Main.getInstance().messages.getLogHeader()
+                                    .replace("%date%", file.getName())
+                                    .replace("%range%", args[2]));
+                            while (reader.hasNextLine()) {
+                                if (counter == Integer.parseInt(args[2])) break;
+                                String data = reader.nextLine()
+                                        .replace("killed ", "")
+                                        .replace("in ", "")
+                                        .replace("at ", "")
+                                        .replace(" New Wanted: ", "")
+                                        .replace("|", "N");
+                                Matcher dateMatcher = datePattern.matcher(data);
+                                Matcher nameMatcher = namePattern.matcher(data);
+                                Matcher locationMatcher = locationPattern.matcher(data);
+                                Matcher wantedMatcher = wantedPattern.matcher(data);
+
+                                String date = null;
+                                String killer = null;
+                                String victim = null;
+                                String world = null;
+                                String location = null;
+                                String newWanted = null;
+
+                                while (dateMatcher.find()) {
+                                    date = dateMatcher.group(1);
+                                }
+
+                                int conditionCounter = 0;
+                                while (nameMatcher.find()) {
+                                    if (conditionCounter == 0) killer = nameMatcher.group();
+                                    if (conditionCounter == 1) victim = nameMatcher.group();
+                                    if (conditionCounter == 2) world = nameMatcher.group();
+                                    conditionCounter++;
+                                }
+
+                                while (locationMatcher.find()) {
+                                    location = locationMatcher.group();
+                                }
+
+                                while (wantedMatcher.find()) {
+                                    newWanted = wantedMatcher.group().replace("N", "");
+                                }
+
+                                player.sendMessage(Main.getInstance().messages.getLogMessage()
+                                        .replace("%time%", date)
+                                        .replace("%killer%", killer)
+                                        .replace("%victim%", victim)
+                                        .replace("%world%", world)
+                                        .replace("%location%", location)
+                                        .replace("%wanted%", newWanted));
+
+                                counter++;
+                            }
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
                 return true;
             }
             //Help command

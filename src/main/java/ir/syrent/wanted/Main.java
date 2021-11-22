@@ -19,6 +19,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
 import java.util.HashMap;
 
 public final class Main extends JavaPlugin implements CommandExecutor {
@@ -39,12 +40,16 @@ public final class Main extends JavaPlugin implements CommandExecutor {
     public static String languageName;
 
     public HashMap<String, String> playerDamagedMap = new HashMap<>();
+    public HashMap<String, String> playerVictimMap = new HashMap<>();
+
+    public File logDirectory;
 
     @Override
     public void onEnable() {
         plugin = this;
 
         initializeBstats();
+        logDirectory = new File(getDataFolder() + File.separator + "logs");
         languageName = this.getConfig().getString("Wanted.LanguageFile");
         initializeYamlFiles();
         initializeInstances();

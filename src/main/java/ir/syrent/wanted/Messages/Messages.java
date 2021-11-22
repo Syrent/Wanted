@@ -93,6 +93,19 @@ public class Messages {
     private String complaintSubmit;
     private String cantComplaint;
 
+    //Log
+    private String logHeader;
+    private String logMessage;
+    private String logUsage;
+
+    //Arrest
+    private String successfullyArrest;
+    private String cantArrest;
+    private String arrestUsage;
+    private String selfArrest;
+    private String arrestNotification;
+    private String arrestIsDisabled;
+
 
     private String messageFormatter(String message) {
         return Utils.color(String.format("%s%s", getPrefix(), message));
@@ -126,6 +139,7 @@ public class Messages {
         clearOperator = messageFormatter(languageYML.getConfig().getString("clear-operator"));
         setMaximumUsage = messageFormatter(languageYML.getConfig().getString("maximum-usage"));
         getWantedUsage = messageFormatter(languageYML.getConfig().getString("get-wanted-usage"));
+        logUsage = messageFormatter(languageYML.getConfig().getString("log-usage"));
         clearWanted = messageFormatter(languageYML.getConfig().getString("clear-wanted"));
         takeWanted = messageFormatter(languageYML.getConfig().getString("take-wanted"));
         addWanted = messageFormatter(languageYML.getConfig().getString("add-wanted"));
@@ -179,6 +193,18 @@ public class Messages {
         complaintAlreadyExpire = Utils.color(languageYML.getConfig().getString("complaint-already-expire"));
         complaintSubmit = Utils.color(languageYML.getConfig().getString("complaint-submit"));
         cantComplaint = Utils.color(languageYML.getConfig().getString("cant-complain"));
+
+        //Log
+        logHeader = Utils.color(languageYML.getConfig().getString("log-message-header"));
+        logMessage = Utils.color(languageYML.getConfig().getString("log-message"));
+
+        //Arrest
+        successfullyArrest = Utils.color(languageYML.getConfig().getString("successfully-arrest"));
+        cantArrest = Utils.color(languageYML.getConfig().getString("cant-arrest"));
+        arrestUsage = Utils.color(languageYML.getConfig().getString("arrest-usage"));
+        selfArrest = Utils.color(languageYML.getConfig().getString("self-arrest"));
+        arrestNotification = Utils.color(languageYML.getConfig().getString("arrest-notification"));
+        arrestIsDisabled = Utils.color(languageYML.getConfig().getString("disabled-arrest"));
     }
 
     public void helpMessage1(CommandSender sender) {
@@ -530,5 +556,41 @@ public class Messages {
 
     public String getDifferentWorld() {
         return differentWorld;
+    }
+
+    public String getLogHeader() {
+        return logHeader;
+    }
+
+    public String getLogMessage() {
+        return logMessage;
+    }
+
+    public String getLogUsage() {
+        return logUsage;
+    }
+
+    public String getSuccessfullyArrest() {
+        return successfullyArrest;
+    }
+
+    public String getCantArrest() {
+        return cantArrest;
+    }
+
+    public String getArrestUsage() {
+        return arrestUsage;
+    }
+
+    public String getSelfArrest() {
+        return selfArrest;
+    }
+
+    public String getArrestNotification() {
+        return arrestNotification;
+    }
+
+    public String getArrestIsDisabled() {
+        return arrestIsDisabled;
     }
 }
