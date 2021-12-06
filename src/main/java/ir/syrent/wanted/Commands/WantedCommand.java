@@ -2,6 +2,7 @@ package ir.syrent.wanted.Commands;
 
 import ir.syrent.wanted.Main;
 import ir.syrent.wanted.Utils.SkullBuilder;
+import ir.syrent.wanted.Wanted;
 import ir.syrent.wanted.WantedManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -221,37 +222,46 @@ public class WantedCommand implements CommandExecutor {
 
                 Player target = Bukkit.getPlayerExact(args[1]);
 
-                if (Main.getInstance().getConfig().getBoolean("Wanted.ArrestMode.PreventSelfArrest")) {
-                    if (target == sender) {
-                        sender.sendMessage(Main.getInstance().messages.getSelfArrest());
-                        return true;
-                    }
-                }
-
                 if (target == null) {
                     sender.sendMessage(Main.getInstance().messages.getPlayerNotFound());
                     return true;
                 }
 
-                if (player.getLocation().distance(target.getLocation()) > Main.getInstance().getConfig().getDouble("Wanted.ArrestMode.Distance")) {
-
-                }
-
-                player.sendMessage(Main.getInstance().messages.getSuccessfullyArrest().replace("%target%", target.getName()));
-                for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-                    if (onlinePlayer.hasPermission("wanted.arrest.notify")) {
-                        if (sender == onlinePlayer) continue;
-                        onlinePlayer.sendMessage(Main.getInstance().messages.getTargetWarn()
-                                .replace("%player%", player.getName())
-                                .replace("%target%", target.getName())
-                        );
+                if (WantedManager.getInstance().getWanted(player.getName()) >= 0) {
+                    if (Main.getInstance().getConfig().getBoolean("Wanted.ArrestMode.PreventSelfArrest")) {
+                        if (target == sender) {
+                            sender.sendMessage(Main.getInstance().messages.getSelfArrest());
+                            return true;
+                        }
                     }
+
+                    if (player.getLocation().distance(target.getLocation()) > Main.getInstance().getConfig().getDouble("Wanted.ArrestMode.Distance")) {
+                        player.sendMessage(Main.getInstance().messages.getCantArrest());
+                        return true;
+                    }
+
+                    player.sendMessage(Main.getInstance().messages.getSuccessfullyArrest().replace("%target%", target.getName()));
+                    for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+                        if (onlinePlayer.hasPermission("wanted.arrest.notify")) {
+                            if (sender == onlinePlayer) continue;
+                            onlinePlayer.sendMessage(Main.getInstance().messages.getTargetWarn()
+                                    .replace("%player%", player.getName())
+                                    .replace("%target%", target.getName())
+                            );
+                        }
+                    }
+
+                    Wanted.getInstance().runArrestCommand(player, target);
+
+                    getTarget.remove(player);
+
+                    if (playerBossBarHashMap.containsKey(player)) playerBossBarHashMap.get(player).removePlayer(player);
+                    playerBossBarHashMap.remove(player);
+                    WantedManager.getInstance().setWanted(target.getName(), 0);
+                } else {
+                    sender.sendMessage(Main.getInstance().messages.getCantArrest());
                 }
 
-                getTarget.remove(player);
-
-                if (playerBossBarHashMap.containsKey(player)) playerBossBarHashMap.get(player).removePlayer(player);
-                playerBossBarHashMap.remove(player);
                 return true;
             }
 
