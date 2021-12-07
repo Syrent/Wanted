@@ -370,7 +370,7 @@ public class WantedCommand implements CommandExecutor {
             //AddWanted command
             if (args[0].equalsIgnoreCase("add")) {
 
-                if (!Utils.hasPermission(sender, true, Permissions.ADMIN, Permissions.ADMIN)) return true;
+                if (!Utils.hasPermission(sender, true, Permissions.ADMIN, Permissions.ADD)) return true;
 
                 if (args.length < 3) {
                     sender.sendMessage(Messages.OPERATION.replace("%action%", "add"));
