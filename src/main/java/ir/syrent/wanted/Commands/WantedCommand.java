@@ -405,7 +405,7 @@ public class WantedCommand implements CommandExecutor {
                 if (!Utils.hasPermission(sender, true, Permissions.SET, Permissions.ADMIN)) return true;
 
                 if (args.length < 3) {
-                    sender.sendMessage(Messages.OPERATION.replace("%action%", "Set"));
+                    sender.sendMessage(Messages.OPERATION.replace("%action%", "set"));
                     return true;
                 }
 
