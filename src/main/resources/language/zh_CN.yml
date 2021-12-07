@@ -67,7 +67,7 @@ complaint-expire: "&cComplaint time for getting killed by &7%killer &chas been e
 complaint-already-expire: "&cYour complaint time is already expired!"
 complaint-submit: "&aYour complaint has been submitted!"
 cant-complain: "&cYou can't complain at this time."
-wanted-complaint-help: "&7- &a/wanted &bcomplaint"
+wanted-complaint-help: "&8- &6/complaint"
 different-world: "&cThis player is on another world."
 log-message-header: "&b%date% &elogs &7(Range: %range%):"
 log-message: "&8[&7%time%&8] &c%killer% &7killed &c%victim% &7in &c%world% &7at &c%location% &b| &7New Wanted: &c%wanted%"

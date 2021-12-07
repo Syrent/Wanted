@@ -59,6 +59,16 @@ public class Messages extends Utils {
 
     public Messages() {
         initialize();
+        Usage.initialize();
+        Help.initialize();
+        Help.Page.initialize();
+        GUI.initialize();
+        GUI.Player.initialize();
+        GUI.Button.initialize();
+        BossBar.initialize();
+        Complaint.initialize();
+        Log.initialize();
+        Arrest.initialize();
     }
 
     public static class Usage {
@@ -68,8 +78,7 @@ public class Messages extends Utils {
         public static String LOG;
         public static String ARREST;
 
-
-        public static void initialize() {
+        private static void initialize() {
             FIND = formatMessage(getMessage("find-usage"));
             SET_MAXIMUM = formatMessage(getMessage("maximum-usage"));
             GET_MAXIMUM = formatMessage(getMessage("get-wanted-usage"));
@@ -94,7 +103,7 @@ public class Messages extends Utils {
         public static String TOP;
         public static String HELP;
 
-        public static void initialize() {
+        private static void initialize() {
             HEADER = colorize(getMessage("help-header"));
             RELOAD = colorize(getMessage("wanted-reload-help"));
             FIND = colorize(getMessage("wanted-find-help"));
@@ -115,7 +124,7 @@ public class Messages extends Utils {
             public static String NEXT_PAGE;
             public static String PREV_PAGE;
 
-            public static void initialize() {
+            private static void initialize() {
                 NEXT_PAGE = colorize(getMessage("next-page-help"));
                 PREV_PAGE = colorize(getMessage("prev-page-help"));
             }
@@ -125,7 +134,7 @@ public class Messages extends Utils {
     public static class GUI {
         public static String TITLE;
 
-        public void initialize() {
+        private static void initialize() {
             TITLE = colorize(getMessage("wanted-gui-title"));
         }
 
@@ -134,7 +143,7 @@ public class Messages extends Utils {
             public static String NEXT_PAGE;
             public static String PREV_PAGE;
 
-            public void initialize() {
+            private static void initialize() {
                 REFRESH = colorize(getMessage("wanted-gui-refresh-button"));
                 NEXT_PAGE = colorize(getMessage("wanted-gui-next-page-button"));
                 PREV_PAGE = colorize(getMessage("wanted-gui-prev-page-button"));
@@ -145,7 +154,7 @@ public class Messages extends Utils {
             public static String TITLE;
             public static List<String> LORE;
 
-            public void initialize() {
+            private static void initialize() {
                 TITLE = colorize(getMessage("wanted-gui-player-title"));
                 LORE = new ArrayList<>();
                 for (String line : getMessageList("wanted-gui-player-lore")) {
@@ -158,7 +167,7 @@ public class Messages extends Utils {
     public static class BossBar {
         public static String TITLE;
 
-        public static void initialize() {
+        private static void initialize() {
             TITLE = colorize(getMessage("bar-title"));
         }
     }
@@ -170,7 +179,7 @@ public class Messages extends Utils {
         public static String SUBMIT;
         public static String CANT;
 
-        public static void initialize() {
+        private static void initialize() {
             CONFIRM = colorize(getMessage("complaint-confirm"));
             EXPIRE = colorize(getMessage("complaint-expire"));
             ALREADY_EXPIRED = colorize(getMessage("complaint-already-expire"));
@@ -183,7 +192,7 @@ public class Messages extends Utils {
         public static String HEADER;
         public static String MESSAGE;
 
-        public static void initialize() {
+        private static void initialize() {
             HEADER = colorize(getMessage("log-message-header"));
             MESSAGE = colorize(getMessage("log-message"));
         }
@@ -196,7 +205,7 @@ public class Messages extends Utils {
         public static String NOTIFICATION;
         public static String DISABLED;
 
-        public static void initialize() {
+        private static void initialize() {
             SUCCESSFULLY = colorize(getMessage("successfully-arrest"));
             CANT = colorize(getMessage("cant-arrest"));
             PREVENT_SELF = colorize(getMessage("self-arrest"));
@@ -205,13 +214,13 @@ public class Messages extends Utils {
         }
     }
 
-    public static void initialize() {
+    private static void initialize() {
         Main.getInstance().languageYML =
                 new LanguageGenerator(Main.getInstance().getDataFolder() + File.separator + "language", Main.languageName);
 
-        PREFIX = getMessage("PREFIX");
+        PREFIX = getMessage("prefix");
         NEED_PERMISSION = formatMessage(getMessage("need-permission"));
-        NEED_GPS = formatMessage(getMessage("NEED_GPS"));
+        NEED_GPS = formatMessage(getMessage("need_gps"));
         PLAYER_NOT_FOUND = formatMessage(getMessage("player-not-found"));
         SELF_TARGET = formatMessage(getMessage("self-target"));
         SEARCH_TARGET = formatMessage(getMessage("search-target"));
@@ -225,7 +234,7 @@ public class Messages extends Utils {
         PLUGIN_RELOADED = formatMessage(getMessage("plugin-reloaded"));
         ITEM_COOLDOWN = formatMessage(getMessage("item-cooldown"));
         GET_PLAYER_WANTED = formatMessage(getMessage("get-player-wanted"));
-        OPERATION = formatMessage(getMessage("OPERATION"));
+        OPERATION = formatMessage(getMessage("operation"));
         CLEAR_OPERATOR = formatMessage(getMessage("clear-operator"));
         CLEAR_WANTED = formatMessage(getMessage("clear-wanted"));
         TAKE_WANTED = formatMessage(getMessage("take-wanted"));

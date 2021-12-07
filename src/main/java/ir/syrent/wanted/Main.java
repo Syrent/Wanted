@@ -79,6 +79,7 @@ public final class Main extends JavaPlugin implements CommandExecutor {
     }
 
     public void initializeYamlFiles() {
+        new Messages();
         wantedsYML = new WantedsYML();
         wantedsYML.saveDefaultConfig();
         enUSLanguage = new LanguageGenerator(this.getDataFolder() + "/language", "en_US");
