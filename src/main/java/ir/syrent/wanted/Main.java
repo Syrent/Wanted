@@ -6,7 +6,6 @@ import ir.syrent.wanted.Commands.WantedsCommand;
 import ir.syrent.wanted.DataManager.LanguageGenerator;
 import ir.syrent.wanted.DataManager.Log;
 import ir.syrent.wanted.DataManager.WantedsYML;
-import ir.syrent.wanted.Dependencies.PlaceholderAPI;
 import ir.syrent.wanted.Dependencies.WorldGuard;
 import ir.syrent.wanted.Events.*;
 import ir.syrent.wanted.GUI.RequestGUI;
@@ -15,7 +14,6 @@ import ir.syrent.wanted.Utils.SkullBuilder;
 import ir.syrent.wanted.Utils.TabCompleter;
 import ir.syrent.wanted.Utils.Utils;
 import org.bstats.bukkit.Metrics;
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -34,9 +32,9 @@ public final class Main extends JavaPlugin implements CommandExecutor {
     public Log log;
     public SkullBuilder skullBuilder;
     public RequestGUI requestGUI;
-    public WorldGuard worldGuard;
+    public static WorldGuard worldGuard;
 
-    public boolean placeholderAPIFound;
+    public static boolean placeholderAPIFound;
     public static String languageName;
 
     public HashMap<String, String> playerDamagedMap = new HashMap<>();
@@ -47,13 +45,14 @@ public final class Main extends JavaPlugin implements CommandExecutor {
     @Override
     public void onEnable() {
         plugin = this;
+        placeholderAPIFound = false;
 
         initializeBstats();
         logDirectory = new File(getDataFolder() + File.separator + "logs");
         languageName = this.getConfig().getString("Wanted.LanguageFile");
         initializeYamlFiles();
         initializeInstances();
-        dependencyChecker();
+        Utils.checkDependencies("PlaceholderAPI", "Citizens", "WorldGuard");
         registerCommands();
         registerEvents();
     }
@@ -97,35 +96,6 @@ public final class Main extends JavaPlugin implements CommandExecutor {
         log = new Log();
         new Wanted();
         new WantedManager();
-    }
-
-    public void dependencyChecker() {
-        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
-            this.getLogger().info(Utils.colorize("PlaceholderAPI found! enabling hook..."));
-            new PlaceholderAPI().register();
-            placeholderAPIFound = true;
-            this.getLogger().info(Utils.colorize("PlaceholderAPI hook enabled!"));
-        } else {
-            this.getLogger().info(Utils.colorize("PlaceholderAPI not found! disabling hook..."));
-            placeholderAPIFound = false;
-        }
-
-        if (Bukkit.getPluginManager().getPlugin("Citizens") != null) {
-            this.getLogger().info(Utils.colorize("Citizens found! enabling hook..."));
-            this.getServer().getPluginManager().registerEvents(new NPCDeathListener(), this);
-            this.getLogger().info(Utils.colorize("Citizens hook enabled!"));
-        } else {
-            this.getLogger().info(Utils.colorize("Citizens not found! disabling hook..."));
-            placeholderAPIFound = false;
-        }
-
-        if (Bukkit.getPluginManager().getPlugin("WorldGuard") != null) {
-            this.getLogger().info(Utils.colorize("WorldGuard found! enabling hook..."));
-            worldGuard = new WorldGuard();
-            this.getLogger().info(Utils.colorize("WorldGuard hook enabled!"));
-        } else {
-            this.getLogger().info(Utils.colorize("WorldGuard not found! disabling hook..."));
-        }
     }
 
     public LanguageGenerator getLanguageYML() {

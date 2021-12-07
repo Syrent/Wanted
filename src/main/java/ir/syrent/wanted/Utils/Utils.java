@@ -1,8 +1,12 @@
 package ir.syrent.wanted.Utils;
 
 import com.iridium.iridiumcolorapi.IridiumColorAPI;
+import ir.syrent.wanted.Dependencies.PlaceholderAPI;
+import ir.syrent.wanted.Dependencies.WorldGuard;
+import ir.syrent.wanted.Events.NPCDeathListener;
 import ir.syrent.wanted.Main;
 import ir.syrent.wanted.Messages.Messages;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -34,6 +38,33 @@ public class Utils {
         if (!hasPermission)
             if (sendMessage) sender.sendMessage(Messages.NEED_PERMISSION);
         return hasPermission;
+    }
+
+    public static void checkDependencies(String... plugins) {
+        for (String plugin : plugins) {
+            if (Bukkit.getPluginManager().getPlugin(plugin) != null) {
+                Main.getInstance().getLogger().info(Utils.colorize(String.format("%s found! enabling hook...", plugin)));
+                switch (plugin) {
+                    case "PlaceholderAPI": {
+                        new PlaceholderAPI().register();
+                        Main.placeholderAPIFound = true;
+                        break;
+                    }
+                    case "Citizens": {
+                        Main.getInstance().getServer().getPluginManager().registerEvents(new NPCDeathListener(), Main.getInstance());
+                        break;
+                    }
+                    case "WorldGuard": {
+                        Main.worldGuard = new WorldGuard();
+                        break;
+                    }
+                }
+                Main.getInstance().getLogger().info(Utils.colorize(String.format("%s hook enabled!", plugin)));
+            } else {
+                Main.getInstance().getLogger().info(Utils.colorize(String.format("%s not found! disabling hook...", plugin)));
+                if (plugin.equals("PlaceholderAPI")) Main.placeholderAPIFound = false;
+            }
+        }
     }
 
     public static String colorize(String string) {
