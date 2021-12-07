@@ -34,20 +34,6 @@ public class SkullBuilder {
 
     public Map<Player, Map<String, Object>> cache = new HashMap<>();
 
-    /* Handling in Join,Leave listeners is better.
-    public void reloadCache() {
-        new BukkitRunnable() {
-            public void run() {
-                for (String playerName : Main.getInstance().wantedMap.keySet()) {
-                    Player player = Bukkit.getPlayerExact(playerName);
-                    if (!cache.containsKey(player))
-                        cache.put(player, getHead(player).serialize());
-                }
-                Main.getInstance().requestGUI.refresh();
-            }
-        }.runTaskAsynchronously(Main.getInstance());
-    }*/
-
     /**
      * Save the player's head to the cache async.
      * @param player The target player to save head

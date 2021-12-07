@@ -19,7 +19,7 @@ Wanted:
     RunCommandOnArrest:
         Enable: false
         Commands:
-         - 'PLAYER;spawn'
+          - 'PLAYER;spawn'
           - 'VICTIM;spawn'
           - 'CONSOLE;give %player% diamond %wanted_level%'
           - 'CONSOLE;say %player% arrested %victim%'
@@ -74,7 +74,7 @@ Wanted:
       RunCommandOnKill:
         Enable: false
         Commands:
-         - 'KILLER;spawn'
+          - 'KILLER;spawn'
           - 'VICTIM;spawn'
           - 'CONSOLE;say %victim% died'
           - 'CONSOLE;say %killer% killed %victim%'
@@ -85,7 +85,7 @@ Wanted:
       RunCommandOnKill:
         Enable: false
         Commands:
-         - 'KILLER;spawn'
+          - 'KILLER;spawn'
           - 'CONSOLE;say %victim% died'
           - 'CONSOLE;say %killer% killed %victim%'
     Mob:
@@ -94,12 +94,12 @@ Wanted:
       RunCommandOnKill:
         Enable: false
         Commands:
-         - 'KILLER;spawn'
+          - 'KILLER;spawn'
           - 'CONSOLE;say %victim% died'
           - 'CONSOLE;say %killer% killed %victim%'
       # You can use "ENTITY;WANTED" to decide how many Wanted(s) should a player get when they kill specific mobs.
       Mobs:
-       - COW;1
+        - COW;1
         - CHICKEN;1
         - PIG;2
         - ZOMBIE;-1
@@ -109,4 +109,4 @@ Wanted:
         Enable: false
         # If the Wanted killer has wanted.hunter permission the below commands will run.
         Commands:
-         - 'CONSOLE;give %killer% diamond %wanted_level%'
+            - 'CONSOLE;give %killer% diamond %wanted_level%'

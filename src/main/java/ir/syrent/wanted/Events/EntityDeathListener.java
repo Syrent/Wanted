@@ -1,6 +1,7 @@
 package ir.syrent.wanted.Events;
 
 import ir.syrent.wanted.Main;
+import ir.syrent.wanted.Messages.Messages;
 import ir.syrent.wanted.Wanted;
 import ir.syrent.wanted.WantedManager;
 import org.bukkit.entity.EntityType;
@@ -26,7 +27,7 @@ public class EntityDeathListener implements Listener {
                     WantedManager.getInstance().addWanted(player, Integer.parseInt(split[1]));
 
                     if (Main.getInstance().getConfig().getBoolean("Wanted.ReceiveOnKill.Mob.KillMessage")) {
-                        player.sendMessage(Main.getInstance().messages.getMessageOnKillMob()
+                        player.sendMessage(Messages.ON_KILL_MOB
                                 .replace("%mob%", event.getEntityType().name()).replace("%wanted%", split[1]));
                     }
 

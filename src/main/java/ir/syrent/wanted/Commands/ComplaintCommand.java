@@ -2,6 +2,7 @@ package ir.syrent.wanted.Commands;
 
 import ir.syrent.wanted.Events.PlayerDeathListenerComplaint;
 import ir.syrent.wanted.Main;
+import ir.syrent.wanted.Messages.Messages;
 import ir.syrent.wanted.WantedManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -16,19 +17,19 @@ public class ComplaintCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (!(commandSender instanceof Player)) {
-            commandSender.sendMessage(Main.getInstance().messages.getConsoleSender());
+            commandSender.sendMessage(Messages.CONSOLE_SENDER);
             return true;
         }
 
         Player player = (Player) commandSender;
         if (!player.hasPermission("wanted.admin") && !player.hasPermission("wanted.complaint")) {
-            player.sendMessage(Main.getInstance().messages.getNeedPermission());
+            player.sendMessage(Messages.NEED_PERMISSION);
             return true;
         }
 
         if (PlayerDeathListenerComplaint.playerComplaintMap.containsKey(player.getName())) {
             if (System.currentTimeMillis() > PlayerDeathListenerComplaint.playerComplaintMap.get(player.getName())) {
-                player.sendMessage(Main.getInstance().messages.getComplaintAlreadyExpire());
+                player.sendMessage(Messages.Complaint.ALREADY_EXPIRED);
                 return true;
             }
 
@@ -82,7 +83,7 @@ public class ComplaintCommand implements CommandExecutor {
                 }
 
                 if (Main.getInstance().getConfig().getBoolean("Wanted.ReceiveOnKill.Player.KillMessage")) {
-                    killerPlayer.sendMessage(Main.getInstance().messages.getMessageOnKillPlayer()
+                    killerPlayer.sendMessage(Messages.ON_KILL_PLAYER
                             .replace("%player_name%", player.getName()).replace("%wanted%", String.valueOf(finalWanted))
                             .replace("%fight_starter%", fightStarter == null ? "UNKNOWN" : fightStarter)
                             .replace("%region%", Main.getInstance().worldGuard == null ?
@@ -99,12 +100,12 @@ public class ComplaintCommand implements CommandExecutor {
                 break;
             }
 
-            player.sendMessage(Main.getInstance().messages.getComplaintSubmit());
+            player.sendMessage(Messages.Complaint.SUBMIT);
 
             return true;
         }
 
-        player.sendMessage(Main.getInstance().messages.getCantComplaint());
+        player.sendMessage(Messages.Complaint.CANT);
 
         return false;
     }

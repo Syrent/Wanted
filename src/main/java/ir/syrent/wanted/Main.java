@@ -30,7 +30,7 @@ public final class Main extends JavaPlugin implements CommandExecutor {
     public LanguageGenerator enUSLanguage;
     public LanguageGenerator zhCNLanguage;
     public LanguageGenerator viVNLanguage;
-    public Messages messages;
+    public LanguageGenerator languageYML;
     public Log log;
     public SkullBuilder skullBuilder;
     public RequestGUI requestGUI;
@@ -93,7 +93,6 @@ public final class Main extends JavaPlugin implements CommandExecutor {
         this.saveDefaultConfig();
         skullBuilder = new SkullBuilder(this);
         requestGUI = new RequestGUI();
-        messages = new Messages();
         log = new Log();
         new Wanted();
         new WantedManager();
@@ -101,31 +100,35 @@ public final class Main extends JavaPlugin implements CommandExecutor {
 
     public void dependencyChecker() {
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
-            this.getLogger().info(Utils.color("PlaceholderAPI found! enabling hook..."));
+            this.getLogger().info(Utils.colorize("PlaceholderAPI found! enabling hook..."));
             new PlaceholderAPI().register();
             placeholderAPIFound = true;
-            this.getLogger().info(Utils.color("PlaceholderAPI hook enabled!"));
+            this.getLogger().info(Utils.colorize("PlaceholderAPI hook enabled!"));
         } else {
-            this.getLogger().info(Utils.color("PlaceholderAPI not found! disabling hook..."));
+            this.getLogger().info(Utils.colorize("PlaceholderAPI not found! disabling hook..."));
             placeholderAPIFound = false;
         }
 
         if (Bukkit.getPluginManager().getPlugin("Citizens") != null) {
-            this.getLogger().info(Utils.color("Citizens found! enabling hook..."));
+            this.getLogger().info(Utils.colorize("Citizens found! enabling hook..."));
             this.getServer().getPluginManager().registerEvents(new NPCDeathListener(), this);
-            this.getLogger().info(Utils.color("Citizens hook enabled!"));
+            this.getLogger().info(Utils.colorize("Citizens hook enabled!"));
         } else {
-            this.getLogger().info(Utils.color("Citizens not found! disabling hook..."));
+            this.getLogger().info(Utils.colorize("Citizens not found! disabling hook..."));
             placeholderAPIFound = false;
         }
 
         if (Bukkit.getPluginManager().getPlugin("WorldGuard") != null) {
-            this.getLogger().info(Utils.color("WorldGuard found! enabling hook..."));
+            this.getLogger().info(Utils.colorize("WorldGuard found! enabling hook..."));
             worldGuard = new WorldGuard();
-            this.getLogger().info(Utils.color("WorldGuard hook enabled!"));
+            this.getLogger().info(Utils.colorize("WorldGuard hook enabled!"));
         } else {
-            this.getLogger().info(Utils.color("WorldGuard not found! disabling hook..."));
+            this.getLogger().info(Utils.colorize("WorldGuard not found! disabling hook..."));
         }
+    }
+
+    public LanguageGenerator getLanguageYML() {
+        return languageYML;
     }
 
     public static Main getInstance() {

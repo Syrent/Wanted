@@ -25,6 +25,7 @@ public class TabCompleter implements org.bukkit.command.TabCompleter {
             arguments.add("reload");
             arguments.add("help");
             arguments.add("log");
+            arguments.add("arrest");
         }
 
         List<String> fileArguments = new ArrayList<>();

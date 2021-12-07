@@ -1,6 +1,7 @@
 package ir.syrent.wanted.GUI;
 
 import ir.syrent.wanted.Main;
+import ir.syrent.wanted.Messages.Messages;
 import ir.syrent.wanted.Utils.SkullBuilder;
 import ir.syrent.wanted.Utils.Utils;
 import ir.syrent.wanted.WantedManager;
@@ -28,7 +29,7 @@ public class RequestGUI {
         if (playerList.size() == 0) return; //No wanteds found
 
         for (int i=1 ; i <= Math.ceil((float) playerList.size() / 45) ; i++) {
-            playersGUI.add(Bukkit.createInventory(null, 54, Main.getInstance().messages.getWantedGUITitle().replace("%page%", String.valueOf(i))));
+            playersGUI.add(Bukkit.createInventory(null, 54, Messages.GUI.TITLE.replace("%page%", String.valueOf(i))));
         }
 
         boolean isNewVersion = Arrays.stream(Material.values()).map(Material::name)
@@ -49,16 +50,16 @@ public class RequestGUI {
             }
             ItemMeta meta = playerItem.getItemMeta();
             assert meta != null;
-            meta.setDisplayName(Main.getInstance().messages.getWantedGUIPlayerTitle().replace("%player_name%", player.getName()));
+            meta.setDisplayName(Messages.GUI.Player.TITLE.replace("%player_name%", player.getName()));
 
             List<String> lore = new ArrayList<>();
             String victim = Main.getInstance().playerVictimMap.get(player.getName());
 
-            for (String line : Main.getInstance().messages.getWantedGUIPlayerLore()) {
+            for (String line : Messages.GUI.Player.LORE) {
                 lore.add(line.replace("%wanted%", String.valueOf(WantedManager.getInstance().getWanted(player.getName())))
                 .replace("%world%", player.getWorld().getName())
                 .replace("%location%",
-                        Utils.color(String.format(
+                        Utils.colorize(String.format(
                                 "&eX: &b%.0f&7, &eY: &b%.0f&7, &eZ: &b%.0f",
                                 player.getLocation().getX(),
                                 player.getLocation().getY(),
@@ -77,13 +78,13 @@ public class RequestGUI {
                     "lY3JhZnQubmV0L3RleHR1cmUvYWFiOTVhODc1MWFlYWEzYzY3MWE4ZTkwYjgzZGU3NmEwMjA0ZjFiZTY1NzUyYWMzMWJlMmY5OGZlYjY0YmY3ZiJ9fX0=");
             ItemMeta nextPageMeta = nextPage.getItemMeta();
             assert nextPageMeta != null;
-            nextPageMeta.setDisplayName(Main.getInstance().messages.getWantedGUINextPageButton());
+            nextPageMeta.setDisplayName(Messages.GUI.Button.NEXT_PAGE);
             nextPage.setItemMeta(nextPageMeta);
             ItemStack prevPage = SkullBuilder.getInstance().getHead("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5" +
                     "lY3JhZnQubmV0L3RleHR1cmUvMzJmZjhhYWE0YjJlYzMwYmM1NTQxZDQxYzg3ODIxOTliYWEyNWFlNmQ4NTRjZGE2NTFmMTU5OWU2NTRjZmM3OSJ9fX0=");
             ItemMeta prevPageMeta = prevPage.getItemMeta();
             assert prevPageMeta != null;
-            prevPageMeta.setDisplayName(Main.getInstance().messages.getWantedGUIPrevPageButton());
+            prevPageMeta.setDisplayName(Messages.GUI.Button.PREV_PAGE);
             prevPage.setItemMeta(prevPageMeta);
 
             playersGUI.get(0).setItem(52, nextPage);
@@ -100,7 +101,7 @@ public class RequestGUI {
         ItemStack refresh = getRefreshButtonItem();
         ItemMeta refreshMeta = refresh.getItemMeta();
         assert refreshMeta != null;
-        refreshMeta.setDisplayName(Main.getInstance().messages.getWantedGUIRefreshButton());
+        refreshMeta.setDisplayName(Messages.GUI.Button.REFRESH);
         refresh.setItemMeta(refreshMeta);
         for (Inventory inv : playersGUI) {
             inv.setItem(49, refresh);
@@ -112,7 +113,7 @@ public class RequestGUI {
         try {
             player.openInventory(playersGUI.get(0));
         } catch (IndexOutOfBoundsException e) {
-            player.sendMessage(Main.getInstance().messages.getLoadingData());
+            player.sendMessage(Messages.LOADING_DATA);
         }
     }
 

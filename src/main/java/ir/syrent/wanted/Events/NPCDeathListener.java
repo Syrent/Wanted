@@ -1,6 +1,7 @@
 package ir.syrent.wanted.Events;
 
 import ir.syrent.wanted.Main;
+import ir.syrent.wanted.Messages.Messages;
 import ir.syrent.wanted.Wanted;
 import ir.syrent.wanted.WantedManager;
 import net.citizensnpcs.api.event.NPCDeathEvent;
@@ -21,13 +22,13 @@ public class NPCDeathListener implements Listener {
             WantedManager.getInstance().addWanted(killer, wanted);
 
             if (Main.getInstance().getConfig().getBoolean("Wanted.ReceiveOnKill.NPC.KillMessage")) {
-                killer.sendMessage(Main.getInstance().messages.getMessageOnKillNPC()
+                killer.sendMessage(Messages.ON_KILL_NPC
                         .replace("%npc_name%", event.getEvent().getEntity().getName()).replace("%wanted%", String.valueOf(wanted)));
             }
 
             Wanted.getInstance().runCommand(killer, event.getEvent().getEntity(), "NPC");
 
-            Main.getInstance().log.logToFile(Main.getInstance().log.logTime(), Main.getInstance().messages.npcDeathLogger(event));
+            Main.getInstance().log.logToFile(Main.getInstance().log.logTime(), Messages.npcDeathLogger(event));
         }
     }
 }

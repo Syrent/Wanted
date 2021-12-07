@@ -1,6 +1,7 @@
 package ir.syrent.wanted.Events;
 
 import ir.syrent.wanted.Main;
+import ir.syrent.wanted.Messages.Messages;
 import ir.syrent.wanted.Wanted;
 import ir.syrent.wanted.WantedManager;
 import net.citizensnpcs.api.CitizensAPI;
@@ -58,9 +59,7 @@ public class PlayerDeathListenerComplaint implements Listener {
         if (killer.hasPermission("wanted.hunter"))
             Wanted.getInstance().runCommand(killer, victim, "Wanted");
 
-        victim.sendMessage(Main.getInstance().messages.getComplaintConfirm()
-                .replace("%killer%", killer.getName())
-        );
+        victim.sendMessage(Messages.Complaint.CONFIRM.replace("%killer%", killer.getName()));
 
         long expireTime = Main.getInstance().getConfig().getLong("Wanted.ComplaintMode.ExpireTime");
         playerComplaintMap.put(victim.getName(), System.currentTimeMillis() + (expireTime * 1000L));
@@ -74,6 +73,6 @@ public class PlayerDeathListenerComplaint implements Listener {
         }
 
 
-        Main.getInstance().log.logToFile(Main.getInstance().log.logTime(), Main.getInstance().messages.playerDeathLogger(event));
+        Main.getInstance().log.logToFile(Main.getInstance().log.logTime(), Messages.playerDeathLogger(event));
     }
 }

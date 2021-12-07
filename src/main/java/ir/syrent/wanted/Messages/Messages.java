@@ -12,271 +12,307 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Messages {
+@SuppressWarnings("unused")
+public class Messages extends Utils {
 
     public static Main getPlugin() {
         return Main.getInstance();
     }
 
-    private String prefix;
-    private String needPermission;
-    private String needGPS;
-    private String playerNotFound;
-    private String selfTarget;
-    private String searchTarget;
-    private String targetWarn;
-    private String wantedTitle;
-    private String wantedList;
-    private String wantedTop;
-    private String playerLeaveOnFinding;
-    private String noWanteds;
-    private String maximumWantedChanged;
-    private String pluginReloaded;
-    private String itemCooldown;
-    private String getPlayerWanted;
-    private String findUsage;
-    private String operation;
-    private String clearOperator;
-    private String setMaximumUsage;
-    private String getWantedUsage;
-    private String clearWanted;
-    private String takeWanted;
-    private String addWanted;
-    private String setWanted;
-    private String validNumber;
-    private String playerWanted;
-    private String consoleSender;
-    private String messageOnKillPlayer;
-    private String messageOnKillMob;
-    private String messageOnKillNPC;
-    private String loadingData;
-    private String wantedSymbol;
-    private String playerWantedListFormat;
-    private String differentWorld;
+    public static String PREFIX;
+    public static String NEED_PERMISSION;
+    public static String NEED_GPS;
+    public static String PLAYER_NOT_FOUND;
+    public static String SELF_TARGET;
+    public static String SEARCH_TARGET;
+    public static String TARGET_WARN;
+    public static String WANTED_TITLE;
+    public static String WANTED_LIST;
+    public static String WANTED_TOP;
+    public static String PLAYER_LEAVE_ON_FINDING;
+    public static String NO_WANTEDS;
+    public static String MAXIMUM_WANTED_CHANGED;
+    public static String PLUGIN_RELOADED;
+    public static String ITEM_COOLDOWN;
+    public static String GET_PLAYER_WANTED;
+    public static String OPERATION;
+    public static String CLEAR_OPERATOR;
+    public static String CLEAR_WANTED;
+    public static String TAKE_WANTED;
+    public static String ADD_WANTED;
+    public static String SET_WANTED;
+    public static String INVALID_NUMBER;
+    public static String PLAYER_WANTED;
+    public static String CONSOLE_SENDER;
+    public static String ON_KILL_PLAYER;
+    public static String ON_KILL_MOB;
+    public static String ON_KILL_NPC;
+    public static String LOADING_DATA;
+    public static String WANTED_SYMBOL;
+    public static String PLAYER_WANTED_LIST_FORMAT;
+    public static String DIFFERENT_WORLD;
 
-    //Help messages
-    private String helpHeader;
-    private String wantedReloadHelp;
-    private String wantedFindHelp;
-    private String wantedMaximumHelp;
-    private String wantedClearHelp;
-    private String wantedSetHelp;
-    private String wantedTakeHelp;
-    private String wantedAddHelp;
-    private String wantedsHelp;
-    private String nextPageHelp;
-    private String wantedGUIHelp;
-    private String wantedComplaintHelp;
-    private String wantedGetHelp;
-    private String wantedTopHelp;
-    private String wantedHelpHelp;
-    private String prevPageHelp;
-
-    //WantedGUI
-    private String wantedGUITitle;
-    private String wantedGUIRefreshButton;
-    private String wantedGUINextPageButton;
-    private String wantedGUIPrevPageButton;
-    private String wantedGUIPlayerTitle;
-    private List<String> wantedGUIPlayerLore;
-
-    //BossBar
-    private String barTitle;
-
-    //Complaint
-    private String complaintConfirm;
-    private String complaintExpire;
-    private String complaintAlreadyExpire;
-    private String complaintSubmit;
-    private String cantComplaint;
-
-    //Log
-    private String logHeader;
-    private String logMessage;
-    private String logUsage;
-
-    //Arrest
-    private String successfullyArrest;
-    private String cantArrest;
-    private String arrestUsage;
-    private String selfArrest;
-    private String arrestNotification;
-    private String arrestIsDisabled;
-
-
-    private String messageFormatter(String message) {
-        return Utils.color(String.format("%s%s", getPrefix(), message));
-    }
 
     public Messages() {
-        reload();
+        initialize();
     }
 
-    public void reload() {
-        LanguageGenerator languageYML = new LanguageGenerator(Main.getInstance().getDataFolder() + "/language", Main.languageName);
-        
-        prefix = languageYML.getConfig().getString("prefix");
-        needPermission = messageFormatter(languageYML.getConfig().getString("need-permission"));
-        needGPS = messageFormatter(languageYML.getConfig().getString("needGPS"));
-        playerNotFound = messageFormatter(languageYML.getConfig().getString("player-not-found"));
-        selfTarget = messageFormatter(languageYML.getConfig().getString("self-target"));
-        searchTarget = messageFormatter(languageYML.getConfig().getString("search-target"));
-        targetWarn = messageFormatter(languageYML.getConfig().getString("search-notification"));
-        wantedTitle = Utils.color(languageYML.getConfig().getString("wanted-title"));
-        wantedList = Utils.color(languageYML.getConfig().getString("wanted-list"));
-        wantedTop = Utils.color(languageYML.getConfig().getString("wanted-top"));
-        playerLeaveOnFinding = messageFormatter(languageYML.getConfig().getString("player-leave-on-finding"));
-        noWanteds = messageFormatter(languageYML.getConfig().getString("no-wanteds"));
-        maximumWantedChanged = messageFormatter(languageYML.getConfig().getString("maximum-wanted-changed"));
-        pluginReloaded = messageFormatter(languageYML.getConfig().getString("plugin-reloaded"));
-        itemCooldown = messageFormatter(languageYML.getConfig().getString("item-cooldown"));
-        getPlayerWanted = messageFormatter(languageYML.getConfig().getString("get-player-wanted"));
-        findUsage = messageFormatter(languageYML.getConfig().getString("find-usage"));
-        operation = messageFormatter(languageYML.getConfig().getString("operation"));
-        clearOperator = messageFormatter(languageYML.getConfig().getString("clear-operator"));
-        setMaximumUsage = messageFormatter(languageYML.getConfig().getString("maximum-usage"));
-        getWantedUsage = messageFormatter(languageYML.getConfig().getString("get-wanted-usage"));
-        logUsage = messageFormatter(languageYML.getConfig().getString("log-usage"));
-        clearWanted = messageFormatter(languageYML.getConfig().getString("clear-wanted"));
-        takeWanted = messageFormatter(languageYML.getConfig().getString("take-wanted"));
-        addWanted = messageFormatter(languageYML.getConfig().getString("add-wanted"));
-        setWanted = messageFormatter(languageYML.getConfig().getString("set-wanted"));
-        validNumber = messageFormatter(languageYML.getConfig().getString("valid-number"));
-        playerWanted = messageFormatter(languageYML.getConfig().getString("player-wanted"));
-        consoleSender = messageFormatter(languageYML.getConfig().getString("console-sender"));
-        messageOnKillPlayer = messageFormatter(languageYML.getConfig().getString("message-on-kill-player"));
-        messageOnKillMob = messageFormatter(languageYML.getConfig().getString("message-on-kill-mob"));
-        messageOnKillNPC = messageFormatter(languageYML.getConfig().getString("message-on-kill-npc"));
-        loadingData = messageFormatter(languageYML.getConfig().getString("loading-data"));
-        wantedSymbol = Utils.color(languageYML.getConfig().getString("wanted-symbol"));
-        playerWantedListFormat = Utils.color(languageYML.getConfig().getString("player-wanted-list-format"));
-        differentWorld = Utils.color(languageYML.getConfig().getString("different-world"));
+    public static class Usage {
+        public static String FIND;
+        public static String SET_MAXIMUM;
+        public static String GET_MAXIMUM;
+        public static String LOG;
+        public static String ARREST;
 
-        //Help messages
-        helpHeader = Utils.color(languageYML.getConfig().getString("help-header"));
-        wantedReloadHelp = Utils.color(languageYML.getConfig().getString("wanted-reload-help"));
-        wantedFindHelp = Utils.color(languageYML.getConfig().getString("wanted-find-help"));
-        wantedMaximumHelp = Utils.color(languageYML.getConfig().getString("wanted-maximum-help"));
-        wantedClearHelp = Utils.color(languageYML.getConfig().getString("wanted-clear-help"));
-        wantedSetHelp = Utils.color(languageYML.getConfig().getString("wanted-set-help"));
-        wantedTakeHelp = Utils.color(languageYML.getConfig().getString("wanted-take-help"));
-        wantedAddHelp = Utils.color(languageYML.getConfig().getString("wanted-add-help"));
-        wantedsHelp = Utils.color(languageYML.getConfig().getString("wanteds-help"));
-        nextPageHelp = Utils.color(languageYML.getConfig().getString("next-page-help"));
-        wantedGUIHelp = Utils.color(languageYML.getConfig().getString("wanted-gui-help"));
-        wantedComplaintHelp = Utils.color(languageYML.getConfig().getString("wanted-complaint-help"));
-        wantedGetHelp = Utils.color(languageYML.getConfig().getString("wanted-get-help"));
-        wantedTopHelp = Utils.color(languageYML.getConfig().getString("wanted-top-help"));
-        wantedHelpHelp = Utils.color(languageYML.getConfig().getString("wanted-help-help"));
-        prevPageHelp = Utils.color(languageYML.getConfig().getString("prev-page-help"));
 
-        //WantedGUI
-        wantedGUITitle = Utils.color(languageYML.getConfig().getString("wanted-gui-title"));
-        wantedGUIRefreshButton = Utils.color(languageYML.getConfig().getString("wanted-gui-refresh-button"));
-        wantedGUINextPageButton = Utils.color(languageYML.getConfig().getString("wanted-gui-next-page-button"));
-        wantedGUIPrevPageButton = Utils.color(languageYML.getConfig().getString("wanted-gui-prev-page-button"));
-        wantedGUIPlayerTitle = Utils.color(languageYML.getConfig().getString("wanted-gui-player-title"));
-        wantedGUIPlayerLore = new ArrayList<>();
-        for (String line : languageYML.getConfig().getStringList("wanted-gui-player-lore")) {
-            wantedGUIPlayerLore.add(Utils.color(line));
+        public static void initialize() {
+            FIND = formatMessage(getMessage("find-usage"));
+            SET_MAXIMUM = formatMessage(getMessage("maximum-usage"));
+            GET_MAXIMUM = formatMessage(getMessage("get-wanted-usage"));
+            LOG = formatMessage(getMessage("log-usage"));
+            ARREST = colorize(getMessage("arrest-usage"));
+        }
+    }
+
+    public static class Help {
+        public static String HEADER;
+        public static String RELOAD;
+        public static String FIND;
+        public static String MAXIMUM;
+        public static String CLEAR;
+        public static String SET;
+        public static String TAKE;
+        public static String ADD;
+        public static String WANTEDS;
+        public static String GUI;
+        public static String COMPLAINT;
+        public static String GET;
+        public static String TOP;
+        public static String HELP;
+
+        public static void initialize() {
+            HEADER = colorize(getMessage("help-header"));
+            RELOAD = colorize(getMessage("wanted-reload-help"));
+            FIND = colorize(getMessage("wanted-find-help"));
+            MAXIMUM = colorize(getMessage("wanted-maximum-help"));
+            CLEAR = colorize(getMessage("wanted-clear-help"));
+            SET = colorize(getMessage("wanted-set-help"));
+            TAKE = colorize(getMessage("wanted-take-help"));
+            ADD = colorize(getMessage("wanted-add-help"));
+            WANTEDS = colorize(getMessage("wanteds-help"));
+            GUI = colorize(getMessage("wanted-gui-help"));
+            COMPLAINT = colorize(getMessage("wanted-complaint-help"));
+            GET = colorize(getMessage("wanted-get-help"));
+            TOP = colorize(getMessage("wanted-top-help"));
+            HELP = colorize(getMessage("wanted-help-help"));
         }
 
-        //BossBar
-        barTitle = Utils.color(languageYML.getConfig().getString("bar-title"));
+        public static class Page {
+            public static String NEXT_PAGE;
+            public static String PREV_PAGE;
 
-        //Complaint
-        complaintConfirm = Utils.color(languageYML.getConfig().getString("complaint-confirm"));
-        complaintExpire = Utils.color(languageYML.getConfig().getString("complaint-expire"));
-        complaintAlreadyExpire = Utils.color(languageYML.getConfig().getString("complaint-already-expire"));
-        complaintSubmit = Utils.color(languageYML.getConfig().getString("complaint-submit"));
-        cantComplaint = Utils.color(languageYML.getConfig().getString("cant-complain"));
-
-        //Log
-        logHeader = Utils.color(languageYML.getConfig().getString("log-message-header"));
-        logMessage = Utils.color(languageYML.getConfig().getString("log-message"));
-
-        //Arrest
-        successfullyArrest = Utils.color(languageYML.getConfig().getString("successfully-arrest"));
-        cantArrest = Utils.color(languageYML.getConfig().getString("cant-arrest"));
-        arrestUsage = Utils.color(languageYML.getConfig().getString("arrest-usage"));
-        selfArrest = Utils.color(languageYML.getConfig().getString("self-arrest"));
-        arrestNotification = Utils.color(languageYML.getConfig().getString("arrest-notification"));
-        arrestIsDisabled = Utils.color(languageYML.getConfig().getString("disabled-arrest"));
+            public static void initialize() {
+                NEXT_PAGE = colorize(getMessage("next-page-help"));
+                PREV_PAGE = colorize(getMessage("prev-page-help"));
+            }
+        }
     }
 
-    public void helpMessage1(CommandSender sender) {
-        sender.sendMessage(getHelpHeader().replace("%version%", getPlugin().getDescription().getVersion()));
-        TextComponent reloadCommand = new TextComponent(getWantedReloadHelp());
+    public static class GUI {
+        public static String TITLE;
+
+        public void initialize() {
+            TITLE = colorize(getMessage("wanted-gui-title"));
+        }
+
+        public static class Button {
+            public static String REFRESH;
+            public static String NEXT_PAGE;
+            public static String PREV_PAGE;
+
+            public void initialize() {
+                REFRESH = colorize(getMessage("wanted-gui-refresh-button"));
+                NEXT_PAGE = colorize(getMessage("wanted-gui-next-page-button"));
+                PREV_PAGE = colorize(getMessage("wanted-gui-prev-page-button"));
+            }
+        }
+
+        public static class Player {
+            public static String TITLE;
+            public static List<String> LORE;
+
+            public void initialize() {
+                TITLE = colorize(getMessage("wanted-gui-player-title"));
+                LORE = new ArrayList<>();
+                for (String line : getMessageList("wanted-gui-player-lore")) {
+                    LORE.add(colorize(line));
+                }
+            }
+        }
+    }
+
+    public static class BossBar {
+        public static String TITLE;
+
+        public static void initialize() {
+            TITLE = colorize(getMessage("bar-title"));
+        }
+    }
+
+    public static class Complaint {
+        public static String CONFIRM;
+        public static String EXPIRE;
+        public static String ALREADY_EXPIRED;
+        public static String SUBMIT;
+        public static String CANT;
+
+        public static void initialize() {
+            CONFIRM = colorize(getMessage("complaint-confirm"));
+            EXPIRE = colorize(getMessage("complaint-expire"));
+            ALREADY_EXPIRED = colorize(getMessage("complaint-already-expire"));
+            SUBMIT = colorize(getMessage("complaint-submit"));
+            CANT = colorize(getMessage("cant-complain"));
+        }
+    }
+
+    public static class Log {
+        public static String HEADER;
+        public static String MESSAGE;
+
+        public static void initialize() {
+            HEADER = colorize(getMessage("log-message-header"));
+            MESSAGE = colorize(getMessage("log-message"));
+        }
+    }
+
+    public static class Arrest {
+        public static String SUCCESSFULLY;
+        public static String CANT;
+        public static String PREVENT_SELF;
+        public static String NOTIFICATION;
+        public static String DISABLED;
+
+        public static void initialize() {
+            SUCCESSFULLY = colorize(getMessage("successfully-arrest"));
+            CANT = colorize(getMessage("cant-arrest"));
+            PREVENT_SELF = colorize(getMessage("self-arrest"));
+            NOTIFICATION = colorize(getMessage("arrest-notification"));
+            DISABLED = colorize(getMessage("disabled-arrest"));
+        }
+    }
+
+    public static void initialize() {
+        Main.getInstance().languageYML =
+                new LanguageGenerator(Main.getInstance().getDataFolder() + File.separator + "language", Main.languageName);
+
+        PREFIX = getMessage("PREFIX");
+        NEED_PERMISSION = formatMessage(getMessage("need-permission"));
+        NEED_GPS = formatMessage(getMessage("NEED_GPS"));
+        PLAYER_NOT_FOUND = formatMessage(getMessage("player-not-found"));
+        SELF_TARGET = formatMessage(getMessage("self-target"));
+        SEARCH_TARGET = formatMessage(getMessage("search-target"));
+        TARGET_WARN = formatMessage(getMessage("search-notification"));
+        WANTED_TITLE = colorize(getMessage("wanted-title"));
+        WANTED_LIST = colorize(getMessage("wanted-list"));
+        WANTED_TOP = colorize(getMessage("wanted-top"));
+        PLAYER_LEAVE_ON_FINDING = formatMessage(getMessage("player-leave-on-finding"));
+        NO_WANTEDS = formatMessage(getMessage("no-wanteds"));
+        MAXIMUM_WANTED_CHANGED = formatMessage(getMessage("maximum-wanted-changed"));
+        PLUGIN_RELOADED = formatMessage(getMessage("plugin-reloaded"));
+        ITEM_COOLDOWN = formatMessage(getMessage("item-cooldown"));
+        GET_PLAYER_WANTED = formatMessage(getMessage("get-player-wanted"));
+        OPERATION = formatMessage(getMessage("OPERATION"));
+        CLEAR_OPERATOR = formatMessage(getMessage("clear-operator"));
+        CLEAR_WANTED = formatMessage(getMessage("clear-wanted"));
+        TAKE_WANTED = formatMessage(getMessage("take-wanted"));
+        ADD_WANTED = formatMessage(getMessage("add-wanted"));
+        SET_WANTED = formatMessage(getMessage("set-wanted"));
+        INVALID_NUMBER = formatMessage(getMessage("valid-number"));
+        PLAYER_WANTED = formatMessage(getMessage("player-wanted"));
+        CONSOLE_SENDER = formatMessage(getMessage("console-sender"));
+        ON_KILL_PLAYER = formatMessage(getMessage("message-on-kill-player"));
+        ON_KILL_MOB = formatMessage(getMessage("message-on-kill-mob"));
+        ON_KILL_NPC = formatMessage(getMessage("message-on-kill-npc"));
+        LOADING_DATA = formatMessage(getMessage("loading-data"));
+        WANTED_SYMBOL = colorize(getMessage("wanted-symbol"));
+        PLAYER_WANTED_LIST_FORMAT = colorize(getMessage("player-wanted-list-format"));
+        DIFFERENT_WORLD = colorize(getMessage("different-world"));
+    }
+
+    public static void helpMessage1(CommandSender sender) {
+        sender.sendMessage(Help.HEADER.replace("%version%", getPlugin().getDescription().getVersion()));
+        TextComponent reloadCommand = new TextComponent(Help.RELOAD);
         reloadCommand.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/wanted reload"));
         sender.spigot().sendMessage(reloadCommand);
-        TextComponent findCommand = new TextComponent(getWantedFindHelp());
+        TextComponent findCommand = new TextComponent(Help.FIND);
         findCommand.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/wanted find "));
         sender.spigot().sendMessage(findCommand);
-        TextComponent setMaximumCommand = new TextComponent(getWantedMaximumHelp());
+        TextComponent setMaximumCommand = new TextComponent(Help.MAXIMUM);
         setMaximumCommand.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/wanted maximum "));
         sender.spigot().sendMessage(setMaximumCommand);
-        TextComponent clearCommand = new TextComponent(getWantedClearHelp());
+        TextComponent clearCommand = new TextComponent(Help.CLEAR);
         clearCommand.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/wanted clear "));
         sender.spigot().sendMessage(clearCommand);
-        TextComponent setCommand = new TextComponent(getWantedSetHelp());
+        TextComponent setCommand = new TextComponent(Help.SET);
         setCommand.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/wanted set "));
         sender.spigot().sendMessage(setCommand);
-        TextComponent takeCommand = new TextComponent(getWantedTakeHelp());
+        TextComponent takeCommand = new TextComponent(Help.TAKE);
         takeCommand.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/wanted take "));
         sender.spigot().sendMessage(takeCommand);
-        TextComponent addCommand = new TextComponent(getWantedAddHelp());
+        TextComponent addCommand = new TextComponent(Help.ADD);
         addCommand.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/wanted add "));
         sender.spigot().sendMessage(addCommand);
-        TextComponent wantedsCommand = new TextComponent(getWantedsHelp());
+        TextComponent wantedsCommand = new TextComponent(Help.WANTEDS);
         wantedsCommand.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/wanteds"));
         sender.spigot().sendMessage(wantedsCommand);
-        TextComponent textComponent = new TextComponent(getNextPageHelp());
+        TextComponent textComponent = new TextComponent(Help.Page.NEXT_PAGE);
         textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/wanted help 2"));
         sender.spigot().sendMessage(textComponent);
     }
 
-    public void helpMessage2(CommandSender sender) {
-        sender.sendMessage(getHelpHeader().replace("%version%", getPlugin().getDescription().getVersion()));
-        TextComponent wantedGUICommand = new TextComponent(getWantedGUIHelp());
+    public static void helpMessage2(CommandSender sender) {
+        sender.sendMessage(Help.HEADER.replace("%version%", getPlugin().getDescription().getVersion()));
+        TextComponent wantedGUICommand = new TextComponent(Help.GUI);
         wantedGUICommand.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/wanted gui"));
         sender.spigot().sendMessage(wantedGUICommand);
-        TextComponent getWantedCommand = new TextComponent(getWantedGetHelp());
+        TextComponent getWantedCommand = new TextComponent(Help.GET);
         getWantedCommand.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/wanted get "));
         sender.spigot().sendMessage(getWantedCommand);
-        TextComponent topWantedCommand = new TextComponent(getWantedTopHelp());
+        TextComponent topWantedCommand = new TextComponent(Help.TOP);
         topWantedCommand.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/wanted top"));
         sender.spigot().sendMessage(topWantedCommand);
-        TextComponent helpCommand = new TextComponent(getWantedHelpHelp());
+        TextComponent helpCommand = new TextComponent(Help.HELP);
         helpCommand.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/wanted help "));
         sender.spigot().sendMessage(helpCommand);
-        TextComponent complaintCommand = new TextComponent(getWantedComplaintHelp());
+        TextComponent complaintCommand = new TextComponent(Help.COMPLAINT);
         complaintCommand.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/complaint"));
         sender.spigot().sendMessage(complaintCommand);
-        TextComponent textComponent = new TextComponent(getPrevPageHelp());
+        TextComponent textComponent = new TextComponent(Help.Page.PREV_PAGE);
         textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/wanted help 1"));
         sender.spigot().sendMessage(textComponent);
     }
 
-    public String wantedSymbol(int count) {
+    public static String wantedSymbol(int count) {
         StringBuilder star = new StringBuilder();
         for (int i = 0; i < count; i++) {
-            star.append(getWantedSymbol());
+            star.append(WANTED_SYMBOL);
         }
-        return Utils.color(getPlayerWantedListFormat().replace("%symbol%", star));
+        return colorize(PLAYER_WANTED_LIST_FORMAT.replace("%symbol%", star));
     }
 
-    public String rawWantedSymbol(int count) {
+    public static String rawWantedSymbol(int count) {
         StringBuilder star = new StringBuilder();
         for (int i = 0; i < count; i++) {
-            star.append(getWantedSymbol());
+            star.append(WANTED_SYMBOL);
         }
-        return Utils.color(getPlayerWantedListFormat().replace("%symbol%", star));
+        return colorize(PLAYER_WANTED_LIST_FORMAT.replace("%symbol%", star));
     }
 
-    public String playerDeathLogger(PlayerDeathEvent event) {
+    public static String playerDeathLogger(PlayerDeathEvent event) {
         Player player = event.getEntity();
         Player killer = player.getKiller();
         if (killer == null) return null;
@@ -291,7 +327,7 @@ public class Messages {
                 + " | New Wanted: " + wanted;
     }
 
-    public String npcDeathLogger(NPCDeathEvent event) {
+    public static String npcDeathLogger(NPCDeathEvent event) {
         Entity npc = event.getEvent().getEntity();
         Player killer = event.getEvent().getEntity().getKiller();
         if (killer == null) return null;
@@ -306,291 +342,4 @@ public class Messages {
                 + " | New Wanted: " + wanted;
     }
 
-    public String getPrefix() {
-        return prefix;
-    }
-
-    public String getNeedPermission() {
-        return needPermission;
-    }
-
-    public String getNeedGPS() {
-        return needGPS;
-    }
-
-    public String getPlayerNotFound() {
-        return playerNotFound;
-    }
-
-    public String getSelfTarget() {
-        return selfTarget;
-    }
-
-    public String getSearchTarget() {
-        return searchTarget;
-    }
-
-    public String getTargetWarn() {
-        return targetWarn;
-    }
-
-    public String getWantedTitle() {
-        return wantedTitle;
-    }
-
-    public String getWantedList() {
-        return wantedList;
-    }
-
-    public String getPlayerLeaveOnFinding() {
-        return playerLeaveOnFinding;
-    }
-
-    public String getNoWanteds() {
-        return noWanteds;
-    }
-
-    public String getFindUsage() {
-        return findUsage;
-    }
-
-    public String getOperation() {
-        return operation;
-    }
-
-    public String getClearOperator() {
-        return clearOperator;
-    }
-
-    public String getClearWanted() {
-        return clearWanted;
-    }
-
-    public String getTakeWanted() {
-        return takeWanted;
-    }
-
-    public String getAddWanted() {
-        return addWanted;
-    }
-
-    public String getSetWanted() {
-        return setWanted;
-    }
-
-    public String getValidNumber() {
-        return validNumber;
-    }
-
-    public String getConsoleSender() {
-        return consoleSender;
-    }
-
-    public String getMaximumWantedChanged() {
-        return maximumWantedChanged;
-    }
-
-    public String getPluginReloaded() {
-        return pluginReloaded;
-    }
-
-    public String getSetMaximumUsage() {
-        return setMaximumUsage;
-    }
-
-    public String getGetWantedUsage() {
-        return getWantedUsage;
-    }
-
-    public String getGetPlayerWanted() {
-        return getPlayerWanted;
-    }
-
-    public String getWantedTop() {
-        return wantedTop;
-    }
-
-    public String getItemCooldown() {
-        return itemCooldown;
-    }
-
-    public String getPlayerWanted() {
-        return playerWanted;
-    }
-
-    public String getMessageOnKillPlayer() {
-        return messageOnKillPlayer;
-    }
-
-    public String getMessageOnKillMob() {
-        return messageOnKillMob;
-    }
-
-    public String getMessageOnKillNPC() {
-        return messageOnKillNPC;
-    }
-
-    public String getLoadingData() {
-        return loadingData;
-    }
-
-    public String getHelpHeader() {
-        return helpHeader;
-    }
-
-    public String getWantedReloadHelp() {
-        return wantedReloadHelp;
-    }
-
-    public String getWantedFindHelp() {
-        return wantedFindHelp;
-    }
-
-    public String getWantedMaximumHelp() {
-        return wantedMaximumHelp;
-    }
-
-    public String getWantedClearHelp() {
-        return wantedClearHelp;
-    }
-
-    public String getWantedSetHelp() {
-        return wantedSetHelp;
-    }
-
-    public String getWantedTakeHelp() {
-        return wantedTakeHelp;
-    }
-
-    public String getWantedAddHelp() {
-        return wantedAddHelp;
-    }
-
-    public String getWantedsHelp() {
-        return wantedsHelp;
-    }
-
-    public String getNextPageHelp() {
-        return nextPageHelp;
-    }
-
-    public String getWantedGUIHelp() {
-        return wantedGUIHelp;
-    }
-
-    public String getWantedGetHelp() {
-        return wantedGetHelp;
-    }
-
-    public String getWantedTopHelp() {
-        return wantedTopHelp;
-    }
-
-    public String getWantedHelpHelp() {
-        return wantedHelpHelp;
-    }
-
-    public String getPrevPageHelp() {
-        return prevPageHelp;
-    }
-
-    public String getWantedGUITitle() {
-        return wantedGUITitle;
-    }
-
-    public String getWantedGUIRefreshButton() {
-        return wantedGUIRefreshButton;
-    }
-
-    public String getWantedGUINextPageButton() {
-        return wantedGUINextPageButton;
-    }
-
-    public String getWantedGUIPrevPageButton() {
-        return wantedGUIPrevPageButton;
-    }
-
-    public String getWantedGUIPlayerTitle() {
-        return wantedGUIPlayerTitle;
-    }
-
-    public List<String> getWantedGUIPlayerLore() {
-        return wantedGUIPlayerLore;
-    }
-
-    public String getWantedSymbol() {
-        return wantedSymbol;
-    }
-
-    public String getPlayerWantedListFormat() {
-        return playerWantedListFormat;
-    }
-
-    public String getBarTitle() {
-        return barTitle;
-    }
-
-    public String getComplaintConfirm() {
-        return complaintConfirm;
-    }
-
-    public String getComplaintExpire() {
-        return complaintExpire;
-    }
-
-    public String getComplaintAlreadyExpire() {
-        return complaintAlreadyExpire;
-    }
-
-    public String getComplaintSubmit() {
-        return complaintSubmit;
-    }
-
-    public String getCantComplaint() {
-        return cantComplaint;
-    }
-
-    public String getWantedComplaintHelp() {
-        return wantedComplaintHelp;
-    }
-
-    public String getDifferentWorld() {
-        return differentWorld;
-    }
-
-    public String getLogHeader() {
-        return logHeader;
-    }
-
-    public String getLogMessage() {
-        return logMessage;
-    }
-
-    public String getLogUsage() {
-        return logUsage;
-    }
-
-    public String getSuccessfullyArrest() {
-        return successfullyArrest;
-    }
-
-    public String getCantArrest() {
-        return cantArrest;
-    }
-
-    public String getArrestUsage() {
-        return arrestUsage;
-    }
-
-    public String getSelfArrest() {
-        return selfArrest;
-    }
-
-    public String getArrestNotification() {
-        return arrestNotification;
-    }
-
-    public String getArrestIsDisabled() {
-        return arrestIsDisabled;
-    }
 }

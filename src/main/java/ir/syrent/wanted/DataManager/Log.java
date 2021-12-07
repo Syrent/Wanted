@@ -38,7 +38,7 @@ public class Log {
             if (!dataFolder.exists()) { // Check if logs folder exists
                 dataFolder.mkdir(); // if not then create it
             }
-            File saveTo = new File(Main.getInstance().getDataFolder() + "/logs/", file + ".log"); // Sets the path of the new log file
+            File saveTo = new File(Main.getInstance().getDataFolder() + File.separator + "logs" + File.separator, file + ".log"); // Sets the path of the new log file
             if (!saveTo.exists()) { // Check if logs folder exists
                 saveTo.createNewFile(); // if not then create it
             }

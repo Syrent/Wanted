@@ -1,6 +1,7 @@
 package ir.syrent.wanted.Events;
 
 import ir.syrent.wanted.Main;
+import ir.syrent.wanted.Messages.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -24,7 +25,7 @@ public class InventoryClickListener implements Listener {
 
         Player player = (Player) event.getWhoClicked();
         if (ChatColor.stripColor(event.getView().getTitle()).contains(ChatColor.stripColor(
-                Main.getInstance().messages.getWantedGUITitle().replace("%page%", "")))) {
+                Messages.GUI.TITLE.replace("%page%", "")))) {
             event.setCancelled(true);
 
             //if (!(event.getSlot() == 46 || event.getSlot() == 52 || event.getSlot() == 49)) return;
@@ -35,7 +36,7 @@ public class InventoryClickListener implements Listener {
 
             if (event.getClickedInventory() == null) return;
             if (playerCooldown.contains(player)) {
-                player.sendMessage(Main.getInstance().messages.getItemCooldown());
+                player.sendMessage(Messages.GUI.Button.REFRESH);
                 return;
             }
 

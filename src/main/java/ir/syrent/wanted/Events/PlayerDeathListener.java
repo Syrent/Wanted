@@ -2,6 +2,7 @@ package ir.syrent.wanted.Events;
 
 import ir.syrent.wanted.Commands.WantedCommand;
 import ir.syrent.wanted.Main;
+import ir.syrent.wanted.Messages.Messages;
 import ir.syrent.wanted.Wanted;
 import ir.syrent.wanted.WantedManager;
 import net.citizensnpcs.api.CitizensAPI;
@@ -87,7 +88,7 @@ public class PlayerDeathListener implements Listener {
                 && !killer.hasPermission("wanted.hunter")) return;
 
             if (Main.getInstance().getConfig().getBoolean("Wanted.ReceiveOnKill.Player.KillMessage")) {
-                killer.sendMessage(Main.getInstance().messages.getMessageOnKillPlayer()
+                killer.sendMessage(Messages.ON_KILL_PLAYER
                         .replace("%player_name%", victim.getName()).replace("%wanted%", String.valueOf(finalWanted))
                         .replace("%fight_starter%", fightStarter == null ? "UNKNOWN" : fightStarter)
                         .replace("%region%", Main.getInstance().worldGuard == null ?
@@ -98,18 +99,15 @@ public class PlayerDeathListener implements Listener {
             if (WantedManager.getInstance().getWanted(victim.getName()) != 0)
                 WantedManager.getInstance().setWanted(victim.getName(), 0);
             Main.getInstance().skullBuilder.cache.remove(victim);
-            return;
-        }
 
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            if (WantedCommand.getTarget.containsKey(player)) {
+            for (Player player : Bukkit.getOnlinePlayers()) {
                 WantedCommand.getTarget.remove(player);
+                if (WantedCommand.playerBossBarHashMap.containsKey(player))
+                    WantedCommand.playerBossBarHashMap.get(player).removePlayer(player);
+                WantedCommand.playerBossBarHashMap.remove(player);
             }
-            if (WantedCommand.playerBossBarHashMap.containsKey(player)) WantedCommand.playerBossBarHashMap.get(player).removePlayer(player);
-            WantedCommand.playerBossBarHashMap.remove(player);
+
+            Main.getInstance().log.logToFile(Main.getInstance().log.logTime(), Messages.playerDeathLogger(event));
         }
-
-
-        Main.getInstance().log.logToFile(Main.getInstance().log.logTime(), Main.getInstance().messages.playerDeathLogger(event));
     }
 }

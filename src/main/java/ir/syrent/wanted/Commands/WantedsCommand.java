@@ -1,6 +1,7 @@
 package ir.syrent.wanted.Commands;
 
 import ir.syrent.wanted.Main;
+import ir.syrent.wanted.Messages.Messages;
 import ir.syrent.wanted.WantedManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -16,30 +17,31 @@ import java.util.Map;
 
 public class WantedsCommand implements CommandExecutor {
     
-    List<String> message = new ArrayList<>();
-    int number = 0;
+    private final List<String> message = new ArrayList<>();
+    private int number = 0;
 
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @Nullable String[] args) {
         boolean isAdmin = sender.hasPermission("wanted.admin");
         if (!(sender.hasPermission("wanted.list") || isAdmin)) {
-            sender.sendMessage(Main.getInstance().messages.getNeedPermission().replace("%prefix%", Main.getInstance().messages.getPrefix()).replace("%player%", sender.getName()));
+            sender.sendMessage(Messages.NEED_PERMISSION.replace("%prefix%", Messages.PREFIX).replace("%player%", sender.getName()));
             return true;
         }
         if (WantedManager.getInstance().getWanteds().isEmpty()) {
-            sender.sendMessage(Main.getInstance().messages.getNoWanteds());
+            sender.sendMessage(Messages.NO_WANTEDS);
             return true;
         }
 
         for (Map.Entry<String, Integer> wantedPlayer : WantedManager.getInstance().getWanteds().entrySet()) {
             if (Bukkit.getPlayerExact(wantedPlayer.getKey()) != null) number++;
         }
+
         if (number == 0) {
-            sender.sendMessage(Main.getInstance().messages.getNoWanteds());
+            sender.sendMessage(Messages.NO_WANTEDS);
             return true;
         }
         number = 0;
 
-        sender.sendMessage(Main.getInstance().messages.getWantedTitle());
+        sender.sendMessage(Messages.WANTED_TITLE);
         for (Map.Entry<String, Integer> wantedlist : WantedManager.getInstance().getWanteds().entrySet()) {
             String key = wantedlist.getKey();
 
@@ -52,8 +54,8 @@ public class WantedsCommand implements CommandExecutor {
             if (currentWanted <= 0 || currentWanted > maximum) continue;
             int count = WantedManager.getInstance().getWanteds().get(key);
 
-            if (maximum <= 5) message.add(Main.getInstance().messages.wantedSymbol(currentWanted).replace("%player%", key));
-            else message.add(Main.getInstance().messages.getWantedList().replace("%player%", key).replace("%wanted%", String.valueOf(count)));
+            if (maximum <= 5) message.add(Messages.wantedSymbol(currentWanted).replace("%player%", key));
+            else message.add(Messages.WANTED_LIST.replace("%player%", key).replace("%wanted%", String.valueOf(count)));
         }
 
         int counter = 0;
