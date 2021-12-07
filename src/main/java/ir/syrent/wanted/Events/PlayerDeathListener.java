@@ -1,8 +1,10 @@
 package ir.syrent.wanted.Events;
 
+import ir.syrent.wanted.Commands.Permissions;
 import ir.syrent.wanted.Commands.WantedCommand;
 import ir.syrent.wanted.Main;
 import ir.syrent.wanted.Messages.Messages;
+import ir.syrent.wanted.Utils.Utils;
 import ir.syrent.wanted.Wanted;
 import ir.syrent.wanted.WantedManager;
 import net.citizensnpcs.api.CitizensAPI;
@@ -38,7 +40,7 @@ public class PlayerDeathListener implements Listener {
         if (killer == null) return;
 
         Wanted.getInstance().runCommand(killer, victim, "Player");
-        if (killer.hasPermission("wanted.hunter"))
+        if (Utils.hasPermission(killer, false, Permissions.HUNTER))
             Wanted.getInstance().runCommand(killer, victim, "Wanted");
 
         int finalWanted = 1;
@@ -49,7 +51,7 @@ public class PlayerDeathListener implements Listener {
         Main.getInstance().playerVictimMap.put(killer.getName(), victim.getName());
 
         for (PermissionAttachmentInfo permissionList : victim.getEffectivePermissions()) {
-            if (killer.hasPermission("wanted.bypass")) break;
+            if (Utils.hasPermission(killer, false, Permissions.BYPASS)) break;
             if (Main.getInstance().getConfig().getBoolean("Wanted.ReceiveOnKill.Player.PreventReceiveIfDefender"))
                 if (!killer.getName().equals(fightStarter)) break;
             String wantedPermission = permissionList.getPermission();
@@ -85,7 +87,7 @@ public class PlayerDeathListener implements Listener {
 
         if (Main.getInstance().getConfig().getBoolean("Wanted.ClearWantedOnDeath")) {
             if (Main.getInstance().getConfig().getBoolean("Wanted.RemoveWantedOnlyIfKilledByHunter")
-                && !killer.hasPermission("wanted.hunter")) return;
+                && !Utils.hasPermission(killer, false, Permissions.HUNTER)) return;
 
             if (Main.getInstance().getConfig().getBoolean("Wanted.ReceiveOnKill.Player.KillMessage")) {
                 killer.sendMessage(Messages.ON_KILL_PLAYER

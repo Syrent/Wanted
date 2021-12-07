@@ -1,7 +1,9 @@
 package ir.syrent.wanted.Events;
 
+import ir.syrent.wanted.Commands.Permissions;
 import ir.syrent.wanted.Main;
 import ir.syrent.wanted.Messages.Messages;
+import ir.syrent.wanted.Utils.Utils;
 import ir.syrent.wanted.Wanted;
 import ir.syrent.wanted.WantedManager;
 import net.citizensnpcs.api.CitizensAPI;
@@ -25,7 +27,7 @@ public class PlayerDeathListenerComplaint implements Listener {
 
         Player victim = event.getEntity();
         if (!(victim.getKiller() instanceof Player)) return;
-        if (!victim.hasPermission("wanted.complaint")) return;
+        if (!Utils.hasPermission(victim, false, Permissions.COMPLAINT)) return;
 
         if (Main.getInstance().getConfig().getBoolean("Wanted.WorldGuard.Enable") && Main.getInstance().worldGuard != null) {
             List<String> regions = Main.getInstance().getConfig().getStringList("Wanted.WorldGuard.BlacklistRegions");
@@ -40,7 +42,7 @@ public class PlayerDeathListenerComplaint implements Listener {
         Player killer = victim.getKiller();
         if (killer == null) return;
 
-        if (killer.hasPermission("wanted.bypass")) return;
+        if (Utils.hasPermission(killer, false, Permissions.BYPASS)) return;
 
         String fightStarter = Main.getInstance().playerDamagedMap.containsKey(victim.getName()) ?
                 Main.getInstance().playerDamagedMap.get(victim.getName()) : Main.getInstance().playerDamagedMap.get(killer.getName());
@@ -56,7 +58,8 @@ public class PlayerDeathListenerComplaint implements Listener {
         }
 
         Wanted.getInstance().runCommand(killer, victim, "Player");
-        if (killer.hasPermission("wanted.hunter"))
+
+        if (Utils.hasPermission(killer, false, Permissions.HUNTER))
             Wanted.getInstance().runCommand(killer, victim, "Wanted");
 
         victim.sendMessage(Messages.Complaint.CONFIRM.replace("%killer%", killer.getName()));

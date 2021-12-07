@@ -3,6 +3,7 @@ package ir.syrent.wanted.Commands;
 import ir.syrent.wanted.Main;
 import ir.syrent.wanted.Messages.Messages;
 import ir.syrent.wanted.Utils.SkullBuilder;
+import ir.syrent.wanted.Utils.Utils;
 import ir.syrent.wanted.Wanted;
 import ir.syrent.wanted.WantedManager;
 import org.bukkit.Bukkit;
@@ -34,7 +35,6 @@ public class WantedCommand implements CommandExecutor {
     public static HashMap<Player, BossBar> playerBossBarHashMap = new HashMap<>();
 
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @Nullable String[] args) {
-        boolean isAdmin = sender.hasPermission("wanted.admin");
         if (args.length > 0) {
             //Get Wanted
             if (args[0].equalsIgnoreCase("get") || args[0].equalsIgnoreCase("look")) {
@@ -45,10 +45,7 @@ public class WantedCommand implements CommandExecutor {
 
                 Player player = (Player) sender;
 
-                if (!isAdmin && !player.hasPermission("wanted.get")) {
-                    player.sendMessage(Messages.NEED_PERMISSION);
-                    return true;
-                }
+                if (!Utils.hasPermission(player, true, Permissions.GET, Permissions.ADMIN)) return true;
 
                 if (args.length == 1) {
                     player.sendMessage(Messages.Usage.GET_MAXIMUM);
@@ -78,10 +75,7 @@ public class WantedCommand implements CommandExecutor {
                 }
 
                 Player player = (Player) sender;
-                if (!player.hasPermission("wanted.find") && !isAdmin) {
-                    sender.sendMessage(Messages.NEED_PERMISSION);
-                    return true;
-                }
+                if (Utils.hasPermission(player, true, Permissions.ADMIN, Permissions.FIND)) return true;
 
                 if (args.length == 1) {
                     getTarget.remove(player);
@@ -113,7 +107,7 @@ public class WantedCommand implements CommandExecutor {
 
                 player.sendMessage(Messages.SEARCH_TARGET.replace("%target%", target.getName()));
                 for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-                    if (onlinePlayer.hasPermission("wanted.notify")) {
+                    if (Utils.hasPermission(player, false, Permissions.NOTIFY)) {
                         if (sender == onlinePlayer) continue;
                         onlinePlayer.sendMessage(Messages.TARGET_WARN
                                 .replace("%player%", player.getName())
@@ -213,10 +207,7 @@ public class WantedCommand implements CommandExecutor {
                 }
 
                 Player player = (Player) sender;
-                if (!player.hasPermission("wanted.arrest") && !isAdmin) {
-                    sender.sendMessage(Messages.NEED_PERMISSION);
-                    return true;
-                }
+                if (!Utils.hasPermission(player, true, Permissions.ARREST, Permissions.ADMIN)) return true;
 
                 if (args.length == 1) {
                     player.sendMessage(Messages.Usage.ARREST);
@@ -245,7 +236,7 @@ public class WantedCommand implements CommandExecutor {
 
                     player.sendMessage(Messages.Arrest.SUCCESSFULLY.replace("%target%", target.getName()));
                     for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-                        if (onlinePlayer.hasPermission("wanted.arrest.notify")) {
+                        if (Utils.hasPermission(player, false, Permissions.ARREST_NOTIFY)) {
                             if (sender == onlinePlayer) continue;
                             onlinePlayer.sendMessage(Messages.TARGET_WARN
                                     .replace("%player%", player.getName())
@@ -270,10 +261,9 @@ public class WantedCommand implements CommandExecutor {
 
             //Maximum command
             if (args[0].equalsIgnoreCase("maximum")) {
-                if (!isAdmin) {
-                    sender.sendMessage(Messages.NEED_PERMISSION);
+                Player player = (Player) sender;
+                if (!Utils.hasPermission(player, true, Permissions.ADMIN))
                     return true;
-                }
 
                 if (args.length == 1) {
                     sender.sendMessage(Messages.Usage.SET_MAXIMUM);
@@ -300,10 +290,7 @@ public class WantedCommand implements CommandExecutor {
 
             //Reload command
             if (args[0].equalsIgnoreCase("reload")) {
-                if (!isAdmin) {
-                    sender.sendMessage(Messages.NEED_PERMISSION);
-                    return true;
-                }
+                if (!Utils.hasPermission(sender, true, Permissions.ADMIN)) return true;
 
                 Main.getInstance().reloadConfig();
 
@@ -314,7 +301,7 @@ public class WantedCommand implements CommandExecutor {
 
                     FileConfiguration dataConfig = YamlConfiguration.loadConfiguration(configFile);
 
-                    InputStream defaultStream = Main.getInstance().getResource("language/" + configFile.getName()  + ".yml");
+                    InputStream defaultStream = Main.getInstance().getResource("language/" + configFile.getName() + ".yml");
                     if (defaultStream != null) {
                         YamlConfiguration defaultConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(defaultStream));
                         dataConfig.setDefaults(defaultConfig);
@@ -327,10 +314,8 @@ public class WantedCommand implements CommandExecutor {
 
             //ClearWanted command
             if (args[0].equalsIgnoreCase("clear")) {
-                if (!sender.hasPermission("wanted.clear") && !isAdmin) {
-                    sender.sendMessage(Messages.NEED_PERMISSION);
-                    return true;
-                }
+
+                if (!Utils.hasPermission(sender, true, Permissions.CLEAR, Permissions.ADMIN)) return true;
 
                 if (args.length == 1) {
                     sender.sendMessage(Messages.CLEAR_OPERATOR);
@@ -353,10 +338,8 @@ public class WantedCommand implements CommandExecutor {
 
             //TakeWanted command
             if (args[0].equalsIgnoreCase("take")) {
-                if (!sender.hasPermission("wanted.take") && !isAdmin) {
-                    sender.sendMessage(Messages.NEED_PERMISSION);
-                    return true;
-                }
+
+                if (!Utils.hasPermission(sender, true, Permissions.TAKE, Permissions.ADMIN)) return true;
 
                 if (args.length < 3) {
                     sender.sendMessage(Messages.OPERATION.replace("%action%", "Take"));
@@ -386,13 +369,11 @@ public class WantedCommand implements CommandExecutor {
             }
             //AddWanted command
             if (args[0].equalsIgnoreCase("add")) {
-                if (!sender.hasPermission("wanted.add") && !isAdmin) {
-                    sender.sendMessage(Messages.NEED_PERMISSION);
-                    return true;
-                }
+
+                if (!Utils.hasPermission(sender, true, Permissions.ADMIN, Permissions.ADMIN)) return true;
 
                 if (args.length < 3) {
-                    sender.sendMessage(Messages.OPERATION.replace("%action%", "Add"));
+                    sender.sendMessage(Messages.OPERATION.replace("%action%", "add"));
                     return true;
                 }
 
@@ -420,10 +401,8 @@ public class WantedCommand implements CommandExecutor {
 
             //SetWanted command
             if (args[0].equalsIgnoreCase("set")) {
-                if (!sender.hasPermission("wanted.set") && !isAdmin) {
-                    sender.sendMessage(Messages.NEED_PERMISSION);
-                    return true;
-                }
+
+                if (!Utils.hasPermission(sender, true, Permissions.SET, Permissions.ADMIN)) return true;
 
                 if (args.length < 3) {
                     sender.sendMessage(Messages.OPERATION.replace("%action%", "Set"));
@@ -454,10 +433,7 @@ public class WantedCommand implements CommandExecutor {
 
             //TopWanted command
             if (args[0].equalsIgnoreCase("top")) {
-                if (!sender.hasPermission("wanted.top") && !isAdmin) {
-                    sender.sendMessage(Messages.NEED_PERMISSION);
-                    return true;
-                }
+                if (!Utils.hasPermission(sender, true, Permissions.TOP, Permissions.ADMIN)) return true;
 
                 if (WantedManager.getInstance().getWanteds().isEmpty()) {
                     sender.sendMessage(Messages.NO_WANTEDS);
@@ -513,10 +489,8 @@ public class WantedCommand implements CommandExecutor {
                 }
 
                 Player player = (Player) sender;
-                if (!sender.hasPermission("wanted.gui") && !sender.hasPermission("wanted.admin")) {
-                    sender.sendMessage(Messages.NEED_PERMISSION);
-                    return true;
-                }
+
+                if (!Utils.hasPermission(player, true, Permissions.GUI, Permissions.ADMIN)) return true;
 
                 Main.getInstance().requestGUI.open(player);
                 return true;
@@ -530,10 +504,8 @@ public class WantedCommand implements CommandExecutor {
                 }
 
                 Player player = (Player) sender;
-                if (!sender.hasPermission("wanted.log") && !sender.hasPermission("wanted.admin")) {
-                    sender.sendMessage(Messages.NEED_PERMISSION);
-                    return true;
-                }
+
+                if (!Utils.hasPermission(player, true, Permissions.LOG, Permissions.ADMIN)) return true;
 
                 if (args.length < 3) {
                     player.sendMessage(Messages.Usage.LOG);
@@ -615,10 +587,8 @@ public class WantedCommand implements CommandExecutor {
             }
             //Help command
             if (args[0].equalsIgnoreCase("help")) {
-                if (!sender.hasPermission("wanted.help") && !sender.hasPermission("wanted.admin")) {
-                    sender.sendMessage(Messages.NEED_PERMISSION);
-                    return true;
-                }
+
+                if (!Utils.hasPermission(sender, true, Permissions.HELP, Permissions.ADMIN)) return true;
 
                 if (args.length == 2) {
                     if (args[1].equals("2")) {
@@ -639,18 +609,15 @@ public class WantedCommand implements CommandExecutor {
 
         Player player = (Player) sender;
 
-        if (!isAdmin && !player.hasPermission("wanted.use")) {
-            player.sendMessage(Messages.NEED_PERMISSION);
-            return true;
-        }
+        if (!Utils.hasPermission(player, true, Permissions.USE, Permissions.ADMIN)) return true;
 
         try {
             sender.sendMessage(Messages.PLAYER_WANTED.replace("%wanted%",
                     String.valueOf(WantedManager.getInstance().getWanted(player.getName()))));
-            return true;
         } catch (Exception e) {
             sender.sendMessage(Messages.PLAYER_WANTED.replace("%wanted%", "0"));
-            return true;
         }
+
+        return false;
     }
 }

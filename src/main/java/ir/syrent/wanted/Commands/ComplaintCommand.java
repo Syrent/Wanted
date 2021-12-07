@@ -3,6 +3,7 @@ package ir.syrent.wanted.Commands;
 import ir.syrent.wanted.Events.PlayerDeathListenerComplaint;
 import ir.syrent.wanted.Main;
 import ir.syrent.wanted.Messages.Messages;
+import ir.syrent.wanted.Utils.Utils;
 import ir.syrent.wanted.WantedManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -15,17 +16,15 @@ import org.jetbrains.annotations.NotNull;
 public class ComplaintCommand implements CommandExecutor {
 
     @Override
-    public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (!(commandSender instanceof Player)) {
-            commandSender.sendMessage(Messages.CONSOLE_SENDER);
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        if (!(sender instanceof Player)) {
+            sender.sendMessage(Messages.CONSOLE_SENDER);
             return true;
         }
 
-        Player player = (Player) commandSender;
-        if (!player.hasPermission("wanted.admin") && !player.hasPermission("wanted.complaint")) {
-            player.sendMessage(Messages.NEED_PERMISSION);
-            return true;
-        }
+        Player player = (Player) sender;
+
+        if (!Utils.hasPermission(player, true, Permissions.ADMIN, Permissions.COMPLAINT)) return true;
 
         if (PlayerDeathListenerComplaint.playerComplaintMap.containsKey(player.getName())) {
             if (System.currentTimeMillis() > PlayerDeathListenerComplaint.playerComplaintMap.get(player.getName())) {
@@ -45,7 +44,7 @@ public class ComplaintCommand implements CommandExecutor {
             for (PermissionAttachmentInfo permissionList : player.getEffectivePermissions()) {
                 Player killerPlayer = Bukkit.getPlayerExact(killer);
                 if (killerPlayer != null) {
-                    if (killerPlayer.hasPermission("wanted.bypass")) break;
+                    if (Utils.hasPermission(killerPlayer, false, Permissions.BYPASS)) break;
                 }
 
                 if (Main.getInstance().getConfig().getBoolean("Wanted.ReceiveOnKill.Player.PreventReceiveIfDefender")) {

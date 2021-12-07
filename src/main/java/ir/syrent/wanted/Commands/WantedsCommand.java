@@ -2,6 +2,7 @@ package ir.syrent.wanted.Commands;
 
 import ir.syrent.wanted.Main;
 import ir.syrent.wanted.Messages.Messages;
+import ir.syrent.wanted.Utils.Utils;
 import ir.syrent.wanted.WantedManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -21,11 +22,8 @@ public class WantedsCommand implements CommandExecutor {
     private int number = 0;
 
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @Nullable String[] args) {
-        boolean isAdmin = sender.hasPermission("wanted.admin");
-        if (!(sender.hasPermission("wanted.list") || isAdmin)) {
-            sender.sendMessage(Messages.NEED_PERMISSION.replace("%prefix%", Messages.PREFIX).replace("%player%", sender.getName()));
-            return true;
-        }
+        if (!Utils.hasPermission(sender, true, Permissions.LIST, Permissions.ADMIN)) return true;
+
         if (WantedManager.getInstance().getWanteds().isEmpty()) {
             sender.sendMessage(Messages.NO_WANTEDS);
             return true;
