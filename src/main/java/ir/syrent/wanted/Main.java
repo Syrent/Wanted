@@ -28,6 +28,7 @@ public final class Main extends JavaPlugin implements CommandExecutor {
     public LanguageGenerator enUSLanguage;
     public LanguageGenerator zhCNLanguage;
     public LanguageGenerator viVNLanguage;
+    public LanguageGenerator esESLanguage;
     public LanguageGenerator languageYML;
     public Log log;
     public SkullBuilder skullBuilder;
@@ -87,6 +88,8 @@ public final class Main extends JavaPlugin implements CommandExecutor {
         zhCNLanguage.saveDefaultConfig();
         viVNLanguage = new LanguageGenerator(this.getDataFolder() + "/language", "vi_VN");
         viVNLanguage.saveDefaultConfig();
+        esESLanguage = new LanguageGenerator(this.getDataFolder() + "/language", "es_ES");
+        esESLanguage.saveDefaultConfig();
     }
 
     public void initializeInstances() {
