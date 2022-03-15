@@ -220,7 +220,7 @@ public class Messages extends Utils {
 
         PREFIX = getMessage("prefix");
         NEED_PERMISSION = formatMessage(getMessage("need-permission"));
-        NEED_GPS = formatMessage(getMessage("need_gps"));
+        NEED_GPS = formatMessage(getMessage("needGPS"));
         PLAYER_NOT_FOUND = formatMessage(getMessage("player-not-found"));
         SELF_TARGET = formatMessage(getMessage("self-target"));
         SEARCH_TARGET = formatMessage(getMessage("search-target"));

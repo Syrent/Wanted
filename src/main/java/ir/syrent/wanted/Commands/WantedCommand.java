@@ -75,7 +75,7 @@ public class WantedCommand implements CommandExecutor {
                 }
 
                 Player player = (Player) sender;
-                if (Utils.hasPermission(player, true, Permissions.ADMIN, Permissions.FIND)) return true;
+                if (!Utils.hasPermission(player, true, Permissions.ADMIN, Permissions.FIND)) return true;
 
                 if (args.length == 1) {
                     getTarget.remove(player);

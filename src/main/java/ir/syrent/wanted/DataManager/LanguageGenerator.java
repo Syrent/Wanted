@@ -19,6 +19,7 @@ public class LanguageGenerator {
         this.path = path;
         this.name = name;
         this.configFile = new File(path, name + ".yml");
+        saveDefaultConfig();
     }
 
     public void reloadConfig() {
