@@ -43,7 +43,7 @@ public class PlaceholderAPI extends PlaceholderExpansion {
 
         //Wanted placeholder
         if (identifier.equals("wanted")) {
-            if (WantedManager.getInstance().getWanteds().get(player.getName()) == null) return "0";
+            if (WantedManager.getInstance().getWanteds().get(player.getName()) == null) return "";
             else if (WantedManager.getInstance().getWanted(player.getName()) == 0) return "";
             else if (WantedManager.getInstance().getWanted(player.getName()) <= 5)
                 return Messages.rawWantedSymbol(WantedManager.getInstance().getWanted(player.getName()));
