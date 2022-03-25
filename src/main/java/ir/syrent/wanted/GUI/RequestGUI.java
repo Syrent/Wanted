@@ -75,7 +75,7 @@ public class RequestGUI implements Listener {
                                     player.getLocation().getY(),
                                     player.getLocation().getZ())))
                     .replace("%last_victim%", victim == null ? "Unknown" : victim)
-                    .replace("%region%", Main.worldGuard == null ? "UNKNOWN" : Main.worldGuard.getRegionName(player.getLocation()) == null ? "UNKNOWN" : Main.worldGuard.getRegionName(player.getLocation())));
+                    .replace("%region%", !Main.getInstance().getConfig().getBoolean("Wanted.WorldGuard.Enable") ? "WorldGuard support is disabled on the configuration file" : Main.worldGuard == null ? "UNKNOWN" : Main.worldGuard.getRegionName(player.getLocation()) == null ? "UNKNOWN" : Main.worldGuard.getRegionName(player.getLocation())));
             }
             meta.setLore(lore);
 
