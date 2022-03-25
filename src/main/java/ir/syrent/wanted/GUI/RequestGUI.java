@@ -67,14 +67,15 @@ public class RequestGUI implements Listener {
 
             for (String line : Messages.GUI.Player.LORE) {
                 lore.add(line.replace("%wanted%", String.valueOf(WantedManager.getInstance().getWanted(player.getName())))
-                .replace("%world%", player.getWorld().getName())
-                .replace("%location%",
-                        Utils.colorize(String.format(
-                                "&eX: &b%.0f&7, &eY: &b%.0f&7, &eZ: &b%.0f",
-                                player.getLocation().getX(),
-                                player.getLocation().getY(),
-                                player.getLocation().getZ())))
-                .replace("%last_victim%", victim == null ? "Unknown" : victim));
+                    .replace("%world%", player.getWorld().getName())
+                    .replace("%location%",
+                            Utils.colorize(String.format(
+                                    "&eX: &b%.0f&7, &eY: &b%.0f&7, &eZ: &b%.0f",
+                                    player.getLocation().getX(),
+                                    player.getLocation().getY(),
+                                    player.getLocation().getZ())))
+                    .replace("%last_victim%", victim == null ? "Unknown" : victim)
+                    .replace("%region", Main.worldGuard == null ? "UNKNOWN" : Main.worldGuard.getRegionName(player.getLocation())));
             }
             meta.setLore(lore);
 
