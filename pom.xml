@@ -6,7 +6,7 @@
 
     <groupId>dev.syrent</groupId>
     <artifactId>Wanted</artifactId>
-    <version>2.3.7</version>
+    <version>2.3.8</version>
     <packaging>jar</packaging>
 
     <name>Wanted</name>
