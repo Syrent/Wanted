@@ -93,9 +93,9 @@ public class PlayerDeathListener implements Listener {
                 killer.sendMessage(Messages.ON_KILL_PLAYER
                         .replace("%player_name%", victim.getName()).replace("%wanted%", String.valueOf(finalWanted))
                         .replace("%fight_starter%", fightStarter == null ? "UNKNOWN" : fightStarter)
-                        .replace("%region%", Main.getInstance().worldGuard == null ?
-                                "UNKNOWN" : Main.getInstance().worldGuard.getRegionName(victim.getLocation()) == null ?
-                                "UNKNOWN" : Main.getInstance().worldGuard.getRegionName(victim.getLocation()))
+                        .replace("%region%", Main.worldGuard == null ?
+                                "UNKNOWN" : Main.worldGuard.getRegionName(victim.getLocation()) == null ?
+                                "UNKNOWN" : Main.worldGuard.getRegionName(victim.getLocation()))
                 );
             }
             if (WantedManager.getInstance().getWanted(victim.getName()) != 0)
