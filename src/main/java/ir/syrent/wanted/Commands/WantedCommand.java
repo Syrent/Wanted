@@ -85,13 +85,14 @@ public class WantedCommand implements CommandExecutor {
                 }
 
                 Player target = Bukkit.getPlayerExact(args[1]);
-                if (target == sender) {
-                    sender.sendMessage(Messages.SELF_TARGET);
-                    return true;
-                }
 
                 if (target == null) {
                     sender.sendMessage(Messages.PLAYER_NOT_FOUND);
+                    return true;
+                }
+
+                if (target == sender) {
+                    sender.sendMessage(Messages.SELF_TARGET);
                     return true;
                 }
 
