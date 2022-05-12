@@ -25,13 +25,13 @@ public class PlayerDeathListener implements Listener {
         if (!Main.getInstance().getConfig().getBoolean("Wanted.ReceiveOnKill.Player.Enable")) return;
 
         Player victim = event.getEntity();
-        if (Main.getInstance().getConfig().getBoolean("Wanted.WorldGuard.Enable") && Main.getInstance().worldGuard != null) {
+        if (Main.getInstance().getConfig().getBoolean("Wanted.WorldGuard.Enable") && Main.worldGuardFound) {
             List<String> regions = Main.getInstance().getConfig().getStringList("Wanted.WorldGuard.BlacklistRegions");
 
             if (Main.getInstance().getConfig().getBoolean("Wanted.WorldGuard.RevertBlacklist")) {
-                if (!Main.getInstance().worldGuard.isRegionBlacklisted(regions, victim.getLocation())) return;
+                if (!Main.worldGuard.isRegionBlacklisted(regions, victim.getLocation())) return;
             }
-            if (Main.getInstance().worldGuard.isRegionBlacklisted(regions, victim.getLocation())) return;
+            if (Main.worldGuard.isRegionBlacklisted(regions, victim.getLocation())) return;
         }
 
         if (Bukkit.getPluginManager().getPlugin("Citizens") != null)
@@ -93,7 +93,7 @@ public class PlayerDeathListener implements Listener {
                 killer.sendMessage(Messages.ON_KILL_PLAYER
                         .replace("%player_name%", victim.getName()).replace("%wanted%", String.valueOf(finalWanted))
                         .replace("%fight_starter%", fightStarter == null ? "UNKNOWN" : fightStarter)
-                        .replace("%region%", Main.worldGuard == null ?
+                        .replace("%region%", !Main.worldGuardFound ?
                                 "UNKNOWN" : Main.worldGuard.getRegionName(victim.getLocation()) == null ?
                                 "UNKNOWN" : Main.worldGuard.getRegionName(victim.getLocation()))
                 );

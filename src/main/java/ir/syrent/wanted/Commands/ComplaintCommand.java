@@ -85,9 +85,9 @@ public class ComplaintCommand implements CommandExecutor {
                     killerPlayer.sendMessage(Messages.ON_KILL_PLAYER
                             .replace("%player_name%", player.getName()).replace("%wanted%", String.valueOf(finalWanted))
                             .replace("%fight_starter%", fightStarter == null ? "UNKNOWN" : fightStarter)
-                            .replace("%region%", Main.getInstance().worldGuard == null ?
-                                    "UNKNOWN" : Main.getInstance().worldGuard.getRegionName(player.getLocation()) == null ?
-                                    "UNKNOWN" : Main.getInstance().worldGuard.getRegionName(player.getLocation()))
+                            .replace("%region%", !Main.worldGuardFound ?
+                                    "UNKNOWN" : Main.worldGuard.getRegionName(player.getLocation()) == null ?
+                                    "UNKNOWN" : Main.worldGuard.getRegionName(player.getLocation()))
                     );
                 }
                 Main.getInstance().playerVictimMap.put(killer, player.getName());

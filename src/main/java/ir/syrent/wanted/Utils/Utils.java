@@ -56,6 +56,7 @@ public class Utils {
                     }
                     case "WorldGuard": {
                         Main.worldGuard = new WorldGuard();
+                        Main.worldGuardFound = true;
                         break;
                     }
                 }
@@ -63,6 +64,7 @@ public class Utils {
             } else {
                 Main.getInstance().getLogger().info(Utils.colorize(String.format("%s not found! disabling hook...", plugin)));
                 if (plugin.equals("PlaceholderAPI")) Main.placeholderAPIFound = false;
+                if (plugin.equals("WorldGuard")) Main.worldGuardFound = false;
             }
         }
     }

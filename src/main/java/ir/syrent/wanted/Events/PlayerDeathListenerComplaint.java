@@ -29,12 +29,12 @@ public class PlayerDeathListenerComplaint implements Listener {
         if (!(victim.getKiller() instanceof Player)) return;
         if (!Utils.hasPermission(victim, false, Permissions.COMPLAINT)) return;
 
-        if (Main.getInstance().getConfig().getBoolean("Wanted.WorldGuard.Enable") && Main.getInstance().worldGuard != null) {
+        if (Main.getInstance().getConfig().getBoolean("Wanted.WorldGuard.Enable") && Main.worldGuardFound) {
             List<String> regions = Main.getInstance().getConfig().getStringList("Wanted.WorldGuard.BlacklistRegions");
 
             if (Main.getInstance().getConfig().getBoolean("Wanted.WorldGuard.RevertBlacklist")) {
-                if (!Main.getInstance().worldGuard.isRegionBlacklisted(regions, victim.getLocation())) return;
-            } else if (Main.getInstance().worldGuard.isRegionBlacklisted(regions, victim.getLocation())) return;
+                if (!Main.worldGuard.isRegionBlacklisted(regions, victim.getLocation())) return;
+            } else if (Main.worldGuard.isRegionBlacklisted(regions, victim.getLocation())) return;
         }
 
         if (Bukkit.getPluginManager().getPlugin("Citizens") != null)

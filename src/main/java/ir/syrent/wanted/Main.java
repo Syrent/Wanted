@@ -36,6 +36,7 @@ public final class Main extends JavaPlugin implements CommandExecutor {
     public static WorldGuard worldGuard;
 
     public static boolean placeholderAPIFound;
+    public static boolean worldGuardFound;
     public static String languageName;
 
     public HashMap<String, String> playerDamagedMap = new HashMap<>();
@@ -47,6 +48,7 @@ public final class Main extends JavaPlugin implements CommandExecutor {
     public void onEnable() {
         plugin = this;
         placeholderAPIFound = false;
+        worldGuardFound = false;
 
         initializeBstats();
         logDirectory = new File(getDataFolder() + File.separator + "logs");
