@@ -325,8 +325,7 @@ public class Messages extends Utils {
         Player player = event.getEntity();
         Player killer = player.getKiller();
         if (killer == null) return null;
-        Integer wanted = WantedManager.getInstance().getWanted(player.getName());
-        if (wanted == null) return null;
+        int wanted = WantedManager.getInstance().getWanted(player.getName());
         return "[Player] [" + Main.getInstance().log.formatMessage() + "] "
                 + killer.getName() + " killed " + player.getName()
                 + " in " + player.getWorld().getName()
@@ -340,8 +339,7 @@ public class Messages extends Utils {
         Entity npc = event.getEvent().getEntity();
         Player killer = event.getEvent().getEntity().getKiller();
         if (killer == null) return null;
-        Integer wanted = WantedManager.getInstance().getWanted(killer.getName());
-        if (wanted == null) return null;
+        int wanted = WantedManager.getInstance().getWanted(killer.getName());
         return "[NPC] [" + Main.getInstance().log.formatMessage() + "] "
                 + killer.getName() + " killed " + npc.getName()
                 + " in " + npc.getWorld().getName()
