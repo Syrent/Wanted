@@ -56,7 +56,10 @@ public class Utils {
                     }
                     case "WorldGuard": {
                         Main.worldGuard = new WorldGuard();
-                        Main.worldGuardFound = true;
+                        try {
+                            Main.worldGuard.getWorldGuard();
+                            Main.worldGuardFound = true;
+                        } catch (NoClassDefFoundError ignored) {}
                         break;
                     }
                 }
