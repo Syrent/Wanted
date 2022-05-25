@@ -1,17 +1,76 @@
 package ir.syrent.wanted
 
-import org.bukkit.plugin.java.JavaPlugin
+import ir.syrent.wanted.core.WantedManager
+import ir.syrent.wanted.listener.PlayerJoinListener
+import ir.syrent.wanted.storage.Database
+import ir.syrent.wanted.storage.Settings
+import ir.syrent.wanted.utils.toComponent
+import me.mohamad82.ruom.RUoMPlugin
+import me.mohamad82.ruom.Ruom
+import me.mohamad82.ruom.adventure.AdventureApi
+import me.mohamad82.ruom.configuration.YamlConfig
 
-class Wanted : JavaPlugin() {
+class Wanted : RUoMPlugin() {
+
+    val settings = YamlConfig(dataFolder, "settings.yml")
 
     override fun onEnable() {
-        instance = this
+        INSTANCE = this
+
+        Database
+        Settings
+        WantedManager
+
+        Ruom.initializeAdventure()
+        initialize()
     }
 
-    override fun onDisable() {}
+    override fun onDisable() {
+        Database.INSTANCE.shutdown()
+        AdventureApi.get().console().sendMessage("$CONSOLE_PREFIX Database closed.".toComponent())
+        Ruom.shutdown()
+        AdventureApi.get().console().sendMessage("$CONSOLE_PREFIX Plugin disabled.".toComponent())
+    }
+
+    private fun initialize() {
+        sendFiglet()
+        checkData()
+        registerListeners()
+    }
+
+    private fun sendFiglet() {
+        val list = ArrayList<String>()
+        list.add("<gradient:dark_red:red> _       __            __           __")
+        list.add("<gradient:dark_red:red>| |     / /___ _____  / /____  ____/ /")
+        list.add("<gradient:dark_red:red>| | /| / / __ `/ __ \\/ __/ _ \\/ __  / ")
+        list.add("<gradient:dark_red:red>| |/ |/ / /_/ / / / / /_/  __/ /_/ /  ")
+        list.add("<gradient:dark_red:red>|__/|__/\\__,_/_/ /_/\\__/\\___/\\__,_/   ")
+        list.add("                                      ")
+
+        for (text in list) {
+            AdventureApi.get().console().sendMessage(text.toComponent())
+        }
+    }
+
+    private fun checkData() {
+        if (!dataFolder.exists()) {
+            AdventureApi.get().console().sendMessage("<gradient:dark_purple:blue>Data folder not found, creating...".toComponent())
+            dataFolder.mkdir()
+        }
+        AdventureApi.get().console().sendMessage("<gradient:dark_purple:blue>Using ${Database.INSTANCE.type} as storage type.".toComponent())
+    }
+
+    private fun registerListeners() {
+        AdventureApi.get().console().sendMessage("<gradient:dark_purple:blue>Register listeners...".toComponent())
+        PlayerJoinListener()
+    }
 
     companion object {
-        var instance: Wanted? = null
+        val RAW_PREFIX = "Wanted » "
+        val CONSOLE_PREFIX = "<gradient:dark_red:red>Wanted »<gradient:gold:yellow>"
+        val PREFIX = "<gradient:dark_red:red><bold><it>Wanted »</it></bold></gradient><gradient:dark_purple:blue>"
+
+        var INSTANCE: Wanted? = null
             private set
     }
 }

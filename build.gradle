@@ -6,6 +6,8 @@ plugins {
 
 repositories {
     mavenLocal()
+    mavenCentral()
+
     maven {
         url = uri('https://hub.spigotmc.org/nexus/content/repositories/snapshots/')
     }
@@ -41,11 +43,19 @@ repositories {
     maven {
         url = uri('https://repo.maven.apache.org/maven2/')
     }
+
+    maven {
+        url = uri("https://maven.pkg.github.com/mohamad82bz/ruom")
+        credentials {
+            username = project.findProperty("gpr.user")
+            password = project.findProperty("gpr.key")
+        }
+    }
 }
 
 dependencies {
     implementation 'org.bstats:bstats-bukkit:2.2.1'
-    implementation 'com.iridium:IridiumColorAPI:1.0.6'
+    implementation 'me.mohamad82:ruom-bukkit:4.6.3'
     compileOnly 'org.spigotmc:spigot-api:1.18.2-R0.1-SNAPSHOT'
     compileOnly 'me.clip:placeholderapi:2.10.10'
     compileOnly 'net.citizensnpcs:citizens-main:2.0.28-SNAPSHOT'
@@ -59,6 +69,15 @@ java.sourceCompatibility = JavaVersion.VERSION_1_8
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
+}
+
+shadowJar {
+    relocate('me.mohamad82.ruom', 'ir.syrent.wanted.ruom')
+    dependencies {
+        exclude(dependency('net.kyori:.*:.*'))
+        exclude(dependency('com.zaxxer:HikariCP:.*'))
+        exclude(dependency('com.github.cryptomorin:XSeries:.*'))
+    }
 }
 
 def targetJavaVersion = 8
