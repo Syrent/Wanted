@@ -1,6 +1,6 @@
 name: Wanted
 version: "${project.version}"
-main: ir.syrent.wanted.Main
+main: ir.syrent.wanted.Wanted
 api-version: 1.13
 prefix: Wanted
 authors: [ Syrent ]
