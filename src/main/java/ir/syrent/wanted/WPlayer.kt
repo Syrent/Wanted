@@ -1,12 +1,23 @@
 package ir.syrent.wanted
 
-import java.util.UUID
+import me.mohamad82.ruom.Ruom
+import org.bukkit.entity.Player
+import java.util.*
 
 data class WPlayer(
     val uuid: UUID,
     val username: String,
     val wanted: Int
 ) {
+
+    fun getPlayer(): Optional<Player> {
+        for (onlinePlayer in Ruom.getOnlinePlayers()) {
+            if (onlinePlayer.uniqueId == uuid) {
+                return Optional.of(onlinePlayer)
+            }
+        }
+        return Optional.empty()
+    }
 
     companion object {
         class Builder {

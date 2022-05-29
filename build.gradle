@@ -4,47 +4,22 @@ plugins {
     id 'com.github.johnrengelman.shadow' version '7.1.0'
 }
 
+group = 'dev.syrent'
+version = '2.3.10'
+description = 'Wanted'
+java.sourceCompatibility = JavaVersion.VERSION_1_8
+
 repositories {
     mavenLocal()
     mavenCentral()
 
     maven {
+        name = "spigotmc"
         url = uri('https://hub.spigotmc.org/nexus/content/repositories/snapshots/')
     }
 
     maven {
-        url = uri('https://oss.sonatype.org/content/groups/public/')
-    }
-
-    maven {
-        url = uri('https://repo.codemc.org/repository/maven-public')
-    }
-
-    maven {
-        url = uri('https://repo.extendedclip.com/content/repositories/placeholderapi/')
-    }
-
-    maven {
-        url = uri('https://repo.citizensnpcs.co/')
-    }
-
-    maven {
-        url = uri('https://maven.enginehub.org/repo/')
-    }
-
-    maven {
-        url = uri('https://oss.sonatype.org/content/repositories/snapshots/')
-    }
-
-    maven {
-        url = uri('https://nexus.iridiumdevelopment.net/repository/maven-releases/')
-    }
-
-    maven {
-        url = uri('https://repo.maven.apache.org/maven2/')
-    }
-
-    maven {
+        name = "ruom"
         url = uri("https://maven.pkg.github.com/mohamad82bz/ruom")
         credentials {
             username = project.findProperty("gpr.user")
@@ -54,30 +29,13 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.bstats:bstats-bukkit:2.2.1'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10'
+    //implementation 'org.bstats:bstats-bukkit:2.2.1'
     implementation 'me.mohamad82:ruom-bukkit:4.6.3'
     compileOnly 'org.spigotmc:spigot-api:1.18.2-R0.1-SNAPSHOT'
-    compileOnly 'me.clip:placeholderapi:2.10.10'
-    compileOnly 'net.citizensnpcs:citizens-main:2.0.28-SNAPSHOT'
-    compileOnly 'com.sk89q.worldguard:worldguard-bukkit:7.0.5'
-}
-
-group = 'dev.syrent'
-version = '2.3.10'
-description = 'Wanted'
-java.sourceCompatibility = JavaVersion.VERSION_1_8
-
-tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
-}
-
-shadowJar {
-    relocate('me.mohamad82.ruom', 'ir.syrent.wanted.ruom')
-    dependencies {
-        exclude(dependency('net.kyori:.*:.*'))
-        exclude(dependency('com.zaxxer:HikariCP:.*'))
-        exclude(dependency('com.github.cryptomorin:XSeries:.*'))
-    }
+    //compileOnly 'me.clip:placeholderapi:2.10.10'
+    //compileOnly 'net.citizensnpcs:citizens-main:2.0.28-SNAPSHOT'
+    //compileOnly 'com.sk89q.worldguard:worldguard-bukkit:7.0.5'
 }
 
 def targetJavaVersion = 8
@@ -101,6 +59,16 @@ compileKotlin {
 compileTestKotlin {
     kotlinOptions.jvmTarget = '1.' + targetJavaVersion
 }
+
+shadowJar {
+    relocate('me.mohamad82.ruom', 'ir.syrent.wanted.ruom')
+    dependencies {
+        exclude(dependency('net.kyori:.*:.*'))
+        exclude(dependency('com.zaxxer:HikariCP:.*'))
+        exclude(dependency('com.github.cryptomorin:XSeries:.*'))
+    }
+}
+
 processResources {
     def props = [version: version]
     inputs.properties props

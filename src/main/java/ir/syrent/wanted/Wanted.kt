@@ -2,6 +2,7 @@ package ir.syrent.wanted
 
 import ir.syrent.wanted.core.WantedManager
 import ir.syrent.wanted.listener.PlayerJoinListener
+import ir.syrent.wanted.listener.PlayerQuitListener
 import ir.syrent.wanted.storage.Database
 import ir.syrent.wanted.storage.Settings
 import ir.syrent.wanted.utils.toComponent
@@ -9,6 +10,7 @@ import me.mohamad82.ruom.RUoMPlugin
 import me.mohamad82.ruom.Ruom
 import me.mohamad82.ruom.adventure.AdventureApi
 import me.mohamad82.ruom.configuration.YamlConfig
+
 
 class Wanted : RUoMPlugin() {
 
@@ -27,9 +29,8 @@ class Wanted : RUoMPlugin() {
 
     override fun onDisable() {
         Database.INSTANCE.shutdown()
-        AdventureApi.get().console().sendMessage("$CONSOLE_PREFIX Database closed.".toComponent())
+        Ruom.log("Database closed.")
         Ruom.shutdown()
-        AdventureApi.get().console().sendMessage("$CONSOLE_PREFIX Plugin disabled.".toComponent())
     }
 
     private fun initialize() {
@@ -63,11 +64,11 @@ class Wanted : RUoMPlugin() {
     private fun registerListeners() {
         AdventureApi.get().console().sendMessage("<gradient:dark_purple:blue>Register listeners...".toComponent())
         PlayerJoinListener()
+        PlayerQuitListener()
     }
 
     companion object {
-        val RAW_PREFIX = "Wanted » "
-        val CONSOLE_PREFIX = "<gradient:dark_red:red>Wanted »<gradient:gold:yellow>"
+        val RAW_PREFIX = "[Wanted] "
         val PREFIX = "<gradient:dark_red:red><bold><it>Wanted »</it></bold></gradient><gradient:dark_purple:blue>"
 
         var INSTANCE: Wanted? = null
