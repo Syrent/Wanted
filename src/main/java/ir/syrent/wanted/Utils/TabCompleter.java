@@ -3,7 +3,6 @@ package ir.syrent.wanted.Utils;
 import ir.syrent.wanted.Main;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -12,7 +11,7 @@ import java.util.List;
 public class TabCompleter implements org.bukkit.command.TabCompleter {
     List<String> arguments = new ArrayList<>();
 
-    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, String[] args) {
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         if (arguments.isEmpty()) {
             arguments.add("gui");
             arguments.add("top");

@@ -5,7 +5,6 @@ import ir.syrent.wanted.Messages.Messages;
 import ir.syrent.wanted.WantedManager;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 
 public class PlaceholderAPI extends PlaceholderExpansion {
 
@@ -20,22 +19,22 @@ public class PlaceholderAPI extends PlaceholderExpansion {
     }
 
     @Override
-    public @NotNull String getAuthor() {
+    public String getAuthor() {
         return Main.getInstance().getDescription().getAuthors().toString();
     }
 
     @Override
-    public @NotNull String getIdentifier() {
+    public String getIdentifier() {
         return "wanted";
     }
 
     @Override
-    public @NotNull String getVersion() {
+    public String getVersion() {
         return Main.getInstance().getDescription().getVersion();
     }
 
     @Override
-    public String onPlaceholderRequest(Player player, @NotNull String identifier) {
+    public String onPlaceholderRequest(Player player, String identifier) {
 
         if (player == null) {
             return "";

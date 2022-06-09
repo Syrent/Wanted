@@ -9,8 +9,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +19,7 @@ public class WantedsCommand implements CommandExecutor {
     private final List<String> message = new ArrayList<>();
     private int number = 0;
 
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @Nullable String[] args) {
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!Utils.hasPermission(sender, true, Permissions.LIST, Permissions.ADMIN)) return true;
 
         if (WantedManager.getInstance().getWanteds().isEmpty()) {

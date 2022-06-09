@@ -18,8 +18,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -34,7 +32,7 @@ public class WantedCommand implements CommandExecutor {
     public static HashMap<Player, Player> getTarget = new HashMap<>();
     public static HashMap<Player, BossBar> playerBossBarHashMap = new HashMap<>();
 
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @Nullable String[] args) {
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (args.length > 0) {
             //Get Wanted
             if (args[0].equalsIgnoreCase("get") || args[0].equalsIgnoreCase("look")) {
