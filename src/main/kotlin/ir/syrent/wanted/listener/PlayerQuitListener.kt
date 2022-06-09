@@ -20,6 +20,6 @@ class PlayerQuitListener: Listener {
         val player = event.player
 
         if (WantedManager.INSTANCE.wPlayers.containsKey(player.uniqueId))
-            Database.INSTANCE.saveWPlayer(WantedManager.INSTANCE.wPlayers[player.uniqueId]!!)
+            Database.INSTANCE.saveWPlayer(WantedManager.INSTANCE.getWPlayer(player))
     }
 }
