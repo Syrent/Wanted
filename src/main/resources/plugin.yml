@@ -1,5 +1,5 @@
 name: Wanted
-version: "${project.version}"
+version: "2.5.0"
 main: ir.syrent.wanted.Main
 api-version: 1.13
 prefix: Wanted
@@ -13,6 +13,7 @@ softdepend:
 commands:
   wanteds:
   wanted:
+    aliases: bounty
   complaint:
 permissions:
   wanted.use:

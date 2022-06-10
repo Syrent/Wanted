@@ -34,6 +34,27 @@ public class WantedCommand implements CommandExecutor {
 
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (args.length > 0) {
+            if (label.equalsIgnoreCase("bounty")) {
+                Player target = Bukkit.getPlayerExact(args[0]);
+                if (target == null) {
+                    sender.sendMessage(Messages.PLAYER_NOT_FOUND);
+                    return true;
+                }
+
+                if (!Utils.hasPermission(sender, true, Permissions.ADMIN, Permissions.ADD)) return true;
+
+                if (args.length < 3) {
+                    sender.sendMessage(Messages.OPERATION.replace("%action%", "add"));
+                    return true;
+                }
+
+                if (WantedManager.getInstance().addWanted(target, 1) != 0)
+                    SkullBuilder.getInstance().saveHead(target);
+
+                sender.sendMessage(Messages.ADD_WANTED);
+                return true;
+            }
+
             //Get Wanted
             if (args[0].equalsIgnoreCase("get") || args[0].equalsIgnoreCase("look")) {
                 if (!(sender instanceof Player)) {
