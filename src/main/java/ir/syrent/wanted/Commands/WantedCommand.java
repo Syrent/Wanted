@@ -43,12 +43,17 @@ public class WantedCommand implements CommandExecutor {
 
                 if (!Utils.hasPermission(sender, true, Permissions.ADMIN, Permissions.ADD)) return true;
 
-                if (args.length < 3) {
-                    sender.sendMessage(Messages.OPERATION.replace("%action%", "add"));
-                    return true;
+                int wanted = 1;
+                if (args.length == 2) {
+                    try {
+                        wanted = Integer.parseInt(args[1]);
+                    } catch (NumberFormatException e) {
+                        sender.sendMessage(Messages.INVALID_NUMBER);
+                        return true;
+                    }
                 }
 
-                if (WantedManager.getInstance().addWanted(target, 1) != 0)
+                if (WantedManager.getInstance().addWanted(target, wanted) != 0)
                     SkullBuilder.getInstance().saveHead(target);
 
                 sender.sendMessage(Messages.ADD_WANTED);
