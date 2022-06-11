@@ -21,6 +21,7 @@ Wanted:
         Commands:
           - 'PLAYER;spawn'
           - 'VICTIM;spawn'
+          - 'CONSOLE;jail %victim% jail 5m'
           - 'CONSOLE;give %player% diamond %wanted_level%'
           - 'CONSOLE;say %player% arrested %victim%'
   # !!! ** Only supports WorldGuard 7.X ** !!!
