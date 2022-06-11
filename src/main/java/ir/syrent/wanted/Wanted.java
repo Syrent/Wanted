@@ -48,7 +48,7 @@ public class Wanted {
     }
 
     public void runArrestCommand(Player killer, LivingEntity victim) {
-        if (!Main.getInstance().getConfig().getBoolean("Wanted.ArrestMode.RunCommandOnKill.Enable")) return;
+        if (!Main.getInstance().getConfig().getBoolean("Wanted.ArrestMode.RunCommandOnArrest.Enable")) return;
 
         for (String command : Main.getInstance().getConfig().getStringList("Wanted.ArrestMode.RunCommandOnArrest.Commands")) {
             String[] splitCommand = command.split(";");
