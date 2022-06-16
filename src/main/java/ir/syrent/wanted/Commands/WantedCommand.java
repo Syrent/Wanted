@@ -172,6 +172,11 @@ public class WantedCommand implements CommandExecutor {
                 new BukkitRunnable() {
                     @Override
                     public void run() {
+                        if (!player.getWorld().getName().equals(target.getWorld().getName())) {
+                            sender.sendMessage(Messages.DIFFERENT_WORLD);
+                            cancel();
+                            return;
+                        }
                         BossBar playerBar = playerBossBarHashMap.get(player);
                         if (!target.isOnline()) {
                             if (playerBossBarHashMap.containsKey(player)) playerBar.removePlayer(player);
