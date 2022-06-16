@@ -18,7 +18,7 @@ public class EntityDeathListener implements Listener {
     public void onDamage(EntityDeathEvent event) {
         if (!Main.getInstance().getConfig().getBoolean("Wanted.ReceiveOnKill.Mob.Enable")) return;
 
-        if (event.getEntity().getKiller() instanceof Player) {
+        if (event.getEntity().getKiller() != null) {
             Player player = event.getEntity().getKiller();
             List<String> list = Main.getInstance().getConfig().getStringList("Wanted.ReceiveOnKill.Mob.Mobs");
             for (String mob : list) {
