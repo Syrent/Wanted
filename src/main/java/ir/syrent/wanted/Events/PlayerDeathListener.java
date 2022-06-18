@@ -21,10 +21,25 @@ public class PlayerDeathListener implements Listener {
 
     @EventHandler
     public void getWanted(PlayerDeathEvent event) {
+        Player victim = event.getEntity();
+        if (Main.getInstance().getConfig().getBoolean("Wanted.ClearWantedOnDeath")) {
+            if (WantedManager.getInstance().getWanted(victim.getName()) != 0)
+                WantedManager.getInstance().setWanted(victim.getName(), 0);
+            Main.getInstance().skullBuilder.cache.remove(victim);
+
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                WantedCommand.getTarget.remove(player);
+                if (WantedCommand.playerBossBarHashMap.containsKey(player))
+                    WantedCommand.playerBossBarHashMap.get(player).removePlayer(player);
+                WantedCommand.playerBossBarHashMap.remove(player);
+            }
+
+            Main.getInstance().log.logToFile(Main.getInstance().log.logTime(), Messages.playerDeathLogger(event));
+        }
+
         if (Main.getInstance().getConfig().getBoolean("Wanted.ComplaintMode.Enable")) return;
         if (!Main.getInstance().getConfig().getBoolean("Wanted.ReceiveOnKill.Player.Enable")) return;
 
-        Player victim = event.getEntity();
         if (Main.getInstance().getConfig().getBoolean("Wanted.WorldGuard.Enable") && Main.worldGuardFound) {
             List<String> regions = Main.getInstance().getConfig().getStringList("Wanted.WorldGuard.BlacklistRegions");
 
@@ -98,18 +113,6 @@ public class PlayerDeathListener implements Listener {
                                 "UNKNOWN" : Main.worldGuard.getRegionName(victim.getLocation()))
                 );
             }
-            if (WantedManager.getInstance().getWanted(victim.getName()) != 0)
-                WantedManager.getInstance().setWanted(victim.getName(), 0);
-            Main.getInstance().skullBuilder.cache.remove(victim);
-
-            for (Player player : Bukkit.getOnlinePlayers()) {
-                WantedCommand.getTarget.remove(player);
-                if (WantedCommand.playerBossBarHashMap.containsKey(player))
-                    WantedCommand.playerBossBarHashMap.get(player).removePlayer(player);
-                WantedCommand.playerBossBarHashMap.remove(player);
-            }
-
-            Main.getInstance().log.logToFile(Main.getInstance().log.logTime(), Messages.playerDeathLogger(event));
         }
     }
 }

@@ -53,7 +53,7 @@ dependencies {
 }
 
 group = 'dev.syrent'
-version = '2.5.2'
+version = '2.5.3'
 description = 'Wanted'
 java.sourceCompatibility = JavaVersion.VERSION_1_8
 
@@ -66,6 +66,15 @@ java {
     def javaVersion = JavaVersion.toVersion(targetJavaVersion)
     sourceCompatibility = javaVersion
     targetCompatibility = javaVersion
+}
+
+processResources {
+    def props = [version: version]
+    inputs.properties props
+    filteringCharset 'UTF-8'
+    filesMatching('plugin.yml') {
+        expand props
+    }
 }
 
 compileJava {

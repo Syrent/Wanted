@@ -69,14 +69,15 @@ public class ComplaintCommand implements CommandExecutor {
                     WantedManager.getInstance().setWanted(killer, (wanted + number));
                     finalWanted = wanted + number;
                 } else {
+                    int defaultReceive = Main.getInstance().getConfig().getInt("Wanted.ReceiveOnKill.Player.Receive");
+
                     if (killerPlayer != null) {
                         if (!Main.getInstance().skullBuilder.cache.containsKey(killerPlayer)) {
                             Main.getInstance().skullBuilder.cache.put(killerPlayer, killerPlayer.serialize());
                         }
+                        WantedManager.getInstance().addWanted(killerPlayer, defaultReceive);
                     }
 
-                    int defaultReceive = Main.getInstance().getConfig().getInt("Wanted.ReceiveOnKill.Player.Receive");
-                    WantedManager.getInstance().addWanted(killerPlayer, defaultReceive);
                     finalWanted = defaultReceive;
                 }
 
