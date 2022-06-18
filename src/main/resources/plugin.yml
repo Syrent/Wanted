@@ -1,5 +1,5 @@
 name: Wanted
-version: "2.5.0"
+version: '${version}'
 main: ir.syrent.wanted.Main
 api-version: 1.13
 prefix: Wanted
