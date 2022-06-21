@@ -310,7 +310,7 @@ public class Messages extends Utils {
         for (int i = 0; i < count; i++) {
             star.append(WANTED_SYMBOL);
         }
-        return colorize(PLAYER_WANTED_LIST_FORMAT.replace("%symbol%", star));
+        return colorize(WANTED_LIST.replace("%wanted%", star));
     }
 
     public static String rawWantedSymbol(int count) {
