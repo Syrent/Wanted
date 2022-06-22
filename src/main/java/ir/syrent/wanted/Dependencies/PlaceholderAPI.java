@@ -49,6 +49,22 @@ public class PlaceholderAPI extends PlaceholderExpansion {
             else return String.valueOf(WantedManager.getInstance().getWanted(player.getName()));
         }
 
+        //Formatted Wanted placeholder
+        if (identifier.equals("wanted_formatted")) {
+            if (WantedManager.getInstance().getWanteds().get(player.getName()) == null) return "";
+            else if (WantedManager.getInstance().getWanted(player.getName()) == 0) return "";
+            else if (WantedManager.getInstance().getWanted(player.getName()) <= 5)
+                return Messages.wantedSymbol(WantedManager.getInstance().getWanted(player.getName())).replace("%player%", player.getName());
+            else return Messages.WANTED_LIST.replace("%wanted%", String.valueOf(WantedManager.getInstance().getWanted(player.getName()))).replace("%player%", player.getName());
+        }
+
+
+        //Formatted Wanted placeholder
+        if (identifier.equals("wanted_count")) {
+            if (WantedManager.getInstance().getWanteds().get(player.getName()) == null) return String.valueOf(0);
+            else return String.valueOf(WantedManager.getInstance().getWanted(player.getName()));
+        }
+
         return null;
     }
 }
