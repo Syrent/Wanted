@@ -132,7 +132,7 @@ public class WantedCommand implements CommandExecutor {
 
                 player.sendMessage(Messages.SEARCH_TARGET.replace("%target%", target.getName()));
                 for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-                    if (Utils.hasPermission(player, false, Permissions.NOTIFY)) {
+                    if (Utils.hasPermission(onlinePlayer, false, Permissions.NOTIFY)) {
                         if (sender == onlinePlayer) continue;
                         onlinePlayer.sendMessage(Messages.TARGET_WARN
                                 .replace("%player%", player.getName())
