@@ -337,6 +337,7 @@ public class WantedCommand implements CommandExecutor {
                         dataConfig.setDefaults(defaultConfig);
                     }
                 }
+                SkullBuilder.getInstance().addPlayersToCache();
 
                 sender.sendMessage(Messages.PLUGIN_RELOADED);
                 return true;

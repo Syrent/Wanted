@@ -2,6 +2,7 @@ package ir.syrent.wanted.Utils;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import ir.syrent.wanted.WantedManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -30,6 +31,15 @@ public class SkullBuilder {
     public SkullBuilder(JavaPlugin plugin) {
         instance = this;
         this.plugin = plugin;
+    }
+
+    public void addPlayersToCache() {
+        SkullBuilder.getInstance().cache.clear();
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (WantedManager.getInstance().getWanted(player.getName()) != 0) {
+                SkullBuilder.getInstance().cache.put(player, player.serialize());
+            }
+        }
     }
 
     public Map<Player, Map<String, Object>> cache = new HashMap<>();

@@ -13,9 +13,7 @@ public class PlayerQuitListener implements Listener {
     public void onQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
         //Removing player from cache to avoid memory leaks
-        if (WantedManager.getInstance().getWanted(player.getName()) != 0) {
-            SkullBuilder.getInstance().cache.remove(player);
-        }
+        SkullBuilder.getInstance().cache.remove(player);
     }
 
 }

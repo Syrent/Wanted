@@ -58,6 +58,7 @@ public final class Main extends JavaPlugin implements CommandExecutor {
         Utils.checkDependencies("PlaceholderAPI", "Citizens", "WorldGuard");
         registerCommands();
         registerEvents();
+        skullBuilder.addPlayersToCache();
     }
 
     public void initializeBstats() {
