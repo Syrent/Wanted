@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 public class WantedsCommand implements CommandExecutor {
-    
+
     private final List<String> message = new ArrayList<>();
     private int number = 0;
 

@@ -46,6 +46,7 @@ public class SkullBuilder {
 
     /**
      * Save the player's head to the cache async.
+     *
      * @param player The target player to save head
      */
     public void saveHead(Player player) {
@@ -56,6 +57,7 @@ public class SkullBuilder {
 
     /**
      * Save the player's head to the cache async.
+     *
      * @param playerName The target player to save head
      */
     public void saveHead(String playerName) {
@@ -69,6 +71,7 @@ public class SkullBuilder {
 
     /**
      * Get a head skin of a value.
+     *
      * @param value Value of the skin
      * @return The requested head
      */
@@ -82,6 +85,7 @@ public class SkullBuilder {
 
     /**
      * Get player's head skin. NOTE: This method should be executed async, otherwise it will cause lag.
+     *
      * @param player The player you want to get their head
      * @return The requested Player's head
      */
@@ -117,16 +121,17 @@ public class SkullBuilder {
             String result = getURLContent("https://api.mojang.com/users/profiles/minecraft/" + name);
             Gson g = new Gson();
             JsonObject obj = g.fromJson(result, JsonObject.class);
-            String uid = obj.get("id").toString().replace("\"","");
+            String uid = obj.get("id").toString().replace("\"", "");
             String signature = getURLContent("https://sessionserver.mojang.com/session/minecraft/profile/" + uid);
             obj = g.fromJson(signature, JsonObject.class);
             String value = obj.getAsJsonArray("properties").get(0).getAsJsonObject().get("value").getAsString();
             String decoded = new String(Base64.getDecoder().decode(value));
-            obj = g.fromJson(decoded,JsonObject.class);
+            obj = g.fromJson(decoded, JsonObject.class);
             String skinURL = obj.getAsJsonObject("textures").getAsJsonObject("SKIN").get("url").getAsString();
             byte[] skinByte = ("{\"textures\":{\"SKIN\":{\"url\":\"" + skinURL + "\"}}}").getBytes();
             return new String(Base64.getEncoder().encode(skinByte));
-        } catch (Exception ignored){}
+        } catch (Exception ignored) {
+        }
         return null;
     }
 
@@ -138,16 +143,17 @@ public class SkullBuilder {
             url = new URL(urlStr);
             in = new BufferedReader(new InputStreamReader(url.openStream(), StandardCharsets.UTF_8));
             String str;
-            while((str = in.readLine()) != null) {
+            while ((str = in.readLine()) != null) {
                 sb.append(str);
             }
-        } catch (Exception ignored) {}
-        finally {
+        } catch (Exception ignored) {
+        } finally {
             try {
                 if (in != null) {
                     in.close();
                 }
-            } catch(IOException ignored) {}
+            } catch (IOException ignored) {
+            }
         }
         return sb.toString();
     }

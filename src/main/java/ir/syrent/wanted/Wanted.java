@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 public class Wanted {
 
     private static Wanted instance;
+
     public static Wanted getInstance() {
         return instance;
     }
@@ -15,7 +16,8 @@ public class Wanted {
     }
 
     public void runCommand(Player killer, LivingEntity victim, String type) {
-        if (!Main.getInstance().getConfig().getBoolean("Wanted.ReceiveOnKill." + type + ".RunCommandOnKill.Enable")) return;
+        if (!Main.getInstance().getConfig().getBoolean("Wanted.ReceiveOnKill." + type + ".RunCommandOnKill.Enable"))
+            return;
 
         for (String command : Main.getInstance().getConfig().getStringList("Wanted.ReceiveOnKill." + type + ".RunCommandOnKill.Commands")) {
             String[] splitCommand = command.split(";");

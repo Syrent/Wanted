@@ -102,7 +102,7 @@ public class PlayerDeathListener implements Listener {
 
         if (Main.getInstance().getConfig().getBoolean("Wanted.ClearWantedOnDeath")) {
             if (Main.getInstance().getConfig().getBoolean("Wanted.RemoveWantedOnlyIfKilledByHunter")
-                && !Utils.hasPermission(killer, false, Permissions.HUNTER)) return;
+                    && !Utils.hasPermission(killer, false, Permissions.HUNTER)) return;
 
             if (Main.getInstance().getConfig().getBoolean("Wanted.ReceiveOnKill.Player.KillMessage")) {
                 killer.sendMessage(Messages.ON_KILL_PLAYER

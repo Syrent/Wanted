@@ -1,7 +1,6 @@
 package ir.syrent.wanted.Events;
 
 import ir.syrent.wanted.Utils.SkullBuilder;
-import ir.syrent.wanted.WantedManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

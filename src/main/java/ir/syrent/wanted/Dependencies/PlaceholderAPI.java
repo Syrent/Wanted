@@ -55,7 +55,8 @@ public class PlaceholderAPI extends PlaceholderExpansion {
             else if (WantedManager.getInstance().getWanted(player.getName()) == 0) return "";
             else if (WantedManager.getInstance().getWanted(player.getName()) <= 5)
                 return Messages.wantedSymbol(WantedManager.getInstance().getWanted(player.getName())).replace("%player%", player.getName());
-            else return Messages.WANTED_LIST.replace("%wanted%", String.valueOf(WantedManager.getInstance().getWanted(player.getName()))).replace("%player%", player.getName());
+            else
+                return Messages.WANTED_LIST.replace("%wanted%", String.valueOf(WantedManager.getInstance().getWanted(player.getName()))).replace("%player%", player.getName());
         }
 
 

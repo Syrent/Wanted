@@ -13,6 +13,7 @@ public class WantedManager {
     private ConfigurationSection wantedSection;
 
     private static WantedManager instance;
+
     public static WantedManager getInstance() {
         return instance;
     }
@@ -75,8 +76,7 @@ public class WantedManager {
     public int getWanted(String player) {
         if (wanteds.containsKey(player))
             return wanteds.get(player);
-        else
-        if (wantedSection.contains(player))
+        else if (wantedSection.contains(player))
             return wantedSection.getInt(player);
         else
             return 0;

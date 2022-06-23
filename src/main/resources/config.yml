@@ -10,39 +10,39 @@ Wanted:
   # In the arrest mode there is no need to kill the Wanted player.
   # The Hunters/Police can use /wanted arrest <player> command to arrest the Wanted player
   ArrestMode:
-   # Should arrest mode be enabled?
+    # Should arrest mode be enabled?
     Enable: false
     # Prevent the player arrest himself
     PreventSelfArrest: true
     # The minimum distance between the Player and the target to arrest
     Distance: 10
     RunCommandOnArrest:
-        Enable: false
-        Commands:
-          - 'PLAYER;spawn'
-          - 'VICTIM;spawn'
-          - 'CONSOLE;jail %victim% jail 5m'
-          - 'CONSOLE;give %player% diamond %wanted_level%'
-          - 'CONSOLE;say %player% arrested %victim%'
+      Enable: false
+      Commands:
+        - 'PLAYER;spawn'
+        - 'VICTIM;spawn'
+        - 'CONSOLE;jail %victim% jail 5m'
+        - 'CONSOLE;give %player% diamond %wanted_level%'
+        - 'CONSOLE;say %player% arrested %victim%'
   # !!! ** Only supports WorldGuard 7.X ** !!!
   # !!! ** Only supports WorldGuard 7.X ** !!!
   # !!! ** Only supports WorldGuard 7.X ** !!!
   # Use this feature to blacklist/whitelist regions in server
   WorldGuard:
-   # Should WorldGuard RegionFilter be enabled
+    # Should WorldGuard RegionFilter be enabled
     Enable: false
     # Revert the blacklist regions to whitelist regions
     RevertBlacklist: false
     # The list of blacklisted regions
     BlacklistRegions:
-     - example1
+      - example1
   # ComplaintMode is a feature that prevents the killer wanted to receive and allow victims to complaint killers
   # Conditions:
   # - The victim should have wanted.complaint permission
   # - The killer should not be op or have access to wanted.bypass
   # - ComplaintMode should be enabled on the config file.
   ComplaintMode:
-   # Should complain mode be enabled?
+    # Should complain mode be enabled?
     Enable: false
     ExpireTime: 15
   TrackerBossBar:
@@ -52,7 +52,7 @@ Wanted:
       Color: "GREEN"
       Type: "SOLID"
     Custom:
-     # Custom BossBars should sort by the smallest distance.
+      # Custom BossBars should sort by the smallest distance.
       1:
         Distance: 50
         Progress: true
@@ -64,7 +64,7 @@ Wanted:
         Color: "YELLOW"
         Type: "SOLID"
   ReceiveOnKill:
-   # You can use the "wanted.receive.X" permission node to decide how many Wanted(s) should a player get when they kill someone,
+    # You can use the "wanted.receive.X" permission node to decide how many Wanted(s) should a player get when they kill someone,
     #  This is the default value, If someone didn't have that permission, this value will be used.
     Player:
       Enable: true
@@ -110,4 +110,4 @@ Wanted:
         Enable: false
         # If the Wanted killer has wanted.hunter permission the below commands will run.
         Commands:
-            - 'CONSOLE;give %killer% diamond %wanted_level%'
+          - 'CONSOLE;give %killer% diamond %wanted_level%'

@@ -37,7 +37,7 @@ public class RequestGUI implements Listener {
 
         if (playerList.size() == 0) return; //No wanteds found
 
-        for (int i=1 ; i <= Math.ceil((float) playerList.size() / 45) ; i++) {
+        for (int i = 1; i <= Math.ceil((float) playerList.size() / 45); i++) {
             playersGUI.add(Bukkit.createInventory(null, 54, Messages.GUI.TITLE.replace("%page%", String.valueOf(i))));
         }
 
@@ -46,7 +46,7 @@ public class RequestGUI implements Listener {
         Material type = Material.matchMaterial(isNewVersion ? "PLAYER_HEAD" : "SKULL_ITEM");
 
         //Looping and placing heads for each player
-        for (int i=1,slot ; i <= playerList.size() ; i++) {
+        for (int i = 1, slot; i <= playerList.size(); i++) {
             int page = (int) Math.ceil((float) i / 45);
             slot = i - ((page - 1) * 45) - 1;
 
@@ -66,15 +66,15 @@ public class RequestGUI implements Listener {
 
             for (String line : Messages.GUI.Player.LORE) {
                 lore.add(line.replace("%wanted%", String.valueOf(WantedManager.getInstance().getWanted(player.getName())))
-                    .replace("%world%", player.getWorld().getName())
-                    .replace("%location%",
-                            Utils.colorize(String.format(
-                                    "&eX: &b%.0f&7, &eY: &b%.0f&7, &eZ: &b%.0f",
-                                    player.getLocation().getX(),
-                                    player.getLocation().getY(),
-                                    player.getLocation().getZ())))
-                    .replace("%last_victim%", victim == null ? "Unknown" : victim)
-                    .replace("%region%", !Main.getInstance().getConfig().getBoolean("Wanted.WorldGuard.Enable") ? "WorldGuard support is disabled on the configuration file" : !Main.worldGuardFound ? "UNKNOWN" : Main.worldGuard.getRegionName(player.getLocation()) == null ? "UNKNOWN" : Main.worldGuard.getRegionName(player.getLocation())));
+                        .replace("%world%", player.getWorld().getName())
+                        .replace("%location%",
+                                Utils.colorize(String.format(
+                                        "&eX: &b%.0f&7, &eY: &b%.0f&7, &eZ: &b%.0f",
+                                        player.getLocation().getX(),
+                                        player.getLocation().getY(),
+                                        player.getLocation().getZ())))
+                        .replace("%last_victim%", victim == null ? "Unknown" : victim)
+                        .replace("%region%", !Main.getInstance().getConfig().getBoolean("Wanted.WorldGuard.Enable") ? "WorldGuard support is disabled on the configuration file" : !Main.worldGuardFound ? "UNKNOWN" : Main.worldGuard.getRegionName(player.getLocation()) == null ? "UNKNOWN" : Main.worldGuard.getRegionName(player.getLocation())));
             }
             meta.setLore(lore);
 

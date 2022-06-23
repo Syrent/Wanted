@@ -25,7 +25,7 @@ public class EntityDamageByEntityListener implements Listener {
 
     @EventHandler
     public void onShoot(ProjectileHitEvent event) {
-        if (event.getEntity().getShooter()  instanceof Player && event.getHitEntity() instanceof Player) {
+        if (event.getEntity().getShooter() instanceof Player && event.getHitEntity() instanceof Player) {
             Player damaged = (Player) event.getHitEntity();
             Player damager = (Player) event.getEntity().getShooter();
 

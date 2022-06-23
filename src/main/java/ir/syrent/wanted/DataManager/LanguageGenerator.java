@@ -27,7 +27,7 @@ public class LanguageGenerator {
 
         this.dataConfig = YamlConfiguration.loadConfiguration(this.configFile);
 
-        InputStream defaultStream = Main.getInstance().getResource("language/" + name  + ".yml");
+        InputStream defaultStream = Main.getInstance().getResource("language/" + name + ".yml");
         if (defaultStream != null) {
             YamlConfiguration defaultConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(defaultStream));
             this.dataConfig.setDefaults(defaultConfig);
