@@ -7,6 +7,7 @@ Wanted:
   StopFindingAfterDeath: true
   RemoveWantedOnlyIfKilledByHunter: false
   ClearWantedOnDeath: true
+  Log: true
   # In the arrest mode there is no need to kill the Wanted player.
   # The Hunters/Police can use /wanted arrest <player> command to arrest the Wanted player
   ArrestMode:

@@ -34,7 +34,9 @@ public class PlayerDeathListener implements Listener {
                 WantedCommand.playerBossBarHashMap.remove(player);
             }
 
-            Main.getInstance().log.logToFile(Main.getInstance().log.logTime(), Messages.playerDeathLogger(event));
+            if (Main.getInstance().getConfig().getBoolean("Wanted.Log")) {
+                Main.getInstance().log.logToFile(Main.getInstance().log.logTime(), Messages.playerDeathLogger(event));
+            }
         }
 
         if (Main.getInstance().getConfig().getBoolean("Wanted.ComplaintMode.Enable")) return;

@@ -59,7 +59,8 @@ public class Utils {
                         try {
                             Main.worldGuard.getWorldGuard();
                             Main.worldGuardFound = true;
-                        } catch (NoClassDefFoundError ignored) {}
+                        } catch (NoClassDefFoundError ignored) {
+                        }
                         break;
                     }
                 }
