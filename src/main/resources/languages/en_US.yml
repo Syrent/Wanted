@@ -1,0 +1,27 @@
+general:
+    raw_prefix: "[Wanted]"
+    prefix: "<gradient:dark_red:red>Wanted</gradient> <gold>|</gold>"
+    console_prefix: "<gray>[<gradient:dark_red:red>Wanted</gradient>]</gray>"
+    successful_prefix: "<dark_gray>[</dark_gray><dark_green><bold>✔</bold><dark_gray>]</dark_gray>"
+    warn_prefix: "<dark_gray>[</dark_gray><gold><bold>!</bold><dark_gray>]</dark_gray>"
+    error_prefix: "<dark_gray>[</dark_gray><dark_red><bold>✘</bold><dark_gray>]</dark_gray>"
+    only_players: "$error_prefix <gradient:dark_red:red>Only players can use this command."
+    valid_parameters: "$error_prefix <gradient:dark_red:red>Please use a valid parameter for this command. <dark_gray>($argument)"
+    unknown_message: "$error_prefix <gradient:dark_red:red>Unknown message!"
+command:
+    no_permission: "$error_prefix <gradient:dark_red:red>You don't have permission to use this command! <dark_gray>($permission)"
+    wanted:
+        usage: "$warn_prefix <gradient:dark_red:red>Usage: <gold>/wanted <yellow><args>"
+        use: "$successful_prefix <gradient:dark_green:green>Your wanted count is: <gold>$wanted_count"
+        no_target: "$error_prefix <gradient:dark_red:red>Player not found!"
+        reload:
+            use: "$successful_prefix <gradient:dark_green:green>Plugin successfully reloaded!"
+        set:
+            usage: "$warn_prefix <gradient:dark_red:red>Usage: <gold>/wanted <yellow>set [player] [count]"
+            use: "$successful_prefix <gradient:dark_green:green><gold>$player</gold> Wanted is now <gold>$wanted_count</gold>!"
+        add:
+            usage: "$warn_prefix <gradient:dark_red:red>Usage: <gold>/wanted <yellow>add [player] [count]"
+            use: "$successful_prefix <gradient:dark_green:green><gold>$count</gold> Wanted added to <gold>$player</gold>!"
+        take:
+            usage: "$warn_prefix <gradient:dark_red:red>Usage: <gold>/wanted <yellow>take [player] [count]"
+            use: "$successful_prefix <gradient:dark_green:green><gold>$count</gold> Wanted added to <gold>$player</gold>!"
