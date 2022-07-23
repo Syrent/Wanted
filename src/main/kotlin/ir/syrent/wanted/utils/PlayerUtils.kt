@@ -12,6 +12,7 @@ import org.bukkit.entity.Player
 fun Player.getWPlayer(): WPlayer {
     return WantedManager.getWPlayer(this.uniqueId)
 }
+
 fun CommandSender.sendMessage(message: Message, vararg replacements: TextReplacement) {
     AdventureApi.get().sender(this).sendMessage(Settings.formatMessage(message, *replacements).component())
 }

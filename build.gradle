@@ -1,11 +1,12 @@
 plugins {
     id 'java'
-    id 'org.jetbrains.kotlin.jvm' version '1.6.10'
+    id 'org.jetbrains.kotlin.jvm' version '1.7.0'
     id 'com.github.johnrengelman.shadow' version '7.1.0'
 }
 
 group = 'dev.syrent'
-version = '2.3.10'
+archivesBaseName = project.name
+version = findProperty("version")
 description = 'Wanted'
 java.sourceCompatibility = JavaVersion.VERSION_1_8
 
@@ -60,7 +61,12 @@ compileTestKotlin {
     kotlinOptions.jvmTarget = '1.' + targetJavaVersion
 }
 
+jar {
+    archiveFileName = findProperty("plugin-name") + " v" + findProperty("version") + " " + "unshaded" + ".jar"
+}
+
 shadowJar {
+    archiveFileName = findProperty("plugin-name") + " v" + findProperty("version") + ".jar"
     relocate('me.mohamad82.ruom', 'ir.syrent.wanted.ruom')
     dependencies {
         exclude(dependency('net.kyori:.*:.*'))
@@ -77,3 +83,17 @@ processResources {
         expand props
     }
 }
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+tasks.withType(Jar) {
+    destinationDirectory = file("$rootDir/bin/")
+}
+
+clean.doLast {
+    file("${rootDir}/bin").deleteDir()
+}
+
+build.dependsOn shadowJar

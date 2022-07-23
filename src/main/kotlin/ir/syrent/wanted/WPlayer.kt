@@ -10,6 +10,9 @@ data class WPlayer(
     var wanted: Int
 ) {
 
+    /**
+     * Get Player object from WPlayer using unique id
+     */
     fun getPlayer(): Optional<Player> {
         return Ruom.getOnlinePlayers().find { it.uniqueId == uuid }.let {
             if (it == null) Optional.empty()

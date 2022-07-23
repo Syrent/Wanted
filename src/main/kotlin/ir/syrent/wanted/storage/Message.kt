@@ -1,5 +1,8 @@
 package ir.syrent.wanted.storage
 
+/**
+ * This class responsible
+ */
 enum class Message(val path: String) {
     RAW_PREFIX("general.raw_prefix"),
     PREFIX("general.prefix"),

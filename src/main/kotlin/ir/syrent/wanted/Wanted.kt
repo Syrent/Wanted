@@ -9,10 +9,8 @@ import ir.syrent.wanted.storage.Settings
 import me.mohamad82.ruom.RUoMPlugin
 import me.mohamad82.ruom.Ruom
 import me.mohamad82.ruom.adventure.AdventureApi
-import me.mohamad82.ruom.configuration.YamlConfig
 import me.mohamad82.ruom.kotlinextensions.component
 import me.mohamad82.ruom.utils.ServerVersion
-import java.io.File
 
 
 class Wanted : RUoMPlugin() {
@@ -56,6 +54,9 @@ class Wanted : RUoMPlugin() {
         }
     }
 
+    /**
+     * Disable plugin if the server is legacy
+     */
     private fun checkVersion() {
         if (ServerVersion.isLegacy()) {
             AdventureApi.get().console().sendMessage("<dark_red>Plugin only supports 1.13-1.19".component())
@@ -66,6 +67,9 @@ class Wanted : RUoMPlugin() {
         }
     }
 
+    /**
+     * Create data folder if not exists
+     */
     private fun checkData() {
         if (!dataFolder.exists()) {
             AdventureApi.get().console().sendMessage("<gradient:dark_purple:blue>Data folder not found, creating...".component())
