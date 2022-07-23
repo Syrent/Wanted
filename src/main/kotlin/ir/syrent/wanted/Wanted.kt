@@ -1,23 +1,24 @@
 package ir.syrent.wanted
 
+import ir.syrent.wanted.command.wanted.WantedCommand
 import ir.syrent.wanted.core.WantedManager
 import ir.syrent.wanted.listener.PlayerJoinListener
 import ir.syrent.wanted.listener.PlayerQuitListener
 import ir.syrent.wanted.storage.Database
 import ir.syrent.wanted.storage.Settings
-import ir.syrent.wanted.utils.toComponent
 import me.mohamad82.ruom.RUoMPlugin
 import me.mohamad82.ruom.Ruom
 import me.mohamad82.ruom.adventure.AdventureApi
 import me.mohamad82.ruom.configuration.YamlConfig
+import me.mohamad82.ruom.kotlinextensions.component
+import me.mohamad82.ruom.utils.ServerVersion
+import java.io.File
 
 
 class Wanted : RUoMPlugin() {
 
-    val settings = YamlConfig(dataFolder, "settings.yml")
-
     override fun onEnable() {
-        INSTANCE = this
+        instance = this
 
         Database
         Settings
@@ -28,15 +29,17 @@ class Wanted : RUoMPlugin() {
     }
 
     override fun onDisable() {
-        Database.INSTANCE.shutdown()
+        Database.instance.shutdown()
         Ruom.log("Database closed.")
         Ruom.shutdown()
     }
 
     private fun initialize() {
         sendFiglet()
+        checkVersion()
         checkData()
         registerListeners()
+        registerCommands()
     }
 
     private fun sendFiglet() {
@@ -49,29 +52,41 @@ class Wanted : RUoMPlugin() {
         list.add("                                      ")
 
         for (text in list) {
-            AdventureApi.get().console().sendMessage(text.toComponent())
+            AdventureApi.get().console().sendMessage(text.component())
+        }
+    }
+
+    private fun checkVersion() {
+        if (ServerVersion.isLegacy()) {
+            AdventureApi.get().console().sendMessage("<dark_red>Plugin only supports 1.13-1.19".component())
+            AdventureApi.get().console().sendMessage("<dark_red>Plugin only supports 1.13-1.19".component())
+            AdventureApi.get().console().sendMessage("<dark_red>Plugin only supports 1.13-1.19".component())
+            AdventureApi.get().console().sendMessage("<dark_red>Disabling plugin...".component())
+            server.pluginManager.disablePlugin(this)
         }
     }
 
     private fun checkData() {
         if (!dataFolder.exists()) {
-            AdventureApi.get().console().sendMessage("<gradient:dark_purple:blue>Data folder not found, creating...".toComponent())
+            AdventureApi.get().console().sendMessage("<gradient:dark_purple:blue>Data folder not found, creating...".component())
             dataFolder.mkdir()
         }
-        AdventureApi.get().console().sendMessage("<gradient:dark_purple:blue>Using ${Database.INSTANCE.type} as storage type.".toComponent())
+        AdventureApi.get().console().sendMessage("<gradient:dark_purple:blue>Using ${Database.instance.type} as storage type.".component())
     }
 
     private fun registerListeners() {
-        AdventureApi.get().console().sendMessage("<gradient:dark_purple:blue>Register listeners...".toComponent())
+        AdventureApi.get().console().sendMessage("<gradient:dark_purple:blue>Register listeners...".component())
         PlayerJoinListener()
         PlayerQuitListener()
     }
 
-    companion object {
-        val RAW_PREFIX = "[Wanted] "
-        val PREFIX = "<gradient:dark_red:red><bold><it>Wanted »</it></bold></gradient><gradient:dark_purple:blue>"
+    private fun registerCommands() {
+        AdventureApi.get().console().sendMessage("<gradient:dark_purple:blue>Register commands...".component())
+        WantedCommand()
+    }
 
-        var INSTANCE: Wanted? = null
+    companion object {
+        lateinit var instance: Wanted
             private set
     }
 }

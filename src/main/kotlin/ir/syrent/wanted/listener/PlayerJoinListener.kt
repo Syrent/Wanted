@@ -18,8 +18,8 @@ class PlayerJoinListener: Listener {
     fun onPlayerJoin(event: PlayerJoinEvent) {
         val player = event.player
 
-        if (!WantedManager.INSTANCE.wPlayers.containsKey(player.uniqueId)) {
-            WantedManager.INSTANCE.wPlayers[player.uniqueId] = WPlayer(player.uniqueId, player.name, Settings.INSTANCE.defaultWanted!!)
+        if (!WantedManager.wPlayers.containsKey(player.uniqueId)) {
+            WantedManager.wPlayers[player.uniqueId] = WPlayer(player.uniqueId, player.name, Settings.defaultWanted)
         }
     }
 }
