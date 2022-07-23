@@ -109,7 +109,7 @@ class Database {
     }
 
     companion object {
-        val INSTANCE = Database()
+        val instance = Database()
 
         enum class DBType {
             MYSQL,

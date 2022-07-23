@@ -5,18 +5,16 @@ import org.bukkit.entity.Player
 import java.util.*
 
 data class WPlayer(
-    val uuid: UUID,
-    val username: String,
-    val wanted: Int
+    var uuid: UUID,
+    var username: String,
+    var wanted: Int
 ) {
 
     fun getPlayer(): Optional<Player> {
-        for (onlinePlayer in Ruom.getOnlinePlayers()) {
-            if (onlinePlayer.uniqueId == uuid) {
-                return Optional.of(onlinePlayer)
-            }
+        return Ruom.getOnlinePlayers().find { it.uniqueId == uuid }.let {
+            if (it == null) Optional.empty()
+            else Optional.of(it)
         }
-        return Optional.empty()
     }
 
     companion object {

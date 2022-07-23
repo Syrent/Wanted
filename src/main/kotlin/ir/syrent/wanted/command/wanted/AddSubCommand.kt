@@ -7,7 +7,6 @@ import ir.syrent.wanted.storage.Settings
 import ir.syrent.wanted.utils.TextReplacement
 import ir.syrent.wanted.utils.sendMessage
 import me.mohamad82.ruom.Ruom
-import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 
 class AddSubCommand : SubCommand("add", "wanted.command.add", false) {
