@@ -30,18 +30,15 @@ object WantedManager {
     }
 
     fun getWPlayer(user: String): Optional<WPlayer> {
-        for (wPlayer in wPlayers.values) {
-            Ruom.warn("Checking $user with ${wPlayer.username}")
-            if (wPlayer.username.lowercase() == user.lowercase()) {
-                Ruom.warn("Found player $user")
-                return Optional.of(wPlayer)
-            }
-        }
-        return Optional.empty<WPlayer>()
+        return wPlayers.values.stream().filter { it.username.lowercase() == user.lowercase() }.findFirst()
     }
 
     fun getWPlayer(uuid: UUID): WPlayer {
         return wPlayers[uuid]!!
+    }
+
+    fun removeWPlayer(wPlayer: WPlayer) {
+        wPlayers.remove(wPlayer.uuid)
     }
 
     fun setWanted(uuid: UUID, wanted: String): Boolean {
