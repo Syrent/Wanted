@@ -58,12 +58,20 @@ class Wanted : RUoMPlugin() {
      * Disable plugin if the server is legacy
      */
     private fun checkVersion() {
-        if (ServerVersion.isLegacy()) {
-            AdventureApi.get().console().sendMessage("<dark_red>Plugin only supports 1.13-1.19".component())
-            AdventureApi.get().console().sendMessage("<dark_red>Plugin only supports 1.13-1.19".component())
-            AdventureApi.get().console().sendMessage("<dark_red>Plugin only supports 1.13-1.19".component())
+        if (!ServerVersion.supports(16)) {
+            AdventureApi.get().console().sendMessage("<dark_red>Plugin only supports 1.16-1.19".component())
+            AdventureApi.get().console().sendMessage("<dark_red>Plugin only supports 1.16-1.19".component())
+            AdventureApi.get().console().sendMessage("<dark_red>Plugin only supports 1.16-1.19".component())
             AdventureApi.get().console().sendMessage("<dark_red>Disabling plugin...".component())
             server.pluginManager.disablePlugin(this)
+        }
+
+        try {
+            Class.forName("com.destroystokyo.paper.ParticleBuilder")
+        } catch (e: ClassNotFoundException) {
+            AdventureApi.get().console().sendMessage("<gradient:gold:yellow>We strongly recommend you to use PaperMC.".component())
+            AdventureApi.get().console().sendMessage("<gradient:gold:yellow>Paper is the next generation of Minecraft servers, compatible with Spigot plugins, offering uncompromising performance.".component())
+            AdventureApi.get().console().sendMessage("<gradient:dark_green:green>You can download it from: <gradient:dark_purple:blue>https://papermc.io/".component())
         }
     }
 
