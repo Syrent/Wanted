@@ -1,1 +1,6 @@
-default-wanted: 0
+default_wanted: 0
+default_language: en_US
+auto_save:
+    enable: true
+    # Insert time in minutes
+    period: 1
