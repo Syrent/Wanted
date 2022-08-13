@@ -24,5 +24,7 @@ enum class Message(val path: String) {
     WANTED_SET_USE("command.wanted.set.use"),
     WANTED_TAKE_USAGE("command.wanted.take.usage"),
     WANTED_TAKE_USE("command.wanted.take.use"),
+    WANTED_GET_USAGE("command.wanted.get.usage"),
+    WANTED_GET_USE("command.wanted.get.use"),
     EMPTY("");
 }

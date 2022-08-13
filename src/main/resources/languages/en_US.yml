@@ -25,3 +25,6 @@ command:
         take:
             usage: "$warn_prefix <gradient:dark_red:red>Usage: <gold>/wanted <yellow>take [player] [count]"
             use: "$successful_prefix <gradient:dark_green:green><gold>$count</gold> Wanted added to <gold>$player</gold>!"
+        get:
+            usage: "$warn_prefix <gradient:dark_red:red>Usage: <gold>/wanted <yellow>get [player]"
+            use: "$successful_prefix <gradient:dark_green:green><gold>$player</gold> Wanted count is <gold>$count</gold>"

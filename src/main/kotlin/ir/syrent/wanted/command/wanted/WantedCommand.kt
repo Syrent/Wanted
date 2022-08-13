@@ -16,6 +16,7 @@ class WantedCommand : PluginCommand("wanted", "wanted.command.wanted", true) {
         addSubcommand(AddSubCommand())
         addSubcommand(SetSubCommand())
         addSubcommand(TakeSubCommand())
+        addSubcommand(GetSubCommand())
     }
 
     override fun onExecute(sender: CommandSender, args: List<String>) {
