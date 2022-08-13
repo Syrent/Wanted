@@ -19,7 +19,9 @@ object WantedManager {
             }
             for (player in Ruom.getOnlinePlayers()) {
                 if (!WantedManager.wPlayers.containsKey(player.uniqueId)) {
-                    WantedManager.wPlayers[player.uniqueId] = WPlayer(player.uniqueId, player.name, Settings.defaultWanted)
+                    Database.instance.getWPlayer(player.uniqueId).whenComplete { wPlayer, _ ->
+                        WantedManager.wPlayers[player.uniqueId] = wPlayer ?: WPlayer(player.uniqueId, player.name, Settings.defaultWanted)
+                    }
                 }
             }
         }

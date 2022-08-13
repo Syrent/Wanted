@@ -17,7 +17,8 @@ class PlayerQuitListener: Listener {
     fun onPlayerQuit(event: PlayerQuitEvent) {
         val player = event.player
 
-        if (WantedManager.wPlayers.containsKey(player.uniqueId))
+        if (WantedManager.wPlayers.containsKey(player.uniqueId)) {
             Database.instance.saveWPlayer(WantedManager.getWPlayer(player))
+        }
     }
 }

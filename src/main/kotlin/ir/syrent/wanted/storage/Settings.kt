@@ -24,7 +24,9 @@ object Settings {
 
     init {
         load()
-        if (autoSaveEnable) autoSaveData()
+        Ruom.runSync({
+            if (autoSaveEnable) autoSaveData()
+        }, 100)
     }
 
     fun load() {
