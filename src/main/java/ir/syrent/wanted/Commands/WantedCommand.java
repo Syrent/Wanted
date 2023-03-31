@@ -251,7 +251,7 @@ public class WantedCommand implements CommandExecutor {
                     return true;
                 }
 
-                if (WantedManager.getInstance().getWanted(player.getName()) > 0) {
+                if (WantedManager.getInstance().getWanted(target.getName()) > 0) {
                     if (Main.getInstance().getConfig().getBoolean("Wanted.ArrestMode.PreventSelfArrest")) {
                         if (target == sender) {
                             sender.sendMessage(Messages.Arrest.PREVENT_SELF);
