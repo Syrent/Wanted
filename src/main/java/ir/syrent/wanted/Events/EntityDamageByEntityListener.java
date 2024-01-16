@@ -25,15 +25,21 @@ public class EntityDamageByEntityListener implements Listener {
 
     @EventHandler
     public void onShoot(ProjectileHitEvent event) {
-        if (event.getEntity().getShooter() instanceof Player && event.getHitEntity() instanceof Player) {
-            Player damaged = (Player) event.getHitEntity();
-            Player damager = (Player) event.getEntity().getShooter();
+        try {
+            if (event.getEntity().getShooter() instanceof Player && event.getHitEntity() instanceof Player) {
+                Player damaged = (Player) event.getHitEntity();
+                Player damager = (Player) event.getEntity().getShooter();
 
-            if (!Main.getInstance().playerDamagedMap.containsKey(damaged.getName())) {
-                if (Main.getInstance().playerDamagedMap.containsValue(damaged.getName())) return;
-                Main.getInstance().playerDamagedMap.put(damaged.getName(), damager.getName());
+                if (!Main.getInstance().playerDamagedMap.containsKey(damaged.getName())) {
+                    if (Main.getInstance().playerDamagedMap.containsValue(damaged.getName())) return;
+                    Main.getInstance().playerDamagedMap.put(damaged.getName(), damager.getName());
+                }
+
             }
-
+        } catch (Exception ignored) {
+            /*ProjectileHitEvent#getHitEntity doesn't exist in 1.8,
+            as the Wanted code is discontinued i don't want to waste time on fixing it properly,
+            so for now a simple try/catch and ignoring the result should do the job */
         }
     }
 

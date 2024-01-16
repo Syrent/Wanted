@@ -23,7 +23,7 @@ repositories {
     }
 
     maven {
-        url = uri('https://repo.citizensnpcs.co/')
+        url = uri('https://maven.citizensnpcs.co/repo')
     }
 
     maven {
@@ -48,12 +48,14 @@ dependencies {
     implementation 'com.iridium:IridiumColorAPI:1.0.6'
     compileOnly 'org.spigotmc:spigot-api:1.19-R0.1-SNAPSHOT'
     compileOnly 'me.clip:placeholderapi:2.11.1'
-    compileOnly 'net.citizensnpcs:citizens-main:2.0.30-SNAPSHOT'
+    compileOnly('net.citizensnpcs:citizens-main:2.0.30-SNAPSHOT') {
+        exclude group: '*', module: '*'
+    }
     compileOnly 'com.sk89q.worldguard:worldguard-bukkit:7.0.5'
 }
 
 group = 'dev.syrent'
-version = '2.6.1'
+version = '2.6.2'
 description = 'Wanted'
 java.sourceCompatibility = JavaVersion.VERSION_1_8
 
