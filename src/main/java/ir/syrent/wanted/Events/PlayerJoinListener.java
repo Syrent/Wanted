@@ -13,7 +13,7 @@ public class PlayerJoinListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         if (WantedManager.getInstance().getWanted(player.getName()) != 0) {
-            SkullBuilder.getInstance().cache.remove(player);
+            SkullBuilder.getInstance().saveHead(player);
         }
     }
 }

@@ -1,7 +1,12 @@
 package ir.syrent.wanted.Utils;
 
+import com.cryptomorin.xseries.profiles.builder.XSkull;
+import com.cryptomorin.xseries.profiles.exceptions.ProfileChangeException;
+import com.cryptomorin.xseries.profiles.exceptions.UnknownPlayerException;
+import com.cryptomorin.xseries.profiles.objects.Profileable;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.mojang.authlib.GameProfile;
 import ir.syrent.wanted.WantedManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -76,11 +81,7 @@ public class SkullBuilder {
      * @return The requested head
      */
     public ItemStack getHead(String value) {
-        ItemStack skull = getSkull();
-        UUID hashAsId = new UUID(value.hashCode(), value.hashCode());
-        return Bukkit.getUnsafe().modifyItemStack(skull,
-                "{SkullOwner:{Id:\"" + hashAsId + "\",Properties:{textures:[{Value:\"" + value + "\"}]}}}"
-        );
+        return XSkull.createItem().profile(Profileable.username(value)).apply();
     }
 
     /**
@@ -90,7 +91,12 @@ public class SkullBuilder {
      * @return The requested Player's head
      */
     public ItemStack getHead(Player player) {
-        ItemStack skull = getSkull();
+        try {
+            return XSkull.createItem().profile(Profileable.of(new GameProfile(player.getUniqueId(), player.getName()))).apply();
+        } catch (ProfileChangeException | UnknownPlayerException e) {
+            return getSkull();
+        }
+        /*ItemStack skull = getSkull();
         String value = getHeadValue(player.getName());
         UUID hashAsId;
         try {
@@ -100,7 +106,7 @@ public class SkullBuilder {
         }
         return Bukkit.getUnsafe().modifyItemStack(skull,
                 "{SkullOwner:{Id:\"" + hashAsId + "\",Properties:{textures:[{Value:\"" + value + "\"}]}}}"
-        );
+        );*/
     }
 
     public ItemStack getHeadFromCache(Player player) {
