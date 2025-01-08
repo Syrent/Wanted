@@ -29,7 +29,7 @@ public class PlayerDeathListener implements Listener {
 
                 if (Main.getInstance().getConfig().getBoolean("Wanted.ClearWantedOnDeath")) {
                     if (WantedManager.getInstance().getWanted(victim.getName()) != 0)
-                        WantedManager.getInstance().setWanted(victim.getName(), 0);
+                        WantedManager.getInstance().setWanted(victim.getName(), 0, null);
                     Main.getInstance().skullBuilder.cache.remove(victim);
 
                     for (Player player : Bukkit.getOnlinePlayers()) {
@@ -82,21 +82,21 @@ public class PlayerDeathListener implements Listener {
                         String[] permissionSplit = wantedPermission.split("\\.");
                         int number = Integer.parseInt(permissionSplit[2]);
                         if (WantedManager.getInstance().getWanted(victim.getName()) != 0)
-                            WantedManager.getInstance().setWanted(victim.getName(), 0);
+                            WantedManager.getInstance().setWanted(victim.getName(), 0, null);
 
                         Main.getInstance().skullBuilder.cache.remove(victim);
 
                         if (!Main.getInstance().skullBuilder.cache.containsKey(killer))
                             Main.getInstance().skullBuilder.cache.put(killer, killer.serialize());
 
-                        WantedManager.getInstance().setWanted(killer.getName(), (wanted + number));
+                        WantedManager.getInstance().setWanted(killer.getName(), (wanted + number), null);
                         finalWanted = wanted + number;
                     } else {
                         if (!Main.getInstance().skullBuilder.cache.containsKey(killer))
                             Main.getInstance().skullBuilder.cache.put(killer, killer.serialize());
 
                         int defaultReceive = Main.getInstance().getConfig().getInt("Wanted.ReceiveOnKill.Player.Receive");
-                        WantedManager.getInstance().addWanted(killer, defaultReceive);
+                        WantedManager.getInstance().addWanted(killer, defaultReceive, null);
                         finalWanted = defaultReceive;
                     }
 

@@ -55,7 +55,7 @@ public class ComplaintCommand implements CommandExecutor {
                     String[] permissionSplit = wantedPermission.split("\\.");
                     int number = Integer.parseInt(permissionSplit[2]);
                     if (WantedManager.getInstance().getWanted(player.getName()) != 0) {
-                        WantedManager.getInstance().setWanted(player.getName(), 0);
+                        WantedManager.getInstance().setWanted(player.getName(), 0, (Player) sender);
                     }
 
                     Main.getInstance().skullBuilder.cache.remove(player);
@@ -66,7 +66,7 @@ public class ComplaintCommand implements CommandExecutor {
                         }
                     }
 
-                    WantedManager.getInstance().setWanted(killer, (wanted + number));
+                    WantedManager.getInstance().setWanted(killer, (wanted + number), (Player) sender);
                     finalWanted = wanted + number;
                 } else {
                     int defaultReceive = Main.getInstance().getConfig().getInt("Wanted.ReceiveOnKill.Player.Receive");
@@ -75,7 +75,7 @@ public class ComplaintCommand implements CommandExecutor {
                         if (!Main.getInstance().skullBuilder.cache.containsKey(killerPlayer)) {
                             Main.getInstance().skullBuilder.cache.put(killerPlayer, killerPlayer.serialize());
                         }
-                        WantedManager.getInstance().addWanted(killerPlayer, defaultReceive);
+                        WantedManager.getInstance().addWanted(killerPlayer, defaultReceive, (Player) sender);
                     }
 
                     finalWanted = defaultReceive;

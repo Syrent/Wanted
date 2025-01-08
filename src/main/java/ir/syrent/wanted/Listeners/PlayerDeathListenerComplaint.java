@@ -70,7 +70,7 @@ public class PlayerDeathListenerComplaint implements Listener {
 
         if (Main.getInstance().getConfig().getBoolean("Wanted.ClearWantedOnDeath")) {
             if (WantedManager.getInstance().getWanted(victim.getName()) != 0)
-                WantedManager.getInstance().setWanted(victim.getName(), 0);
+                WantedManager.getInstance().setWanted(victim.getName(), 0, null);
             Main.getInstance().skullBuilder.cache.remove(victim);
             return;
         }

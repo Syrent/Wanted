@@ -19,7 +19,7 @@ public class NPCDeathListener implements Listener {
 
             Player killer = event.getEvent().getEntity().getKiller();
             int wanted = Main.getInstance().getConfig().getInt("Wanted.ReceiveOnKill.NPC.Receive");
-            WantedManager.getInstance().addWanted(killer, wanted);
+            WantedManager.getInstance().addWanted(killer, wanted, null);
 
             if (Main.getInstance().getConfig().getBoolean("Wanted.ReceiveOnKill.NPC.KillMessage")) {
                 killer.sendMessage(Messages.ON_KILL_NPC

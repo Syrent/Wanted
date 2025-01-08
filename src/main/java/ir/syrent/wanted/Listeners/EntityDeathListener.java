@@ -24,7 +24,7 @@ public class EntityDeathListener implements Listener {
             for (String mob : list) {
                 String[] split = mob.split(";");
                 if (event.getEntityType().equals(EntityType.valueOf(split[0]))) {
-                    WantedManager.getInstance().addWanted(player, Integer.parseInt(split[1]));
+                    WantedManager.getInstance().addWanted(player, Integer.parseInt(split[1]), null);
 
                     if (Main.getInstance().getConfig().getBoolean("Wanted.ReceiveOnKill.Mob.KillMessage")) {
                         player.sendMessage(Messages.ON_KILL_MOB

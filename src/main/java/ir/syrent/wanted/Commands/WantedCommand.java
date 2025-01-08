@@ -1,5 +1,7 @@
 package ir.syrent.wanted.Commands;
 
+import ir.syrent.wanted.Events.WantedArrestEvent;
+import ir.syrent.wanted.Events.WantedFindEvent;
 import ir.syrent.wanted.Main;
 import ir.syrent.wanted.Messages.Messages;
 import ir.syrent.wanted.Utils.SkullBuilder;
@@ -53,7 +55,7 @@ public class WantedCommand implements CommandExecutor {
                     }
                 }
 
-                if (WantedManager.getInstance().addWanted(target, wanted) != 0)
+                if (WantedManager.getInstance().addWanted(target, wanted, sender instanceof Player ? (Player) sender : null) != 0)
                     SkullBuilder.getInstance().saveHead(target);
 
                 sender.sendMessage(Messages.ADD_WANTED);
@@ -143,6 +145,7 @@ public class WantedCommand implements CommandExecutor {
 
                 getTarget.remove(player);
                 getTarget.put(player, target);
+                Bukkit.getPluginManager().callEvent(new WantedFindEvent(player, target));
                 new BukkitRunnable() {
                     @Override
                     public void run() {
@@ -275,13 +278,14 @@ public class WantedCommand implements CommandExecutor {
                         }
                     }
 
+                    Bukkit.getPluginManager().callEvent(new WantedArrestEvent(player, target));
                     Wanted.getInstance().runArrestCommand(player, target);
 
                     getTarget.remove(player);
 
                     if (playerBossBarHashMap.containsKey(player)) playerBossBarHashMap.get(player).removePlayer(player);
                     playerBossBarHashMap.remove(player);
-                    WantedManager.getInstance().setWanted(target.getName(), 0);
+                    WantedManager.getInstance().setWanted(target.getName(), 0, (Player) sender);
                 } else {
                     sender.sendMessage(Messages.Arrest.CANT);
                 }
@@ -360,7 +364,7 @@ public class WantedCommand implements CommandExecutor {
                     return true;
                 }
 
-                WantedManager.getInstance().setWanted(target.getName(), 0);
+                WantedManager.getInstance().setWanted(target.getName(), 0, sender instanceof Player ? (Player) sender : null);
                 SkullBuilder.getInstance().cache.remove(target);
 
                 sender.sendMessage(Messages.CLEAR_WANTED);
@@ -392,7 +396,7 @@ public class WantedCommand implements CommandExecutor {
                     return true;
                 }
 
-                if (WantedManager.getInstance().takeWanted(target, wanted) == 0)
+                if (WantedManager.getInstance().takeWanted(target, wanted, sender instanceof Player ? (Player) sender : null) == 0)
                     SkullBuilder.getInstance().cache.remove(Bukkit.getPlayerExact(args[1]));
 
                 sender.sendMessage(Messages.TAKE_WANTED);
@@ -423,7 +427,7 @@ public class WantedCommand implements CommandExecutor {
                     return true;
                 }
 
-                if (WantedManager.getInstance().addWanted(target, wanted) != 0)
+                if (WantedManager.getInstance().addWanted(target, wanted, sender instanceof Player ? (Player) sender : null) != 0)
                     SkullBuilder.getInstance().saveHead(target);
 
                 sender.sendMessage(Messages.ADD_WANTED);
@@ -455,7 +459,7 @@ public class WantedCommand implements CommandExecutor {
                     return true;
                 }
 
-                if (WantedManager.getInstance().setWanted(target.getName(), wanted) != 0)
+                if (WantedManager.getInstance().setWanted(target.getName(), wanted, sender instanceof Player ? (Player) sender : null) != 0)
                     SkullBuilder.getInstance().saveHead(target);
 
                 sender.sendMessage(Messages.SET_WANTED);
