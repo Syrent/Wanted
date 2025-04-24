@@ -346,7 +346,7 @@ public class WantedCommand implements CommandExecutor {
                 return true;
             }
 
-            //RakeWanted command
+            //TakeWanted command
             if (args[0].equalsIgnoreCase("take")) {
                 if (!Utils.hasPermission(sender, true, Permissions.TAKE, Permissions.ADMIN)) return true;
 
