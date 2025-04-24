@@ -46,11 +46,11 @@ repositories {
 dependencies {
     implementation 'org.bstats:bstats-bukkit:3.0.0'
     implementation 'com.iridium:IridiumColorAPI:1.0.9'
-    implementation 'com.github.cryptomorin:XSeries:11.2.1'
+    implementation 'com.github.cryptomorin:XSeries:13.2.0'
 
     compileOnly 'org.spigotmc:spigot-api:1.19-R0.1-SNAPSHOT'
     compileOnly 'me.clip:placeholderapi:2.11.6'
-    compileOnly('net.citizensnpcs:citizens-main:2.0.30-SNAPSHOT') {
+    compileOnly('net.citizensnpcs:citizens-main:2.0.35-SNAPSHOT') {
         exclude group: '*', module: '*'
     }
     compileOnly 'com.sk89q.worldguard:worldguard-bukkit:7.0.5'

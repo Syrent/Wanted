@@ -34,34 +34,9 @@ public class WantedCommand implements CommandExecutor {
     public static HashMap<Player, Player> getTarget = new HashMap<>();
     public static HashMap<Player, BossBar> playerBossBarHashMap = new HashMap<>();
 
+    @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (args.length > 0) {
-            if (label.equalsIgnoreCase("bounty")) {
-                Player target = Bukkit.getPlayerExact(args[0]);
-                if (target == null) {
-                    sender.sendMessage(Messages.PLAYER_NOT_FOUND);
-                    return true;
-                }
-
-                if (!Utils.hasPermission(sender, true, Permissions.ADMIN, Permissions.ADD)) return true;
-
-                int wanted = 1;
-                if (args.length == 2) {
-                    try {
-                        wanted = Integer.parseInt(args[1]);
-                    } catch (NumberFormatException e) {
-                        sender.sendMessage(Messages.INVALID_NUMBER);
-                        return true;
-                    }
-                }
-
-                if (WantedManager.getInstance().addWanted(target, wanted, sender instanceof Player ? (Player) sender : null) != 0)
-                    SkullBuilder.getInstance().saveHead(target);
-
-                sender.sendMessage(Messages.ADD_WANTED);
-                return true;
-            }
-
             //Get Wanted
             if (args[0].equalsIgnoreCase("get") || args[0].equalsIgnoreCase("look")) {
                 if (!(sender instanceof Player)) {
@@ -91,7 +66,6 @@ public class WantedCommand implements CommandExecutor {
                         .replace("%player%", args[1]));
                 return true;
             }
-
 
             //Find Wanted
             if (args[0].equalsIgnoreCase("find")) {
@@ -295,9 +269,12 @@ public class WantedCommand implements CommandExecutor {
 
             //Maximum command
             if (args[0].equalsIgnoreCase("maximum")) {
-                Player player = (Player) sender;
-                if (!Utils.hasPermission(player, true, Permissions.ADMIN))
+                if (!(sender instanceof Player)) {
+                    sender.sendMessage(Messages.CONSOLE_SENDER);
                     return true;
+                }
+                Player player = (Player) sender;
+                if (!Utils.hasPermission(player, true, Permissions.ADMIN)) return true;
 
                 if (args.length == 1) {
                     sender.sendMessage(Messages.Usage.SET_MAXIMUM);
@@ -316,7 +293,7 @@ public class WantedCommand implements CommandExecutor {
                     Main.getInstance().reloadConfig();
                     sender.sendMessage(Messages.MAXIMUM_WANTED_CHANGED);
                     return true;
-                } catch (Exception e) {
+                } catch (NumberFormatException e) {
                     sender.sendMessage(Messages.INVALID_NUMBER);
                     return true;
                 }
@@ -331,11 +308,10 @@ public class WantedCommand implements CommandExecutor {
                 Main.languageName = Main.getInstance().getConfig().getString("Wanted.LanguageFile");
                 new Messages();
                 File languageDirectory = new File(Main.getInstance().getDataFolder() + "/language");
-                for (File configFile : languageDirectory.listFiles()) {
-
+                for (File configFile : Objects.requireNonNull(languageDirectory.listFiles())) {
                     FileConfiguration dataConfig = YamlConfiguration.loadConfiguration(configFile);
 
-                    InputStream defaultStream = Main.getInstance().getResource("language/" + configFile.getName() + ".yml");
+                    InputStream defaultStream = Main.getInstance().getResource("language/" + configFile.getName());
                     if (defaultStream != null) {
                         YamlConfiguration defaultConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(defaultStream));
                         dataConfig.setDefaults(defaultConfig);
@@ -349,7 +325,6 @@ public class WantedCommand implements CommandExecutor {
 
             //ClearWanted command
             if (args[0].equalsIgnoreCase("clear")) {
-
                 if (!Utils.hasPermission(sender, true, Permissions.CLEAR, Permissions.ADMIN)) return true;
 
                 if (args.length == 1) {
@@ -371,9 +346,8 @@ public class WantedCommand implements CommandExecutor {
                 return true;
             }
 
-            //TakeWanted command
+            //RakeWanted command
             if (args[0].equalsIgnoreCase("take")) {
-
                 if (!Utils.hasPermission(sender, true, Permissions.TAKE, Permissions.ADMIN)) return true;
 
                 if (args.length < 3) {
@@ -402,12 +376,12 @@ public class WantedCommand implements CommandExecutor {
                 sender.sendMessage(Messages.TAKE_WANTED);
                 return true;
             }
+
             //AddWanted command
             if (args[0].equalsIgnoreCase("add")) {
-
                 if (!Utils.hasPermission(sender, true, Permissions.ADMIN, Permissions.ADD)) return true;
 
-                if (args.length < 3) {
+                if (args.length < 2) {
                     sender.sendMessage(Messages.OPERATION.replace("%action%", "add"));
                     return true;
                 }
@@ -419,12 +393,14 @@ public class WantedCommand implements CommandExecutor {
                     return true;
                 }
 
-                int wanted;
-                try {
-                    wanted = Integer.parseInt(args[2]);
-                } catch (NumberFormatException e) {
-                    sender.sendMessage(Messages.INVALID_NUMBER);
-                    return true;
+                int wanted = 1; // Default to 1 if no amount is specified
+                if (args.length >= 3) {
+                    try {
+                        wanted = Integer.parseInt(args[2]);
+                    } catch (NumberFormatException e) {
+                        sender.sendMessage(Messages.INVALID_NUMBER);
+                        return true;
+                    }
                 }
 
                 if (WantedManager.getInstance().addWanted(target, wanted, sender instanceof Player ? (Player) sender : null) != 0)
@@ -436,7 +412,6 @@ public class WantedCommand implements CommandExecutor {
 
             //SetWanted command
             if (args[0].equalsIgnoreCase("set")) {
-
                 if (!Utils.hasPermission(sender, true, Permissions.SET, Permissions.ADMIN)) return true;
 
                 if (args.length < 3) {
@@ -516,6 +491,7 @@ public class WantedCommand implements CommandExecutor {
                 numberList.clear();
                 return true;
             }
+
             //GUI command
             if (args[0].equalsIgnoreCase("gui")) {
                 if (!(sender instanceof Player)) {
@@ -549,7 +525,7 @@ public class WantedCommand implements CommandExecutor {
 
                 Pattern datePattern = Pattern.compile("(\\d\\d:\\d\\d:\\d\\d)");
                 Pattern namePattern = Pattern.compile("(\\w*)[a-z]");
-                Pattern locationPattern = Pattern.compile("X:(-\\d|\\d)* Y:(-\\d|\\d)* Z:(-\\d|\\d)*");
+                Pattern locationPattern = Pattern.compile("X:(-?\\d)* Y:(-?\\d)* Z:(-?\\d)*");
                 Pattern wantedPattern = Pattern.compile("\\bN\\d*");
 
                 for (File file : Main.getInstance().logDirectory.listFiles()) {
@@ -612,6 +588,7 @@ public class WantedCommand implements CommandExecutor {
 
                                 counter++;
                             }
+                            reader.close();
                         } catch (FileNotFoundException e) {
                             e.printStackTrace();
                         }
@@ -620,9 +597,9 @@ public class WantedCommand implements CommandExecutor {
 
                 return true;
             }
+
             //Help command
             if (args[0].equalsIgnoreCase("help")) {
-
                 if (!Utils.hasPermission(sender, true, Permissions.HELP, Permissions.ADMIN)) return true;
 
                 if (args.length == 2) {
@@ -636,7 +613,8 @@ public class WantedCommand implements CommandExecutor {
                 return true;
             }
         }
-        //Wanted (default)
+
+        //Default /wanted or /bounty behavior
         if (!(sender instanceof Player)) {
             sender.sendMessage(Messages.CONSOLE_SENDER);
             return true;
@@ -653,6 +631,6 @@ public class WantedCommand implements CommandExecutor {
             sender.sendMessage(Messages.PLAYER_WANTED.replace("%wanted%", "0"));
         }
 
-        return false;
+        return true;
     }
 }
