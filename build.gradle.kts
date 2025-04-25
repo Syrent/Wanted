@@ -49,7 +49,7 @@ dependencies {
     compileOnly("com.mojang:authlib:1.5.21")
 }
 
-group = "dev.syrent"
+group = "org.sayandev"
 version = "2.7.0"
 description = "Wanted"
 java.sourceCompatibility = JavaVersion.VERSION_1_8
@@ -92,5 +92,5 @@ publishing {
 }
 
 tasks.shadowJar {
-    relocate("org.bstats", "ir.syrent.bstats")
+    relocate("org.bstats", "${group}.bstats")
 }
