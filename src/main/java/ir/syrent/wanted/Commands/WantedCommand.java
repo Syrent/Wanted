@@ -378,6 +378,7 @@ public class WantedCommand implements CommandExecutor {
             }
 
             //AddWanted command
+            //TODO Add support for offline wanteds
             if (args[0].equalsIgnoreCase("add")) {
                 if (!Utils.hasPermission(sender, true, Permissions.ADMIN, Permissions.ADD)) return true;
 
