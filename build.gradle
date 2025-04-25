@@ -58,7 +58,7 @@ dependencies {
 }
 
 group = 'dev.syrent'
-version = '2.6.4'
+version = '2.7.0'
 description = 'Wanted'
 java.sourceCompatibility = JavaVersion.VERSION_1_8
 

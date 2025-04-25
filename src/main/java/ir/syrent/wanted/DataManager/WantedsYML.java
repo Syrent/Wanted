@@ -11,43 +11,59 @@ import java.io.InputStreamReader;
 import java.util.logging.Level;
 
 public class WantedsYML {
-
     private FileConfiguration dataConfig = null;
-    private File configFile = null;
+    private final File configFile;
+    private final Main plugin;
+
+    public WantedsYML(Main plugin) {
+        this.plugin = plugin;
+        this.configFile = new File(plugin.getDataFolder(), "wanteds.yml");
+    }
 
     public void reloadConfig() {
-        if (this.configFile == null) this.configFile = new File(Main.getInstance().getDataFolder(), "wanteds.yml");
+        if (!configFile.exists()) {
+            saveDefaultConfig();
+        }
 
-        this.dataConfig = YamlConfiguration.loadConfiguration(this.configFile);
+        try {
+            dataConfig = YamlConfiguration.loadConfiguration(configFile);
+        } catch (Exception e) {
+            plugin.getLogger().log(Level.SEVERE, "Failed to load wanteds.yml", e);
+            dataConfig = new YamlConfiguration(); // Fallback
+            return;
+        }
 
-        InputStream defaultStream = Main.getInstance().getResource("wanteds.yml");
-        if (defaultStream != null) {
-            YamlConfiguration defaultConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(defaultStream));
-            this.dataConfig.setDefaults(defaultConfig);
+        try (InputStream defaultStream = plugin.getResource("wanteds.yml")) {
+            if (defaultStream != null) {
+                dataConfig.setDefaults(YamlConfiguration.loadConfiguration(new InputStreamReader(defaultStream)));
+            }
+        } catch (IOException e) {
+            plugin.getLogger().log(Level.WARNING, "Failed to load default wanteds.yml", e);
         }
     }
 
     public FileConfiguration getConfig() {
-        if (this.dataConfig == null) reloadConfig();
-        return this.dataConfig;
+        if (dataConfig == null) {
+            reloadConfig();
+        }
+        return dataConfig;
     }
 
     public void saveConfig() {
-        if (this.dataConfig == null || this.configFile == null) return;
+        if (dataConfig == null || !configFile.exists()) {
+            return;
+        }
 
         try {
-            this.getConfig().save(configFile);
+            dataConfig.save(configFile);
         } catch (IOException e) {
-            Main.getInstance().getLogger().log(Level.SEVERE, "Could not save config to " + this.configFile, e);
+            plugin.getLogger().log(Level.SEVERE, "Could not save config to " + configFile, e);
         }
     }
 
     public void saveDefaultConfig() {
-        if (this.configFile == null) this.configFile = new File(Main.getInstance().getDataFolder(), "wanteds.yml");
-
-        if (!this.configFile.exists()) {
-            Main.getInstance().saveResource("wanteds.yml", false);
+        if (!configFile.exists()) {
+            plugin.saveResource("wanteds.yml", false);
         }
     }
-
 }
