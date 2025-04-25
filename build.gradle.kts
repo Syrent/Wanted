@@ -1,7 +1,7 @@
 plugins {
     id("java")
     id("maven-publish")
-    id("com.gradle.shadow") version "9.0.0-beta.12"
+    id("com.gradleup.shadow") version "9.0.0-beta12"
 }
 
 repositories {
