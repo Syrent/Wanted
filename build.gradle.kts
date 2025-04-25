@@ -1,7 +1,7 @@
 plugins {
     id("java")
     id("maven-publish")
-    id("com.github.johnrengelman.shadow") version "7.1.0"
+    id("com.gradle.shadow") version "9.0.0-beta.12"
 }
 
 repositories {
