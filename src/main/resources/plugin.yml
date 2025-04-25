@@ -1,11 +1,11 @@
 name: Wanted
 version: '${version}'
-main: ir.syrent.wanted.Main
+main: org.sayandev.wanted.Main
 api-version: 1.13
 prefix: Wanted
 authors: [ Syrent ]
 description: Wanted plugin for RolePlay servers
-website: syrent.ir
+website: sayandev.org
 softdepend:
   - PlaceholderAPI
   - Citizens
