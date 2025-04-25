@@ -324,15 +324,34 @@ public class Messages extends Utils {
     public static String playerDeathLogger(PlayerDeathEvent event) {
         Player player = event.getEntity();
         Player killer = player.getKiller();
-        if (killer == null) return null;
         int wanted = WantedManager.getInstance().getWanted(player.getName());
-        return "[Player] [" + Main.getInstance().log.formatMessage() + "] "
-                + killer.getName() + " killed " + player.getName()
-                + " in " + player.getWorld().getName()
-                + " at X:" + (int) player.getLocation().getX()
-                + " Y:" + (int) player.getLocation().getY()
-                + " Z:" + (int) player.getLocation().getZ()
-                + " | New Wanted: " + wanted;
+        String world = player.getWorld().getName();
+        int x = (int) player.getLocation().getX();
+        int y = (int) player.getLocation().getY();
+        int z = (int) player.getLocation().getZ();
+        String timestamp = Main.getInstance().log.formatMessage();
+
+        if (killer != null) {
+            //Death caused by another player
+            return "[Player] [" + timestamp + "] "
+                    + killer.getName() + " killed " + player.getName()
+                    + " in " + world
+                    + " at X:" + x + " Y:" + y + " Z:" + z
+                    + " | New Wanted: " + wanted;
+        } else {
+            //Natural death or suicide
+            String cause = "unknown cause";
+            if (event.getDeathMessage() != null) {
+                cause = event.getDeathMessage().replace(player.getName(), "").trim();
+            } else if (player.getLastDamageCause() != null) {
+                cause = player.getLastDamageCause().getCause().name().toLowerCase();
+            }
+            return "[Player] [" + timestamp + "] "
+                    + player.getName() + " died due to " + cause
+                    + " in " + world
+                    + " at X:" + x + " Y:" + y + " Z:" + z
+                    + " | New Wanted: " + wanted;
+        }
     }
 
     public static String npcDeathLogger(NPCDeathEvent event) {

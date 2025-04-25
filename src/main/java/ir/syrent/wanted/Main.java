@@ -8,6 +8,12 @@ import ir.syrent.wanted.DataManager.Log;
 import ir.syrent.wanted.DataManager.WantedsYML;
 import ir.syrent.wanted.Dependencies.WorldGuard;
 import ir.syrent.wanted.Events.*;
+import ir.syrent.wanted.Events.EntityDamageByEntityListener;
+import ir.syrent.wanted.Events.EntityDeathListener;
+import ir.syrent.wanted.Events.PlayerDeathListener;
+import ir.syrent.wanted.Events.PlayerDeathListenerComplaint;
+import ir.syrent.wanted.Events.PlayerJoinListener;
+import ir.syrent.wanted.Events.PlayerQuitListener;
 import ir.syrent.wanted.GUI.RequestGUI;
 import ir.syrent.wanted.Messages.Messages;
 import ir.syrent.wanted.Utils.SkullBuilder;
@@ -84,7 +90,7 @@ public final class Main extends JavaPlugin implements CommandExecutor {
 
     public void initializeYamlFiles() {
         new Messages();
-        wantedsYML = new WantedsYML();
+        wantedsYML = new WantedsYML(this);
         enUSLanguage = new LanguageGenerator(this.getDataFolder() + "/language", "en_US");
         zhCNLanguage = new LanguageGenerator(this.getDataFolder() + "/language", "zh_CN");
         viVNLanguage = new LanguageGenerator(this.getDataFolder() + "/language", "vi_VN");
