@@ -75,6 +75,23 @@ tasks {
         targetCompatibility = "1.$targetJavaVersion"
         options.encoding = "UTF-8"
     }
+
+    shadowJar {
+        archiveClassifier.set("")
+        archiveBaseName.set(project.name)
+        destinationDirectory.set(file("./bin/"))
+
+        relocate("org.bstats", "${group}.bstats")
+    }
+
+    jar {
+        enabled = false
+    }
+
+    build {
+        dependsOn(clean)
+        dependsOn(shadowJar)
+    }
 }
 
 java {
@@ -89,8 +106,4 @@ publishing {
             from(components["java"])
         }
     }
-}
-
-tasks.shadowJar {
-    relocate("org.bstats", "${group}.bstats")
 }
