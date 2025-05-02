@@ -106,4 +106,16 @@ publishing {
             from(components["java"])
         }
     }
+
+    repositories {
+        maven {
+            name = "sayandevelopment-repo"
+            url = uri(if (version.toString().contains("-SNAPSHOT")) "https://repo.sayandev.org/snapshots/" else "https://repo.sayandev.org/releases/")
+
+            credentials {
+                username = System.getenv("REPO_SAYAN_USER") ?: project.findProperty("repo.sayan.user") as? String
+                password = System.getenv("REPO_SAYAN_TOKEN") ?: project.findProperty("repo.sayan.token") as? String
+            }
+        }
+    }
 }
